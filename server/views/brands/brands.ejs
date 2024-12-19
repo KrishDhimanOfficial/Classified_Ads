@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard</title>
+    <%- include('../partials/header') %>
+        <link rel="stylesheet" href="/assets/vendor/datatables-responsive/css/responsive.bootstrap4.min.css">
+        <link rel="stylesheet" href="/assets/vendor/datatables-bs4/css/dataTables.bootstrap4.min.css">
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed">
+    <div class="wrapper">
+        <!-- Preloader -->
+        <%- include('../partials/Loader') %>
+
+            <!-- Navbar -->
+            <%- include('../partials/navbar') %>
+                <!-- /.navbar -->
+
+                <!-- Main Sidebar Container -->
+                <%- include('../partials/sidebar') %>
+
+                    <!-- Content Wrapper. Contains page content -->
+                    <div class="content-wrapper">
+                        <section class="content-header">
+                            <div class="container-fluid">
+                                <div class="row mb-2">
+                                    <div class="col-md-6">
+                                        <h1 class="mb-2">Brands</h1>
+                                        <ol class="breadcrumb float-sm-left">
+                                            <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
+                                            <li class="breadcrumb-item active">Brands</li>
+                                        </ol>
+                                    </div>
+                                    <div class="col-md-6 align-content-center">
+                                        <a href="/admin/product/add-new-brand" class="btn btn-primary float-right">
+                                            ADD New
+                                        </a>
+                                    </div>
+                                </div>
+                                <!-- /.row -->
+                            </div>
+                            <!-- /.container-fluid -->
+                        </section>
+
+                        <section class="content">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <table id="datatable" class="table table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Rendering engine</th>
+                                                            <th>Browser</th>
+                                                            <th>Platform(s)</th>
+                                                            <th>Engine version</th>
+                                                            <th>CSS grade</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    <!-- /.content-wrapper -->
+                    <footer class="main-footer">
+                        <strong>Copyright &copy; 2014-2021</strong>
+                        All rights reserved.
+                    </footer>
+
+    </div>
+    <!-- ./wrapper -->
+    <%- include('../partials/script') %>
+        <%- include('../partials/datatables.script.ejs') %>
+</body>
+
+</html>
