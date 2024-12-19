@@ -3,17 +3,17 @@ import mongoose from "mongoose"
 const brandSchema = new mongoose.Schema({
     title: {
         type: mongoose.Schema.Types.String,
-        required: true,
+        required: [true, 'Title Are Required!'],
         unique: true,
         trim: true,
-        match: /[a-z]/
+        match: [/^[a-z]$/, 'Title must be in character']
     },
     slug: {
         type: mongoose.Schema.Types.String,
-        required: true,
+        required: [true, 'Slug Are Required!'],
         unique: true,
         trim: true,
-        match: /[a-z]/
+        match: [/^[a-z]$/, 'Slug must be in character']
     },
     status: {
         type: mongoose.Schema.Types.Boolean,

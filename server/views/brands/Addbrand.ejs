@@ -44,7 +44,7 @@
                         <section class="content">
                             <div class="container-fluid">
                                 <div class="row">
-                                    <div class="col-12">
+                                    <div class="col-8">
                                         <div class="card card-primary">
                                             <!-- Card Header -->
                                             <div class="card-header">
@@ -59,44 +59,40 @@
                                             <!-- Card Header End -->
 
                                             <div class="card-body">
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <form id="submitFormData" enctype="multipart/form-data">
-                                                            <div class="form-group">
-                                                                <label for="inputTitle">Title</label>
-                                                                <input type="text" id="inputTitle" name="title"
-                                                                    class="form-control">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label for="inputSlug">Slug</label>
-                                                                <input type="text" id="inputSlug" name="slug"
-                                                                    class="form-control">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label for="inputStatus">Status</label>
-                                                                <select id="inputStatus" name="status"
-                                                                    class="form-control custom-select">
-                                                                    <option selected disabled>Select one</option>
-                                                                    <option value="true">Active</option>
-                                                                    <option value="false">InActive</option>
-                                                                </select>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <div class="d-flex gap-3 justify-content-center">
-                                                                    <button type="submit"
-                                                                        class="btn btn-success btn-xs">
-                                                                        <i class="fa-solid fa-cloud-arrow-up"></i>
-                                                                        Submit
-                                                                    </button>
-                                                                    <button type="reset" class="btn btn-dark btn-xs">
-                                                                        <i class="fa-solid fa-rotate-left"></i>
-                                                                        Reset
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </form>
+                                                <form id="submitFormData" enctype="multipart/form-data">
+                                                    <div class="form-group">
+                                                        <label for="inputTitle">Title</label>
+                                                        <input type="text" name="title" id="inputTitle"
+                                                            autocomplete="off" placeholder="Enter Your Title"
+                                                            class="form-control">
                                                     </div>
-                                                </div>
+                                                    <div class="form-group">
+                                                        <label for="inputSlug">Slug</label>
+                                                        <input type="text" name="slug" id="inputSlug" autocomplete="off"
+                                                            placeholder="Enter Your Slug" class="form-control">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="inputStatus">Status</label>
+                                                        <select id="inputStatus" name="status"
+                                                            class="form-control custom-select">
+                                                            <option value="true" selected>Active</option>
+                                                            <option value="false">InActive</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="d-flex gap-3 justify-content-center">
+                                                            <button type="submit" id="submitbtn"
+                                                                class="btn btn-success btn-xs">
+                                                                <i class="fa-solid fa-cloud-arrow-up"></i>
+                                                                Submit
+                                                            </button>
+                                                            <button type="reset" class="btn btn-dark btn-xs">
+                                                                <i class="fa-solid fa-rotate-left"></i>
+                                                                Reset
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </form>
                                             </div>
                                             <!-- /.card-body -->
                                         </div>
@@ -114,7 +110,7 @@
     </div>
     <!-- ./wrapper -->
     <%- include('../partials/script') %>
-        <script> const EndAPI = 'api/brand';</script>
+        <script> const EndAPI = 'product/brand';</script>
         <script async type="module" src="/assets/js/main.js"></script>
 </body>
 

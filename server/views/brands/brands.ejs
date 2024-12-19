@@ -54,14 +54,39 @@
                                                 <table id="datatable" class="table table-hover">
                                                     <thead>
                                                         <tr>
-                                                            <th>Rendering engine</th>
-                                                            <th>Browser</th>
-                                                            <th>Platform(s)</th>
-                                                            <th>Engine version</th>
-                                                            <th>CSS grade</th>
+                                                            <th>S.no</th>
+                                                            <th>Brand</th>
+                                                            <th>Status</th>
+                                                            <th>Actions</th>
                                                         </tr>
                                                     </thead>
-                                                    <tbody>
+                                                    <tbody id="table-grid">
+                                                        <% brands?.forEach((brand,i)=> { %>
+                                                            <tr class="table-row">
+                                                                <td>
+                                                                    <%= i+1 %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= brand.title %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= brand.status ? "Active" : "Inactive" %>
+                                                                </td>
+                                                                <td>
+                                                                    <a href="/admin/product/brand/<%= brand._id %>"
+                                                                        class="btn btn-primary">
+                                                                        <i class="fa-solid fa-pen-to-square"></i>
+                                                                        update
+                                                                    </a>
+                                                                    <button type="button" data-id="<%= brand._id %>"
+                                                                        data-toggle="modal" data-target="#modal-danger"
+                                                                        class="btn btn-danger openModal">
+                                                                        <i class="fa-solid fa-trash-can"></i>
+                                                                        Delete
+                                                                    </button>
+                                                                </td>
+                                                            </tr>
+                                                            <% }) %>
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -79,8 +104,11 @@
 
     </div>
     <!-- ./wrapper -->
-    <%- include('../partials/script') %>
-        <%- include('../partials/datatables.script.ejs') %>
+    <%- include('../partials/danger-modal') %>
+        <%- include('../partials/script') %>
+            <%- include('../partials/datatables.script.ejs') %>
+                <script> const EndAPI = 'product/brand';</script>
+                <script async type="module" src="/assets/js/datatable.js"></script>
 </body>
 
 </html>

@@ -16,17 +16,18 @@ if (cluster.isPrimary) {
     cluster.on('exit', (worker, code, signal) => console.log(`worker ${worker.process.pid} died`))
 } else {
     connectDB() // Connection To The Database
+
     // middlewares
     app.use(cors(
         {
-            origin: ['*'],
+            origin: '*',
             methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
             allowedHeaders: ['Content-Type', 'Authorization'],
             credentials: true,
         }
     ))
     app.use(express.json())
-    app.use(express.urlencoded({ extended: false }))
+    app.use(express.urlencoded({ extended: true }))
     app.use('/uploads', express.static('uploads'))
     app.use('/assets', express.static('assets'))
 

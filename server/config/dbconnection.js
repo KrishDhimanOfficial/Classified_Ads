@@ -3,7 +3,7 @@ import config from './config.js'
 
 const options = {
     serverSelectionTimeoutMS: 5000,
-    dbName: 'classified_Ads'
+    dbName: 'classified_Ads',
 }
 
 const connectDB = async () => {

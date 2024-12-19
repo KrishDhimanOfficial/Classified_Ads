@@ -1,5 +1,6 @@
 import express from 'express'
 import brandController from '../controllers/brand.controller.js'
+import { upload } from '../Middleware/multer.middleware.js'
 const router = express.Router()
 
 router.get('/dashboard', (req, res) => res.render('index'))
@@ -11,8 +12,12 @@ router.get('/category/add-sub-category', (req, res) => res.render('categories/Ad
 
 
 router.get('/product/add-new-brand', (req, res) => res.render('brands/Addbrand'))
-router.get('/product/brands', (req, res) => res.render('brands/brands'))
-router.route('/api/brand/:id?')
-    .post(brandController.createBrand)
+router.get('/product/brands', brandController.renderBrands)
+router.route('/product/brand/:id?')
+    .post(upload.none(), brandController.createBrand)
+    .get(brandController.getSingleBrand)
+    .put(upload.none(), brandController.updateBrand)
+    .delete(brandController.deleteBrand)
+
 
 export default router
