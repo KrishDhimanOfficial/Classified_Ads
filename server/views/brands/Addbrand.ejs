@@ -64,17 +64,17 @@
                                                         <label for="inputTitle">Title</label>
                                                         <input type="text" name="title" id="inputTitle"
                                                             autocomplete="off" placeholder="Enter Your Title"
-                                                            class="form-control">
+                                                            class="form-control" required>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="inputSlug">Slug</label>
                                                         <input type="text" name="slug" id="inputSlug" autocomplete="off"
-                                                            placeholder="Enter Your Slug" class="form-control">
+                                                            placeholder="Enter Your Slug" class="form-control" required>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="inputStatus">Status</label>
                                                         <select id="inputStatus" name="status"
-                                                            class="form-control custom-select">
+                                                            class="form-control custom-select" required>
                                                             <option value="true" selected>Active</option>
                                                             <option value="false">InActive</option>
                                                         </select>
@@ -110,8 +110,8 @@
     </div>
     <!-- ./wrapper -->
     <%- include('../partials/script') %>
-        <script> const EndAPI = 'product/brand';</script>
-        <script async type="module" src="/assets/js/main.js"></script>
+            <script> const EndAPI = 'product/brand';</script>
+            <script async type="module" src="/assets/js/main.js"></script>
 </body>
 
 </html>

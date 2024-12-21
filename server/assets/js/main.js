@@ -5,7 +5,6 @@ import {
 
 'use strict'
 
-
 inputTitle.onkeyup = () => {
     const title = inputTitle.value.trim()
     inputSlug.value = CreateSlug(title) // create slug 
@@ -20,5 +19,5 @@ SubmitForm.onsubmit = async (e) => {
 
 
     const response = await sendDataToServer(api, method, formData) // send data to server
-    if (response) e.target.reset()
+    if (response && SubmitForm.id === 'submitFormData') e.target.reset()
 }

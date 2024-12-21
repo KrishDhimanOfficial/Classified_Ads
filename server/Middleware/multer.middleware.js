@@ -24,7 +24,8 @@ const fileFilter = (req, file, cb) => {
     cb(null, true)
 }
 
-export const upload = multer({})
+export const upload = multer()
+export const upload1 = multer()
 
 export const tour_location = multer({
     storage: createStorage('tour_location_images'),

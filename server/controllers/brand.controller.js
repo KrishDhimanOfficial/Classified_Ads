@@ -1,6 +1,5 @@
 import brandModel from '../models/brand.model.js'
-import validation from '../services/validateData.js';
-
+import validations from '../services/validateData.js';
 
 const brandController = {
     createBrand: async (req, res) => {
@@ -16,7 +15,8 @@ const brandController = {
 
             return res.json({ message: 'successfully created' })
         } catch (error) {
-            if (error.name === 'ValidationError') validation(res, error.errors)
+            // Extract custom error messages
+            if (error.name === 'ValidationError') validations(res, error.errors)
             console.log('createBrand : ' + error.message)
         }
     },
@@ -38,10 +38,15 @@ const brandController = {
     },
     updateBrand: async (req, res) => {
         try {
-            const response = await brandModel.findByIdAndUpdate({ _id: req.params.id }, req.body)
+            const response = await brandModel.findByIdAndUpdate(
+                { _id: req.params.id }, req.body,
+                { runValidators: true }
+            )
             if (!response) return res.json({ error: 'Failed to update brand' })
             return res.json({ message: 'update successfully' })
         } catch (error) {
+            // Extract custom error messages
+            if (error.name === 'ValidationError') validations(res, error.errors)
             console.log('updateBrand : ' + error.message)
         }
     },

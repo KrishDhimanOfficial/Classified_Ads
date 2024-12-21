@@ -1,0 +1,18 @@
+<script src="/assets/vendor/select2/js/select2.full.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const links = [
+            '/assets/vendor/select2/css/select2.min.css',
+            '/assets/vendor/select2/css/select2-bootstrap4.min.css'
+        ]
+        links.forEach(link => {
+            const linkTag = document.createElement('link')
+            linkTag.rel = 'stylesheet';
+            linkTag.href = link;
+            document.head.appendChild(linkTag)
+        })
+    })
+    $(document).ready(() => {
+        $('.select2bs4').select2({ theme: 'bootstrap4' })
+    })
+</script>

@@ -1,6 +1,5 @@
-const validation = (res, error) => {
-    // Extract custom error messages
+const validations = (res, error) => {
     const errors = Object.values(error).map((err) => err.message)
     return res.status(400).json({ errors })
 }
-export default validation
+export default validations

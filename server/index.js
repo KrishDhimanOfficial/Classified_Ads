@@ -15,7 +15,7 @@ if (cluster.isPrimary) {
     console.log(`Primary ${process.pid} is running`)
     cluster.on('exit', (worker, code, signal) => console.log(`worker ${worker.process.pid} died`))
 } else {
-    connectDB() // Connection To The Database
+    connectDB() // Connection To The DB
 
     // middlewares
     app.use(cors(

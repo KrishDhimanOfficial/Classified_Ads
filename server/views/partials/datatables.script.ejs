@@ -3,6 +3,18 @@
 <script src="/assets/vendor/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
 <script src="/assets/vendor/datatables-responsive/js/dataTables.responsive.min.js"></script>
 <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const links = [
+            '/assets/vendor/datatables-responsive/css/responsive.bootstrap4.min.css',
+            '/assets/vendor/datatables-bs4/css/dataTables.bootstrap4.min.css'
+        ]
+        links.forEach(link => {
+            const linkTag = document.createElement('link')
+            linkTag.rel = 'stylesheet';
+            linkTag.href = link;
+            document.head.appendChild(linkTag)
+        })
+    })
     $("#datatable").DataTable({
         "responsive": true,
         "lengthChange": false,

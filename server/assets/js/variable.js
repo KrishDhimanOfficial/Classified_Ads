@@ -9,6 +9,9 @@ export const Notify = (data) => {
     if (data.warning) toastr.warning(data.warning)
     if (data.error) toastr.error(data.error)
     if (data.errors) data.errors.forEach(error => toastr.error(error))
+
+    submitbtn.disabled = false; // 
+    submitbtn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Submit'
     return;
 }
 
@@ -18,11 +21,12 @@ export const CreateSlug = (str) => {
 
 export const sendDataToServer = async (api, method, formData) => {
     try {
-        const response = await fetch(api, {
-            method,
-            body: formData
-        })
-        const res = await response.json()
+        submitbtn.disabled = true;
+        submitbtn.innerText = '...Submitting'
+
+        const response = await fetch(api, { method, body: formData })
+        const res = await response.json() // Receving Response from server
+
         Notify(res) // Show the notifications
         if (res.message) return true
     } catch (error) {
@@ -31,6 +35,7 @@ export const sendDataToServer = async (api, method, formData) => {
 }
 
 export const handleDeleteRequest = async (table_row, api) => {
+    console.log(api);
     const response = await fetch(api, { method: 'DELETE' })
     const res = await response.json()
 

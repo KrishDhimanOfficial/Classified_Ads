@@ -6,14 +6,14 @@ const brandSchema = new mongoose.Schema({
         required: [true, 'Title Are Required!'],
         unique: true,
         trim: true,
-        match: [/^[a-z]$/, 'Title must be in character']
+        match: [/^[a-zA-Z ]+$/, 'Invalid Title!'],
     },
     slug: {
         type: mongoose.Schema.Types.String,
         required: [true, 'Slug Are Required!'],
         unique: true,
         trim: true,
-        match: [/^[a-z]$/, 'Slug must be in character']
+        match: [/^[a-z-]+$/, 'Invalid Slug!']
     },
     status: {
         type: mongoose.Schema.Types.Boolean,

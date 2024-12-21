@@ -27,12 +27,12 @@
                             <div class="container-fluid">
                                 <div class="row mb-2">
                                     <div class="col-md-6">
-                                        <h1 class="mb-2">Add Sub Category</h1>
+                                        <h1 class="mb-2">Add Category</h1>
                                         <ol class="breadcrumb float-sm-left">
                                             <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
-                                            <li class="breadcrumb-item"><a href="/admin/sub/category">Sub Category</a>
+                                            <li class="breadcrumb-item"><a href="/admin/product/category">Category</a>
                                             </li>
-                                            <li class="breadcrumb-item active">ADD Sub Category</li>
+                                            <li class="breadcrumb-item active">ADD Category</li>
                                         </ol>
                                     </div>
                                 </div>
@@ -42,12 +42,12 @@
                         </div>
                         <!-- /.content-header -->
 
-                        <!-- Main content -->
                         <section class="content">
                             <div class="container-fluid">
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="card card-primary">
+                                            <!-- Card Header -->
                                             <div class="card-header">
                                                 <h3 class="card-title">General</h3>
                                                 <div class="card-tools">
@@ -57,40 +57,39 @@
                                                     </button>
                                                 </div>
                                             </div>
+                                            <!-- Card Header End -->
+
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col-md-6">
-                                                        <form id="submitFormData" autocomplete="off"
-                                                            enctype="multipart/form-data">
+                                                        <form id="updateFormData" enctype="multipart/form-data"
+                                                            data-id="<%= category._id %>">
                                                             <div class="form-group">
                                                                 <label for="inputTitle">Title</label>
                                                                 <input type="text" id="inputTitle" class="form-control"
-                                                                    placeholder="Enter title" name="title">
+                                                                    placeholder="Enter Title" name="title"
+                                                                    autocomplete="off" value="<%= category.title %>"
+                                                                    required>
                                                             </div>
                                                             <div class="form-group">
                                                                 <label for="inputSlug">Slug</label>
-                                                                <input type="text" id="inputSlug" class="form-control"
-                                                                    placeholder="Enter slug" name="slug">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label for="parent_category">Parent Category</label>
-                                                                <select id="parent_category" name="parentId"
-                                                                    class="form-control select2bs4"
-                                                                    style="width: 100%;">
-                                                                    <option selected disabled>Parent Category</option>
-                                                                    <% parentCategories?.forEach(category=> { %>
-                                                                        <option value="<%= category._id %>">
-                                                                            <%= category.title %>
-                                                                        </option>
-                                                                        <% }) %>
-                                                                </select>
+                                                                <input type="text" id="inputSlug" autocomplete="off"
+                                                                    class="form-control" name="slug"
+                                                                    placeholder="Enter Slug"
+                                                                    value="<%= category.slug %>" required>
                                                             </div>
                                                             <div class="form-group">
                                                                 <label for="inputStatus">Status</label>
                                                                 <select id="inputStatus" name="status"
                                                                     class="form-control custom-select">
-                                                                    <option value="true" selected>Active</option>
-                                                                    <option value="false">InActive</option>
+                                                                    <% if (category.status) { %>
+                                                                        <option value="true" selected>Active</option>
+                                                                        <option value="false">InActive</option>
+                                                                        <% } else { %>
+                                                                            <option value="true">Active</option>
+                                                                            <option value="false" selected>InActive
+                                                                            </option>
+                                                                            <% } %>
                                                                 </select>
                                                             </div>
                                                             <div class="form-group">
@@ -99,10 +98,6 @@
                                                                         class="btn btn-success btn-xs">
                                                                         <i class="fa-solid fa-cloud-arrow-up"></i>
                                                                         Submit
-                                                                    </button>
-                                                                    <button type="reset" class="btn btn-dark btn-xs">
-                                                                        <i class="fa-solid fa-rotate-left"></i>
-                                                                        Reset
                                                                     </button>
                                                                 </div>
                                                             </div>
@@ -126,8 +121,7 @@
     </div>
     <!-- ./wrapper -->
     <%- include('../partials/script') %>
-    <%- include('../partials/select2.script.ejs') %>
-        <script>const EndAPI = 'product/sub-category';</script>
+        <script>const EndAPI = 'product/category';</script>
         <script async type="module" src="/assets/js/main.js"></script>
 </body>
 
