@@ -1,21 +1,19 @@
 import mongoose from "mongoose"
 
-const userSchema = new mongoose.Schema({
+const sellerSchema = new mongoose.Schema({
     username: {
         type: mongoose.Schema.Types.String,
         required: [true, 'username must be required!'],
         unique: true,
         match: [/^[a-z]+$/, 'Incorrect username!']
     },
-    firstname: {
+    image: {
+        type: mongoose.Schema.Types.String,
+    },
+    name: {
         type: mongoose.Schema.Types.String,
         required: [true, 'Firstname must be required!'],
-        match: [/^[a-z]+$/, 'Incorrect firstname!']
-    },
-    lastname: {
-        type: mongoose.Schema.Types.String,
-        required: [true, 'Lastname must be required!'],
-        match: [/^[a-z]+$/, 'Incorrect lastname!']
+        match: [/^[a-z ]+$/, 'Incorrect firstname!']
     },
     email: {
         type: mongoose.Schema.Types.String,
@@ -35,8 +33,12 @@ const userSchema = new mongoose.Schema({
     password: {
         type: mongoose.Schema.Types.String,
         required: true,
-        min: 6
+        min: [6, 'Password is too short!'],
     },
+    wallet_amount: {
+        type: mongoose.Schema.Types.Number,
+        default: 0
+    }
 })
 
-export default mongoose.model('user', userSchema)
+export default mongoose.model('seller', sellerSchema)

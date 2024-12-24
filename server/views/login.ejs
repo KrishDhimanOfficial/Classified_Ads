@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="/assets/vendor/bootstrap/css/bootstrap.min.css">
+    <style>
+        .form {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            padding: 32px 24px 24px;
+            gap: 16px;
+            text-align: center;
+        }
+
+        /*Inputs box*/
+        .form-container {
+            overflow: hidden;
+            border-radius: 8px;
+            background-color: #fff;
+            margin: 1rem 0 .5rem;
+            width: 100%;
+        }
+
+        .input {
+            background: none;
+            border: 0;
+            outline: 0;
+            height: 40px;
+            width: 100%;
+            border-bottom: 1px solid #eee;
+            font-size: .9rem;
+            padding: 8px 15px;
+        }
+
+        /*Button*/
+        .form button {
+            background-color: #0066ff;
+            color: #fff;
+            border: 0;
+            border-radius: 24px;
+            padding: 10px 16px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color .3s ease;
+        }
+
+        .form button:hover {
+            background-color: #005ce6;
+        }
+    </style>
+
+</head>
+
+<body style="height: 100vh; background-color: #f4f6f9;">
+    <div class="container h-100 d-flex align-items-center justify-content-center">
+        <div class="row w-100">
+            <div class="col-4 mx-auto">
+                <div class="px-4 pt-5 pb-3 bg-white shadow rounded-5">
+                    <h1 class="text-center text-dark"> Admin Login</h1>
+                    <form id="submitFormData" class="form" enctype="multipart/form-data" autocomplete="off">
+                        <div class="form-container">
+                            <input type="email" class="input" name="email" placeholder="Email">
+                            <input type="password" class="input" name="password" placeholder="Password">
+                        </div>
+                        <button type="submit">Login</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script> const EndAPI = 'login';</script>
+    <script async type="module" src="/assets/js/main.js"></script>
+</body>
+
+</html>

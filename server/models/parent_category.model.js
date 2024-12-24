@@ -6,7 +6,7 @@ const categorySchema = new mongoose.Schema({
         required: [true, 'Title is required!'],
         unique: true,
         trim: true,
-        match: [/^[a-zA-Z ]+$/, 'Invalid Title!']
+        match: [/^[a-zA-Z &]+$/, 'Invalid Title!']
     },
     slug: {
         type: mongoose.Schema.Types.String,

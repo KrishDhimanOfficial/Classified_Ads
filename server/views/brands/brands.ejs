@@ -68,7 +68,13 @@
                                                                     <%= brand.title %>
                                                                 </td>
                                                                 <td>
-                                                                    <%= brand.status ? "Active" : "Inactive" %>
+                                                                    <label class="switch">
+                                                                        <input type="checkbox"
+                                                                        class="status"
+                                                                        data-id="<%= brand._id %>"
+                                                                         <%=brand.status ? "checked" : "" %>>
+                                                                        <span class="slider"></span>
+                                                                    </label>
                                                                 </td>
                                                                 <td>
                                                                     <a href="/admin/product/brand/<%= brand._id %>"
@@ -76,12 +82,15 @@
                                                                         <i class="fa-solid fa-pen-to-square"></i>
                                                                         update
                                                                     </a>
-                                                                    <button type="button" data-id="<%= brand._id %>"
-                                                                        data-toggle="modal" data-target="#modal-danger"
-                                                                        class="btn btn-danger openModal">
-                                                                        <i class="fa-solid fa-trash-can"></i>
-                                                                        Delete
-                                                                    </button>
+                                                                    <% if (brand.products.length===0) { %>
+                                                                        <button type="button" data-id="<%= brand._id %>"
+                                                                            data-toggle="modal"
+                                                                            data-target="#modal-danger"
+                                                                            class="btn btn-danger openModal">
+                                                                            <i class="fa-solid fa-trash-can"></i>
+                                                                            Delete
+                                                                        </button>
+                                                                        <% } %>
                                                                 </td>
                                                             </tr>
                                                             <% }) %>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard</title>
+    <%- include('../partials/header') %>
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed">
+    <div class="wrapper">
+        <!-- Preloader -->
+        <%- include('../partials/Loader') %>
+
+            <!-- Navbar -->
+            <%- include('../partials/navbar') %>
+                <!-- /.navbar -->
+
+                <!-- Main Sidebar Container -->
+                <%- include('../partials/sidebar') %>
+
+                    <!-- Content Wrapper. Contains page content -->
+                    <div class="content-wrapper">
+                        <section class="content-header">
+                            <div class="container-fluid">
+                                <div class="row mb-2">
+                                    <div class="col-md-6">
+                                        <h1 class="mb-2">Listings</h1>
+                                        <ol class="breadcrumb float-sm-left">
+                                            <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
+                                            <li class="breadcrumb-item active">All Listing</li>
+                                        </ol>
+                                    </div>
+                                </div>
+                                <!-- /.row -->
+                            </div>
+                            <!-- /.container-fluid -->
+                        </section>
+
+                        <section class="content">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <table style="overflow-x: scroll;" id="datatable"
+                                                    class="table table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>
+                                                                <input type="checkbox" name="">
+                                                            </th>
+                                                            <th>S.no</th>
+                                                            <th>Product</th>
+                                                            <th>Title</th>
+                                                            <th>Category</th>
+                                                            <th>Price</th>
+                                                            <th>Username</th>
+                                                            <th>Created Date</th>
+                                                            <th>Publishing Status</th>
+                                                            <th>Status</th>
+                                                            <th>Actions</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="table-grid">
+                                                        <td>
+                                                            <input type="checkbox" name="" value="<%= 0 %>">
+                                                        </td>
+                                                        <td>
+                                                            <span>
+                                                                1
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <img src="" alt=""
+                                                                style="width: 80px; height: 80px; object-fit: cover;"
+                                                                loading="lazy">
+                                                        </td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td>
+                                                            <label class="switch">
+                                                                <input type="checkbox"
+                                                                class="status"
+                                                                data-id="<%= 1 %>"
+                                                                 <%= true ? "checked" : "" %>>
+                                                                <span class="slider"></span>
+                                                            </label>
+                                                        </td>
+                                                        <td>
+                                                            <label class="switch">
+                                                                <input type="checkbox"
+                                                                class="status"
+                                                                data-id="<%= 1 %>"
+                                                                 <%= true ? "checked" : "" %>>
+                                                                <span class="slider"></span>
+                                                            </label>
+                                                        </td>
+                                                        <td>
+                                                            <a href="#" class="btn btn-primary">
+                                                                <i class="fa-solid fa-pen-to-square"></i>
+                                                                update
+                                                            </a>
+                                                            <button type="button" data-id="<%=0 %>" data-toggle="modal"
+                                                                data-target="#modal-danger"
+                                                                class="btn btn-danger openModal">
+                                                                <i class="fa-solid fa-trash-can"></i>
+                                                                Delete
+                                                            </button>
+                                                        </td>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    <!-- /.content-wrapper -->
+                    <footer class="main-footer">
+                        <strong>Copyright &copy; 2014-2021</strong>
+                        All rights reserved.
+                    </footer>
+
+    </div>
+    <!-- ./wrapper -->
+    <%- include('../partials/danger-modal') %>
+        <%- include('../partials/script') %>
+            <%- include('../partials/datatables.script.ejs') %>
+                <!-- <script> const EndAPI = 'product/brand';</script> -->
+                <script async type="module" src="/assets/js/datatable.js"></script>
+</body>
+
+</html>

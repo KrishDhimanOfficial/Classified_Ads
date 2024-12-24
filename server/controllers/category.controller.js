@@ -23,7 +23,25 @@ const category_controllers = {
     },
     rendercategories: async (req, res) => {
         try {
-            const categories = await parent_categoryModel.find({})
+            const categories = await parent_categoryModel.aggregate([
+                {
+                    $lookup: {
+                        from: 'sub_categories',
+                        localField: '_id',
+                        foreignField: 'parentId',
+                        as: 'subcategories'
+                    }
+                },
+                {
+                    $project: {
+                        'subcategories.title': 0,
+                        'subcategories.slug': 0,
+                        'subcategories.parentId': 0,
+                        'subcategories.status': 0,
+                        'subcategories._id': 0
+                    }
+                }
+            ])
             return res.render('categories/parentCategories', { categories })
         } catch (error) {
             console.log('rendercategories : ' + error.message)
@@ -48,6 +66,18 @@ const category_controllers = {
             // Extract custom error messages
             if (error.name === 'ValidationError') validations(res, error.errors)
             console.log('updateCategory : ' + error.message)
+        }
+    },
+    updateCategoryStatus: async (req, res) => {
+        try {
+            const { status } = req.body;
+            const response = await parent_categoryModel.findByIdAndUpdate(
+                { _id: req.params.id }, { status },
+            )
+            if (!response) return res.json({ error: 'Failed to update brand!' })
+            return res.json({ message: 'update successfully!' })
+        } catch (error) {
+            console.log('updateCategoryStatus : ' + error.message)
         }
     },
     deleteCategory: async (req, res) => {
@@ -117,6 +147,18 @@ const category_controllers = {
             // Extract custom error messages
             if (error.name === 'ValidationError') validations(res, error.errors)
             console.log('updateSubCategory : ' + error.message)
+        }
+    },
+    updateSubCategoryStatus: async (req, res) => {
+        try {
+            const { status } = req.body;
+            const response = await sub_categoryModel.findByIdAndUpdate(
+                { _id: req.params.id }, { status },
+            )
+            if (!response) return res.json({ error: 'Failed to update brand!' })
+            return res.json({ message: 'update successfully!' })
+        } catch (error) {
+            console.log('updateSubCategoryStatus : ' + error.message)
         }
     },
     deleteSubCategory: async (req, res) => {

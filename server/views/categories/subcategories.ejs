@@ -68,7 +68,13 @@
                                                                     <%= category.title %>
                                                                 </td>
                                                                 <td>
-                                                                    <%= category.status ? "Active" : "Inactive" %>
+                                                                    <label class="switch">
+                                                                        <input type="checkbox"
+                                                                        class="status"
+                                                                        data-id="<%= category._id %>"
+                                                                         <%=category.status ? "checked" : "" %>>
+                                                                        <span class="slider"></span>
+                                                                    </label>
                                                                 </td>
                                                                 <td>
                                                                     <a href="/admin/product/sub-category/<%= category._id %>"

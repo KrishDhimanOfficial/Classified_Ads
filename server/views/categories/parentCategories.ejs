@@ -67,7 +67,13 @@
                                                                     <%= category.title %>
                                                                 </td>
                                                                 <td>
-                                                                    <%= category.status ? "Active" : "Inactive" %>
+                                                                    <label class="switch">
+                                                                        <input type="checkbox"
+                                                                        class="status"
+                                                                        data-id="<%= category._id %>"
+                                                                         <%=category.status ? "checked" : "" %>>
+                                                                        <span class="slider"></span>
+                                                                    </label>
                                                                 </td>
                                                                 <td>
                                                                     <a href="/admin/product/category/<%= category._id %>"
@@ -75,12 +81,14 @@
                                                                         <i class="fa-solid fa-pen-to-square"></i>
                                                                         update
                                                                     </a>
-                                                                    <button type="button" data-id="<%= category._id %>"
-                                                                        data-toggle="modal" data-target="#modal-danger"
-                                                                        class="btn btn-danger openModal">
-                                                                        <i class="fa-solid fa-trash-can"></i>
-                                                                        Delete
-                                                                    </button>
+                                                                    <% if (category.subcategories.length === 0) { %>
+                                                                        <button type="button" data-id="<%= category._id %>"
+                                                                            data-toggle="modal" data-target="#modal-danger"
+                                                                            class="btn btn-danger openModal">
+                                                                            <i class="fa-solid fa-trash-can"></i>
+                                                                            Delete
+                                                                        </button>
+                                                                    <% } %>
                                                                 </td>
                                                             </tr>
                                                             <% }) %>

@@ -1,5 +1,6 @@
 import brandModel from '../models/brand.model.js'
-import validations from '../services/validateData.js';
+import productModel from '../models/product.model.js';
+import validations from '../services/validateData.js'
 
 const brandController = {
     createBrand: async (req, res) => {
@@ -22,7 +23,27 @@ const brandController = {
     },
     renderBrands: async (req, res) => {
         try {
-            const brands = await brandModel.find({})
+            const brands = await brandModel.aggregate([
+                {
+                    $lookup: {
+                        from: 'products',
+                        localField: '_id',
+                        foreignField: 'brandId',
+                        as: 'products'
+                    }
+                },
+                {
+                    $project: {
+                        title: 1,
+                        slug: 1,
+                        status: 1,
+                        'products.__v': 1,
+                    }
+                },
+                {
+                    $sort: { title: -1 }
+                }
+            ])
             return res.render('brands/brands', { brands })
         } catch (error) {
             console.log('renderBrands : ' + error.message)
@@ -48,6 +69,18 @@ const brandController = {
             // Extract custom error messages
             if (error.name === 'ValidationError') validations(res, error.errors)
             console.log('updateBrand : ' + error.message)
+        }
+    },
+    updateBrandStatus: async (req, res) => {
+        try {
+            const { status } = req.body;
+            const response = await brandModel.findByIdAndUpdate(
+                { _id: req.params.id }, { status },
+            )
+            if (!response) return res.json({ error: 'Failed to update brand!' })
+            return res.json({ message: 'update successfully!' })
+        } catch (error) {
+            console.log('updateBrandStatus : ' + error.message)
         }
     },
     deleteBrand: async (req, res) => {

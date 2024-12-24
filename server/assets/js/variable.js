@@ -10,13 +10,16 @@ export const Notify = (data) => {
     if (data.error) toastr.error(data.error)
     if (data.errors) data.errors.forEach(error => toastr.error(error))
 
-    submitbtn.disabled = false; // 
+    submitbtn.disabled = false; 
     submitbtn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Submit'
     return;
 }
 
 export const CreateSlug = (str) => {
-    return str.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/)
+    return str.toLowerCase()
+        .replace(/\s+/g, '-')
+        .replace(/&/g, 'and')
+        .replace(/[^\w-]+/,'-')
 }
 
 export const sendDataToServer = async (api, method, formData) => {
@@ -35,7 +38,6 @@ export const sendDataToServer = async (api, method, formData) => {
 }
 
 export const handleDeleteRequest = async (table_row, api) => {
-    console.log(api);
     const response = await fetch(api, { method: 'DELETE' })
     const res = await response.json()
 
