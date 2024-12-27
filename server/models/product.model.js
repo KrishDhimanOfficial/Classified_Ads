@@ -49,12 +49,12 @@ const productSchema = new mongoose.Schema({
     parentcategoryId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'parent_category',
-        required: true
+        required: [true, 'Select Category!']
     },
     subcategoryId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'sub_category',
-        required: true
+        required: [true, 'Select SubCategory!']
     },
     featured_img: {
         type: mongoose.Schema.Types.String,
@@ -68,6 +68,7 @@ const productSchema = new mongoose.Schema({
     },
     price: {
         type: mongoose.Schema.Types.Number,
+
     },
     negotiable: {
         type: mongoose.Schema.Types.Boolean,
@@ -80,6 +81,10 @@ const productSchema = new mongoose.Schema({
                 value: mongoose.Schema.Types.String,
             }
         ]
+    },
+    created_At: {
+        type: mongoose.Schema.Types.Date,
+        default: new Date()
     }
 })
 

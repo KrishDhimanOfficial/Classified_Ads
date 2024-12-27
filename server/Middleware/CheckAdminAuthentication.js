@@ -2,8 +2,9 @@ import { getUser } from "../services/createToken.js"
 
 export const checkAdminIsLogged = async (req, res, next) => {
     try {
-        const token = await req.cookies?.authtoken;
+        const token = await req.cookies.classified_ads_admin;
         const user = getUser(token)
+
         if (!token || !user) return res.redirect('/admin/login')
         next()
     } catch (error) {
@@ -11,9 +12,10 @@ export const checkAdminIsLogged = async (req, res, next) => {
         return res.redirect('/admin/login')
     }
 }
-export const checkToken = (req, res, next) => {
+
+export const checkToken = async (req, res, next) => {
     try {
-        const token = req.cookies?.authtoken;
+        const token = await req.cookies.classified_ads_admin;
         if (token) return res.redirect('/admin/dashboard')
         next()
     } catch (error) {

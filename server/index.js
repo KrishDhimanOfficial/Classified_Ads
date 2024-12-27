@@ -4,8 +4,10 @@ import cors from 'cors'
 import config from './config/config.js'
 import cluster from 'cluster'
 import numCPUs from 'os'
+import cookie_parser from 'cookie-parser'
 import connectDB from './config/dbconnection.js'
 import superAdminRoutes from './routes/superAdmin.routes.js'
+import siteRoutes from './routes/site.routes.js'
 
 dotenv.config()
 const app = express()
@@ -26,6 +28,7 @@ if (cluster.isPrimary) {
             credentials: true,
         }
     ))
+    app.use(cookie_parser())
     app.use(express.json())
     app.use(express.urlencoded({ extended: true }))
     app.use('/uploads', express.static('uploads'))
@@ -37,8 +40,8 @@ if (cluster.isPrimary) {
     app.set('views', 'views')
 
     // Routes
+    app.use('/api', siteRoutes)
     app.use('/admin', superAdminRoutes)
-    app.use('/*', (req, res) => res.render('404'))
 
     app.listen(config.port, () => {
         try {

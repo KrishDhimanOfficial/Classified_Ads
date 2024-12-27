@@ -61,20 +61,25 @@
         <div class="row w-100">
             <div class="col-4 mx-auto">
                 <div class="px-4 pt-5 pb-3 bg-white shadow rounded-5">
-                    <h1 class="text-center text-dark"> Admin Login</h1>
-                    <form id="submitFormData" class="form" enctype="multipart/form-data" autocomplete="off">
+                    <h1 class="text-center text-dark">Admin Login</h1>
+                    <form accept="/admin/login" method="post" class="form" enctype="multipart/form-data"
+                        autocomplete="off">
                         <div class="form-container">
-                            <input type="email" class="input" name="email" placeholder="Email">
+                            <input type="email" class="input" name="email" placeholder="Email"
+                                value="<%= locals.email ? email : '' %>">
                             <input type="password" class="input" name="password" placeholder="Password">
                         </div>
+                        <% if (locals.error) { %>
+                            <div class="alert alert-danger" role="alert">
+                                <%= error %>
+                            </div>
+                        <% } %>
                         <button type="submit">Login</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-    <script> const EndAPI = 'login';</script>
-    <script async type="module" src="/assets/js/main.js"></script>
 </body>
 
 </html>

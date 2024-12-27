@@ -12,7 +12,7 @@ const sellerSchema = new mongoose.Schema({
     },
     name: {
         type: mongoose.Schema.Types.String,
-        required: [true, 'Firstname must be required!'],
+        required: [true, 'Name must be required!'],
         match: [/^[a-z ]+$/, 'Incorrect firstname!']
     },
     email: {
@@ -29,6 +29,10 @@ const sellerSchema = new mongoose.Schema({
             /^(\+?\d{1,3}[-.\s]?)?(\(?\d{3}\)?[-.\s]?)?\d{3}[-.\s]?\d{4}$/,
             'Incorrect phone no!'
         ]
+    },
+    status: {
+        type: mongoose.Schema.Types.Boolean,
+        default: true
     },
     password: {
         type: mongoose.Schema.Types.String,

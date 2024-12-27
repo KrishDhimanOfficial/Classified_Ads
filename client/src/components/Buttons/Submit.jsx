@@ -1,17 +1,17 @@
 import React from 'react'
 
-const Submit = ({ text, classs, props, ref }) => {
+const Submit = ({ text, classs, ref, ...props }) => {
 
     return (
-        <Button
+        <button
             ref={ref}
             type='submit'
             className={classs}
             {...props}
         >
             {text}
-        </Button>
+        </button>
     )
 }
 
-export default Submit
+export default React.memo(Submit)

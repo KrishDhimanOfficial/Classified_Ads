@@ -40,6 +40,9 @@ const category_controllers = {
                         'subcategories.status': 0,
                         'subcategories._id': 0
                     }
+                },
+                {
+                    $sort: { title: -1 }
                 }
             ])
             return res.render('categories/parentCategories', { categories })
@@ -129,7 +132,7 @@ const category_controllers = {
     },
     renderSubCategory: async (req, res) => {
         try {
-            const categories = await sub_categoryModel.find({})
+            const categories = await sub_categoryModel.find({}).sort({ title: -1 })
             return res.render('categories/subcategories', { categories })
         } catch (error) {
             console.log('renderSubCategory : ' + error.message)

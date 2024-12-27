@@ -1,16 +1,16 @@
 import React from 'react'
 
-const Button = ({ type, text, classs, props, ref }) => {
+const Button = ({ type, text, classs, ref, ...props }) => {
     return (
-        <Button
-            ref={ref}
+        <button
             type={type}
+            ref={ref}
             className={classs}
             {...props}
         >
             {text}
-        </Button>
+        </button>
     )
 }
 
-export default Button
+export default React.memo(Button)

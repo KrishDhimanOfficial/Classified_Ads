@@ -1,8 +1,8 @@
 import React from 'react'
 
-const Input = ({ type, ref, classs, props }) => {
+const Input = ({ type, ref, classs, ...props }) => {
     return (
-        <Input
+        <input
             type={type}
             ref={ref}
             className={`${classs}`}
@@ -11,4 +11,4 @@ const Input = ({ type, ref, classs, props }) => {
     )
 }
 
-export default Input
+export default React.memo(Input)

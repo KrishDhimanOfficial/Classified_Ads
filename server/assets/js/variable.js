@@ -3,6 +3,7 @@ export const inputTitle = document.querySelector('#inputTitle')
 export const inputSlug = document.querySelector('#inputSlug')
 export const SubmitForm = document.querySelector('#submitFormData') || document.querySelector('#updateFormData')
 export const submitbtn = document.querySelector('#submitbtn')
+export const loginbtn = document.querySelector('#loginbtn')
 
 export const Notify = (data) => {
     if (data.message) toastr.success(data.message)
@@ -10,7 +11,7 @@ export const Notify = (data) => {
     if (data.error) toastr.error(data.error)
     if (data.errors) data.errors.forEach(error => toastr.error(error))
 
-    submitbtn.disabled = false; 
+    submitbtn.disabled = false;
     submitbtn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Submit'
     return;
 }
@@ -19,7 +20,7 @@ export const CreateSlug = (str) => {
     return str.toLowerCase()
         .replace(/\s+/g, '-')
         .replace(/&/g, 'and')
-        .replace(/[^\w-]+/,'-')
+        .replace(/[^\w-]+/, '-')
 }
 
 export const sendDataToServer = async (api, method, formData) => {

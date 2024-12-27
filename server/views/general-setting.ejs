@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard</title>
+    <%- include('./partials/header') %>
+        <link rel="stylesheet" href="/assets/vendor/datatables-responsive/css/responsive.bootstrap4.min.css">
+        <link rel="stylesheet" href="/assets/vendor/datatables-bs4/css/dataTables.bootstrap4.min.css">
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed">
+    <div class="wrapper">
+        <!-- Preloader -->
+        <%- include('./partials/Loader') %>
+
+            <!-- Navbar -->
+            <%- include('./partials/navbar') %>
+                <!-- /.navbar -->
+
+                <!-- Main Sidebar Container -->
+                <%- include('./partials/sidebar') %>
+
+                    <!-- Content Wrapper. Contains page content -->
+                    <div class="content-wrapper">
+                        <section class="content-header">
+                            <div class="container-fluid">
+                                <div class="row mb-2">
+                                    <div class="col-md-6">
+                                        <h1 class="mb-2">General Settings</h1>
+                                    </div>
+                                </div>
+                                <!-- /.row -->
+                            </div>
+                            <!-- /.container-fluid -->
+                        </section>
+
+                        <section class="content">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <!-- general form elements -->
+                                        <div class="card card-primary">
+                                            <div class="card-header">
+                                                <h3 class="card-title">Change Password</h3>
+                                            </div>
+                                            <!-- /.card-header -->
+                                            <!-- form start -->
+                                            <form action="/admin/change-password" method="post"
+                                                enctype="multipart/form-data">
+                                                <div class="card-body">
+                                                    <div class="form-group">
+                                                        <label for="cpassword">Current Password</label>
+                                                        <input type="password" class="form-control" id="cpassword"
+                                                            name="current_password"
+                                                            value="<%= locals.current_password ? current_password : '' %>"
+                                                            placeholder="Enter Current Password">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="ncpassword">New Password</label>
+                                                        <input type="password" class="form-control" name="new_password"
+                                                        value="<%= locals.new_password ? new_password : '' %>"
+                                                            id="npassword" placeholder="Enter New Password">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="password">Re-Enter Password</label>
+                                                        <input type="password" class="form-control" id="password"
+                                                        value="<%= locals.re_enter_passsword ? re_enter_passsword : '' %>"
+                                                            name="re_enter_passsword" placeholder="Re-Enter Password">
+                                                    </div>
+                                                    <% if (locals.error) { %>
+                                                        <div class="alert alert-danger" role="alert">
+                                                            <%= error %>
+                                                        </div>
+                                                    <% } %>
+                                                    <% if (locals.success) { %>
+                                                        <div class="alert alert-success" role="alert">
+                                                            <%= success %>
+                                                        </div>
+                                                    <% } %>
+                                                </div>
+                                                <!-- /.card-body -->
+                                                <div class="card-footer">
+                                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <!-- /.card -->
+                                        <!-- general form elements -->
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    <!-- /.content-wrapper -->
+                    <footer class="main-footer">
+                        <strong>Copyright &copy; 2014-2021</strong>
+                        All rights reserved.
+                    </footer>
+
+    </div>
+    <!-- ./wrapper -->
+    <%- include('./partials/script') %>
+</body>
+
+</html>

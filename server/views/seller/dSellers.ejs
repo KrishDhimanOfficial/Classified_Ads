@@ -26,10 +26,10 @@
                             <div class="container-fluid">
                                 <div class="row mb-2">
                                     <div class="col-md-6">
-                                        <h1 class="mb-2">Listings</h1>
+                                        <h1 class="mb-2">All Deactivated Sellers</h1>
                                         <ol class="breadcrumb float-sm-left">
                                             <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
-                                            <li class="breadcrumb-item active">All Listing</li>
+                                            <li class="breadcrumb-item active">All Deactivated Sellers</li>
                                         </ol>
                                     </div>
                                 </div>
@@ -48,64 +48,32 @@
                                                     class="table table-hover">
                                                     <thead>
                                                         <tr>
-                                                            <th>
-                                                                <input type="checkbox">
-                                                            </th>
                                                             <th>S.no</th>
-                                                            <th>Product</th>
-                                                            <th>Title</th>
-                                                            <th>Category</th>
-                                                            <th>Price</th>
-                                                            <th>Username</th>
-                                                            <th>Created Date</th>
-                                                            <th>Publishing Status</th>
-                                                            <th>Status</th>
+                                                            <th>Name</th>
+                                                            <th>Email</th>
+                                                            <th>Phone</th>
+                                                            <th>Account Status</th>
                                                             <th>Actions</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody id="table-grid">
-                                                        <td>
-                                                            <input type="checkbox" name="" value="<%= 0 %>">
-                                                        </td>
-                                                        <td>
-                                                            <span>
-                                                                1
-                                                            </span>
-                                                        </td>
-                                                        <td>
-                                                            <img src="" alt=""
-                                                                style="width: 80px; height: 80px; object-fit: cover;"
-                                                                loading="lazy">
-                                                        </td>
-                                                        <td></td>
-                                                        <td></td>
+                                                        <td>1</td>
                                                         <td></td>
                                                         <td></td>
                                                         <td></td>
                                                         <td>
                                                             <label class="switch">
-                                                                <input type="checkbox"
-                                                                class="status"
-                                                                data-id="<%= 1 %>"
-                                                                 <%= true ? "checked" : "" %>>
-                                                                <span class="slider"></span>
-                                                            </label>
-                                                        </td>
-                                                        <td>
-                                                            <label class="switch">
-                                                                <input type="checkbox"
-                                                                class="status"
-                                                                data-id="<%= 1 %>"
-                                                                 <%= true ? "checked" : "" %>>
+                                                                <input type="checkbox" class="status" data-id="<%= 1 %>"
+                                                                    <%=true ? "checked" : "" %>>
                                                                 <span class="slider"></span>
                                                             </label>
                                                         </td>
                                                         <td>
                                                             <a href="#" class="btn btn-primary">
-                                                                <i class="fa-solid fa-pen-to-square"></i>
-                                                                update
+                                                                <i class="fa-regular fa-eye"></i>
+                                                                View Details
                                                             </a>
-                                                            <button type="button" data-id="<%=0 %>" data-toggle="modal"
+                                                            <button type="button" data-id="<%= 0 %>" data-toggle="modal"
                                                                 data-target="#modal-danger"
                                                                 class="btn btn-danger openModal">
                                                                 <i class="fa-solid fa-trash-can"></i>
@@ -132,7 +100,7 @@
     <%- include('../partials/danger-modal') %>
         <%- include('../partials/script') %>
             <%- include('../partials/datatables.script.ejs') %>
-                <!-- <script> const EndAPI = 'product/brand';</script> -->
+                <!-- <script> const EndAPI = '';</script> -->
                 <script async type="module" src="/assets/js/datatable.js"></script>
 </body>
 
