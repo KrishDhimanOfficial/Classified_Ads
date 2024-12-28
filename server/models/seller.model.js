@@ -5,7 +5,7 @@ const sellerSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.String,
         required: [true, 'username must be required!'],
         unique: true,
-        match: [/^[a-z]+$/, 'Incorrect username!']
+        match: [/^[a-z0-9]+$/, 'Incorrect username!']
     },
     image: {
         type: mongoose.Schema.Types.String,
@@ -13,7 +13,7 @@ const sellerSchema = new mongoose.Schema({
     name: {
         type: mongoose.Schema.Types.String,
         required: [true, 'Name must be required!'],
-        match: [/^[a-z ]+$/, 'Incorrect firstname!']
+        match: [/^[A-Za-z]+( [A-Za-z]+)*$/, 'Incorrect Name!']
     },
     email: {
         type: mongoose.Schema.Types.String,
@@ -25,10 +25,7 @@ const sellerSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.String,
         required: [true, 'Phone No is required!'],
         unique: true,
-        match: [
-            /^(\+?\d{1,3}[-.\s]?)?(\(?\d{3}\)?[-.\s]?)?\d{3}[-.\s]?\d{4}$/,
-            'Incorrect phone no!'
-        ]
+        match: [/^[0-9]+$/, 'Incorrect phone no!']
     },
     status: {
         type: mongoose.Schema.Types.Boolean,

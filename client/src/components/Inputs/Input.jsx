@@ -1,11 +1,10 @@
 import React from 'react'
 
-const Input = ({ type, ref, classs, ...props }) => {
+const Input = ({ type, ref, ...props }) => {
     return (
         <input
             type={type}
             ref={ref}
-            className={`${classs}`}
             {...props}
         />
     )

@@ -1,12 +1,11 @@
 import React from 'react'
 
-const Submit = ({ text, classs, ref, ...props }) => {
+const Submit = ({ text, ref, ...props }) => {
 
     return (
         <button
             ref={ref}
             type='submit'
-            className={classs}
             {...props}
         >
             {text}

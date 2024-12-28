@@ -77,15 +77,15 @@ const authenticationcontroller = {
     },
     handelSellerRegister: async (req, res) => {
         try {
-            const { email, username, name, password } = req.body;
+            const { email, username, phone, name, password } = req.body;
 
-            const checkExistence = await sellerModel.findOne({ email }) // Find Exists user with email
+            const checkExistence = await sellerModel.findOne({ email, phone }) // Find Exists user with email
             if (checkExistence) return res.json({ info: 'Account Exists With this Email!' })
 
             const reponse = await sellerModel.create(
                 {
-                    email, username, name,
-                    password: await bcrypt.genSalt(10, password)
+                    email, username, name, phone,
+                    password: await bcrypt.hash(password, 10)
                 }
             ) // create Seller
             if (!reponse) return res.json({ error: 'Unable to create Account!' })

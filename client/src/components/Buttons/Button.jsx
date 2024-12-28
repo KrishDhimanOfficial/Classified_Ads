@@ -1,11 +1,10 @@
 import React from 'react'
 
-const Button = ({ type, text, classs, ref, ...props }) => {
+const Button = ({ type, text, ref, ...props }) => {
     return (
         <button
             type={type}
             ref={ref}
-            className={classs}
             {...props}
         >
             {text}
