@@ -1,6 +1,6 @@
 import adminModel from "../models/admin.model.js"
 import sellerModel from "../models/seller.model.js"
-import { getUser, setUser } from '../services/createToken.js'
+import { setUser } from '../services/createToken.js'
 import validations from "../services/validateData.js"
 import bcrypt from 'bcrypt'
 
@@ -19,7 +19,7 @@ const authenticationcontroller = {
                 res.cookie('classified_ads_admin', token,
                     {
                         httpOnly: true,
-                        maxAge: 60 * 60 * 60 * 24,
+                        maxAge: 60 * 60 * 60 * 60 * 24,
                         sameSite: 'strict',
                         secure: true
                     })
@@ -113,23 +113,6 @@ const authenticationcontroller = {
             console.log('handleSellerLogin : ' + error.message)
         }
     },
-    renderAllSellers: async (req, res) => {
-        try {
-            const sellers = await sellerModel.find({}, { password: 0 })
-            return res.render('seller/allSellers', { sellers })
-        } catch (error) {
-            console.log('renderAllSellers : ' + error.message)
-        }
-
-    },
-    renderAllDeactivated_Sellers: async (req, res) => {
-        try {
-            const sellers = await sellerModel.find({ status: false }, { password: 0 })
-            return res.render('seller/dSellers', { sellers })
-        } catch (error) {
-            console.log('renderAllDeactivated_Sellers : ' + error.message)
-        }
-
-    }
 }
+
 export default authenticationcontroller

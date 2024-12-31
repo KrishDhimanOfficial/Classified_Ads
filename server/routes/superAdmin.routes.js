@@ -3,6 +3,7 @@ import brandController from '../controllers/brand.controller.js'
 import { upload } from '../Middleware/multer.middleware.js'
 import category_controllers from '../controllers/category.controller.js'
 import authenticationcontroller from '../controllers/authentication.controller.js'
+import seller_controllers from '../controllers/seller.controller.js'
 import { checkAdminIsLogged, checkToken } from '../Middleware/CheckAdminAuthentication.js'
 const router = express.Router()
 
@@ -52,8 +53,10 @@ router.route('/product/sub-category/:id?')
 router.get('/product/listings', checkAdminIsLogged, (req, res) => res.render('listing/listings'))
 
 // Routes for Sellers
-router.get('/all-sellers', checkAdminIsLogged, authenticationcontroller.renderAllSellers)
-router.get('/deactivated-sellers', checkAdminIsLogged, authenticationcontroller.renderAllDeactivated_Sellers)
+router.get('/all-sellers', checkAdminIsLogged, seller_controllers.renderAllSellers)
+router.get('/deactivated-sellers', checkAdminIsLogged, seller_controllers.renderAllDeactivated_Sellers)
+router.route('/seller/:id?')
+    .patch(seller_controllers.updateSellerStatus)
 
 // General-Settings
 router.get('/general-settings', checkAdminIsLogged, (req, res) => res.render('general-setting'))

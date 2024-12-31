@@ -13,10 +13,10 @@ const defaultValues = { name: '', username: '', phone: '', email: '', password: 
 const schema = yup.object().shape({
     name: yup.string().trim()
         .required('Name is Required')
-        .matches(/^[A-Za-z]+( [A-Za-z]+)*$/, 'Invalid Name'),
+        .matches(/^[A-Za-z ]+$/, 'Invalid Name'),
     username: yup.string().trim()
         .required('Username is required')
-        .matches(/[a-z0-9]/, 'Invalid username'),
+        .matches(/^[a-z0-9]+$/, 'Invalid username'),
     phone: yup.string().trim()
         .max(10, 'Incorrect Phone no.')
         .required('Phone is required')

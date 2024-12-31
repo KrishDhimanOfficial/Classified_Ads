@@ -13,12 +13,12 @@ const createStorage = (dir) => multer.diskStorage({
         cb(null, newFileName)
     }
 })
-const fileFilter = (req, file, cb) => {
+
+const fileFilter = (req, file, cb) => { 
     const allowedExtensions = ['.jpg', '.jpeg', '.png', '.webp']
     const ext = path.extname(file.originalname).toLowerCase()
 
-    // Check file extension
-    if (!allowedExtensions.includes(ext)) {
+    if (!allowedExtensions.includes(ext)) { // Check file extension
         return cb(new Error('only jpg, png, webp are allowed'), false)
     }
     cb(null, true)
@@ -26,8 +26,8 @@ const fileFilter = (req, file, cb) => {
 
 export const upload = multer()
 
-export const tour_location = multer({
-    storage: createStorage('tour_location_images'),
+export const product = multer({
+    storage: createStorage('product_images'),
     limits: { fileSize: MAX_SIZE },
     fileFilter: fileFilter
 })

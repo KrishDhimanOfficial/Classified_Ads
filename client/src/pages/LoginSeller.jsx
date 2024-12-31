@@ -1,4 +1,3 @@
-import React from 'react'
 import { Link } from 'react-router-dom'
 import { Input, Submit } from '../components/component'
 import { useForm, Controller } from 'react-hook-form'
@@ -12,10 +11,10 @@ import * as yup from 'yup'
 const defaultValues = { email: '', password: '' }
 
 const validateData = yup.object().shape({
-    email: yup.string().email('Invalid email')
+    email: yup.string().email().trim()
         .required('Email is required')
         .matches(/^[a-z0-9]+@gmail.com$/, 'Incorrect Email'),
-    password: yup.string()
+    password: yup.string().trim()
         .required('password is required')
 })
 
@@ -28,6 +27,9 @@ const LoginSeller = () => {
         try {
             const res = await axios.post(`${config.severAPI}/login/seller`, fromData)
             Notify(res.data)
+            const date = new Date()
+            const expDate = date.setTime(date.getTime() + (24 * 60 * 60 * 1000))
+            document.cookie = `seller_token=${res.data.seller_token};expires=${expDate};path=/`;
         } catch (error) {
             console.error(error)
         }
@@ -72,7 +74,7 @@ const LoginSeller = () => {
                         <p className='fs-6 text-danger m-0'>{errors.password?.message}</p>
                     </div>
                     <Submit
-                        text={isSubmitting ? '...Submitting' : 'Login'}
+                        text={isSubmitting ? '...Loging' : 'Login'}
                         className={'submit'}
                         disabled={isSubmitting}
                     />

@@ -57,29 +57,38 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody id="table-grid">
-                                                        <td>1</td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td>
-                                                            <label class="switch">
-                                                                <input type="checkbox" class="status" data-id="<%= 1 %>"
-                                                                    <%=true ? "checked" : "" %>>
-                                                                <span class="slider"></span>
-                                                            </label>
-                                                        </td>
-                                                        <td>
-                                                            <a href="#" class="btn btn-primary">
-                                                                <i class="fa-regular fa-eye"></i>
-                                                                View Details
-                                                            </a>
-                                                            <button type="button" data-id="<%= 0 %>" data-toggle="modal"
-                                                                data-target="#modal-danger"
-                                                                class="btn btn-danger openModal">
-                                                                <i class="fa-solid fa-trash-can"></i>
-                                                                Delete
-                                                            </button>
-                                                        </td>
+                                                        <% sellers.forEach((seller,i)=> { %>
+                                                            <tr>
+                                                                <td>
+                                                                    <%= i+1 %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= seller.name %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= seller.email %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= seller.phone %>
+                                                                </td>
+                                                                <td>
+                                                                    <label class="switch">
+                                                                        <input type="checkbox" class="status"
+                                                                            data-id="<%= seller._id %>" <%=seller.status ? "checked" : ""
+                                                                            %>>
+                                                                        <span class="slider"></span>
+                                                                    </label>
+                                                                </td>
+                                                                <td>
+                                                                    <button type="button" data-id="<%= seller._id %>"
+                                                                        data-toggle="modal" data-target="#modal-danger"
+                                                                        class="btn btn-danger openModal">
+                                                                        <i class="fa-solid fa-trash-can"></i>
+                                                                        Delete
+                                                                    </button>
+                                                                </td>
+                                                            </tr>
+                                                            <% }) %>
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -100,7 +109,7 @@
     <%- include('../partials/danger-modal') %>
         <%- include('../partials/script') %>
             <%- include('../partials/datatables.script.ejs') %>
-                <!-- <script> const EndAPI = '';</script> -->
+                <script> const EndAPI = 'seller';</script>
                 <script async type="module" src="/assets/js/datatable.js"></script>
 </body>
 

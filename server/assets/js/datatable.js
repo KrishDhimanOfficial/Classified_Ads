@@ -20,6 +20,7 @@ const updatetableDataStatus = async (status, api) => {
     try {
         const response = await fetch(api, {
             method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ status })
         })
         const res = await response.json()

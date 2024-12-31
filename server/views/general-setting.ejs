@@ -40,7 +40,7 @@
                             <div class="container-fluid">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <!-- general form elements -->
+                                        <!-- change password -->
                                         <div class="card card-primary">
                                             <div class="card-header">
                                                 <h3 class="card-title">Change Password</h3>
@@ -60,25 +60,25 @@
                                                     <div class="form-group">
                                                         <label for="ncpassword">New Password</label>
                                                         <input type="password" class="form-control" name="new_password"
-                                                        value="<%= locals.new_password ? new_password : '' %>"
+                                                            value="<%= locals.new_password ? new_password : '' %>"
                                                             id="npassword" placeholder="Enter New Password">
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="password">Re-Enter Password</label>
                                                         <input type="password" class="form-control" id="password"
-                                                        value="<%= locals.re_enter_passsword ? re_enter_passsword : '' %>"
+                                                            value="<%= locals.re_enter_passsword ? re_enter_passsword : '' %>"
                                                             name="re_enter_passsword" placeholder="Re-Enter Password">
                                                     </div>
                                                     <% if (locals.error) { %>
                                                         <div class="alert alert-danger" role="alert">
                                                             <%= error %>
                                                         </div>
-                                                    <% } %>
-                                                    <% if (locals.success) { %>
-                                                        <div class="alert alert-success" role="alert">
-                                                            <%= success %>
-                                                        </div>
-                                                    <% } %>
+                                                        <% } %>
+                                                            <% if (locals.success) { %>
+                                                                <div class="alert alert-success" role="alert">
+                                                                    <%= success %>
+                                                                </div>
+                                                                <% } %>
                                                 </div>
                                                 <!-- /.card-body -->
                                                 <div class="card-footer">
@@ -87,7 +87,34 @@
                                             </form>
                                         </div>
                                         <!-- /.card -->
-                                        <!-- general form elements -->
+                                        <!-- change password -->
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card card-primary">
+                                            <div class="card-header">
+                                                <h3 class="card-title">Site Settings</h3>
+                                            </div>
+                                            <!-- /.card-header -->
+                                            <!-- form start -->
+                                            <form action="#" method="post" enctype="multipart/form-data">
+                                                <div class="card-body">
+                                                    <div class="form-group">
+                                                        <label for="sname">Site Name</label>
+                                                        <input type="text" class="form-control" id="sname"
+                                                            name="current_password" placeholder="Enter Name">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="logo">Logo</label>
+                                                        <input type="file" class="form-control" id="logo"
+                                                            name="current_password">
+                                                    </div>
+                                                </div>
+                                                <!-- /.card-body -->
+                                                <div class="card-footer">
+                                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                                </div>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
