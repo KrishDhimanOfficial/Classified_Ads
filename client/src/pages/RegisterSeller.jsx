@@ -3,10 +3,8 @@ import { useForm, Controller } from 'react-hook-form'
 import { Input, Submit } from '../components/component'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { ToastContainer } from 'react-toastify'
-import config from '../../config/config'
-import { Notify } from '../hooks/hooks'
+import { DataService, Notify } from '../hooks/hooks'
 import * as  yup from 'yup'
-import axios from 'axios'
 
 const defaultValues = { name: '', username: '', phone: '', email: '', password: '' }
 
@@ -34,11 +32,10 @@ const RegisterSeller = () => {
             defaultValues
         }
     ) // Handling Form Data
-
     const handleForm = async (fromData) => {
         try {
-            const res = await axios.post(`${config.severAPI}/register/seller`, fromData)
-            if (res.data.message) reset()
+            const res = await DataService.post('/register/seller', fromData)
+            if (res.message) reset()
             Notify(res.data)
         } catch (error) {
             console.error(error)

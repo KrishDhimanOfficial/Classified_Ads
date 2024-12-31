@@ -3,10 +3,9 @@ import { Input, Submit } from '../components/component'
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { ToastContainer } from 'react-toastify'
-import axios from 'axios'
-import config from '../../config/config'
 import { Notify } from '../hooks/hooks'
 import * as yup from 'yup'
+import { DataService } from '../hooks/hooks'
 
 const defaultValues = { email: '', password: '' }
 
@@ -25,11 +24,11 @@ const LoginSeller = () => {
     })
     const handleLogin = async (fromData) => {
         try {
-            const res = await axios.post(`${config.severAPI}/login/seller`, fromData)
-            Notify(res.data)
+            const res = await DataService.post('/login/seller', fromData)
+            Notify(res)
             const date = new Date()
             const expDate = date.setTime(date.getTime() + (24 * 60 * 60 * 1000))
-            document.cookie = `seller_token=${res.data.seller_token};expires=${expDate};path=/`;
+            document.cookie = `seller_token=${res.seller_token};expires=${expDate};path=/`;
         } catch (error) {
             console.error(error)
         }
@@ -41,7 +40,7 @@ const LoginSeller = () => {
             <div className="min-vh-100 d-flex flex-column align-items-center justify-content-center">
                 <form onSubmit={handleSubmit(handleLogin)} autoComplete='off' className="form" style={{ width: '100%' }}>
                     <p className="form-title">Login</p>
-                    <div className="input-container w-100">
+                    <div className="input-container">
                         <Controller
                             name='email'
                             control={control}
