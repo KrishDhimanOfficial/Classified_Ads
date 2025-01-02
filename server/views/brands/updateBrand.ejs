@@ -44,7 +44,7 @@
                         <section class="content">
                             <div class="container-fluid">
                                 <div class="row">
-                                    <div class="col-12">
+                                    <div class="col-md-6">
                                         <div class="card card-primary">
                                             <!-- Card Header -->
                                             <div class="card-header">
@@ -60,8 +60,9 @@
 
                                             <div class="card-body">
                                                 <div class="row">
-                                                    <div class="col-md-6">
-                                                        <form id="updateFormData" autocomplete="off" data-id="<%= brand._id %>">
+                                                    <div class="col-md-12">
+                                                        <form id="updateFormData" autocomplete="off"
+                                                            data-id="<%= brand._id %>">
                                                             <div class="form-group">
                                                                 <label for="inputTitle">Title</label>
                                                                 <input type="text" name="title" id="inputTitle"
@@ -73,6 +74,11 @@
                                                                 <input type="text" name="slug" id="inputSlug"
                                                                     value="<%= brand.slug %>" placeholder="Enter Slug"
                                                                     class="form-control">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="inputImage">Image</label>
+                                                                <input type="file" name="image" id="inputImage" accept="image/*"
+                                                                    autocomplete="off" class="form-control">
                                                             </div>
                                                             <div class="form-group">
                                                                 <label for="inputStatus">Status</label>
@@ -102,6 +108,23 @@
                                                 </div>
                                             </div>
                                             <!-- /.card-body -->
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card card-primary">
+                                            <div class="card-header">
+                                                <h3 class="card-title">Preview</h3>
+                                                <div class="card-tools">
+                                                    <button type="button" class="btn btn-tool"
+                                                        data-card-widget="collapse" title="Collapse">
+                                                        <i class="fas fa-minus"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="card-body d-flex justify-content-center">
+                                                <img id="previewImage" src="<%= brand_img_path %>/<%= brand.image %>" alt=""
+                                                    style="width: 100%; height: 300px; object-fit: contain;">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

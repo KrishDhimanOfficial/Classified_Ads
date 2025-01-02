@@ -1,5 +1,7 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import { LoginSeller, RegisterSeller } from './pages/pages'
+import { LoginSeller, RegisterSeller, Index } from './pages/pages'
+import Layout from './Layout'
+import SellerAccountLayout from './SellerAccountLayout'
 
 const routes = [
   {
@@ -9,6 +11,20 @@ const routes = [
   {
     path: '/login',
     element: <LoginSeller />,
+  },
+  {
+    path: '/',
+    element: <Layout />,
+    children: [
+      {
+        path: '/',
+        element: <Index />
+      }
+    ]
+  },
+  {
+    path: '/user/dashboard',
+    element: <SellerAccountLayout />,
   }
 ]
 

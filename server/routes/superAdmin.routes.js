@@ -1,10 +1,11 @@
 import express from 'express'
 import brandController from '../controllers/brand.controller.js'
-import { upload } from '../Middleware/multer.middleware.js'
+import { upload, brand, category } from '../Middleware/multer.middleware.js'
 import category_controllers from '../controllers/category.controller.js'
 import authenticationcontroller from '../controllers/authentication.controller.js'
 import seller_controllers from '../controllers/seller.controller.js'
 import { checkAdminIsLogged, checkToken } from '../Middleware/CheckAdminAuthentication.js'
+import handlemulterError from '../Middleware/handleMulterError.js'
 const router = express.Router()
 
 // Routes for Super Admin
@@ -21,9 +22,9 @@ router.get('/logout', authenticationcontroller.handleSuperAdminLogout)
 router.get('/product/add-new-brand', checkAdminIsLogged, (req, res) => res.render('brands/Addbrand'))
 router.get('/product/brands', checkAdminIsLogged, brandController.renderBrands)
 router.route('/product/brand/:id?')
-    .post(upload.none(), brandController.createBrand)
+    .post(brand.single('image'), handlemulterError, brandController.createBrand)
     .get(brandController.getSingleBrand)
-    .put(upload.none(), brandController.updateBrand)
+    .put(brand.single('image'), handlemulterError, brandController.updateBrand)
     .patch(brandController.updateBrandStatus)
     .delete(brandController.deleteBrand)
 
@@ -32,9 +33,9 @@ router.route('/product/brand/:id?')
 router.get('/category/add-new-category', checkAdminIsLogged, (req, res) => res.render('categories/AddParentcategory'))
 router.get('/product/category', checkAdminIsLogged, category_controllers.rendercategories)
 router.route('/product/category/:id?')
-    .post(upload.none(), category_controllers.createParentCategory)
+    .post(category.single('image'), handlemulterError, category_controllers.createParentCategory)
     .get(category_controllers.getSingleCategory)
-    .put(upload.none(), category_controllers.updateCategory)
+    .put(category.single('image'), handlemulterError, category_controllers.updateCategory)
     .patch(category_controllers.updateCategoryStatus)
     .delete(category_controllers.deleteCategory)
 

@@ -1,8 +1,11 @@
 export const serverAPI = 'http://localhost:3000/admin';
 export const inputTitle = document.querySelector('#inputTitle')
 export const inputSlug = document.querySelector('#inputSlug')
+export const inputImage = document.querySelector('#inputImage')
+export const previewImage = document.querySelector('#previewImage')
 export const SubmitForm = document.querySelector('#submitFormData') || document.querySelector('#updateFormData')
 export const submitbtn = document.querySelector('#submitbtn')
+export const resetbtn = document.querySelector('#reset')
 export const loginbtn = document.querySelector('#loginbtn')
 
 export const Notify = (data) => {
@@ -21,6 +24,13 @@ export const CreateSlug = (str) => {
         .replace(/\s+/g, '-')
         .replace(/&/g, 'and')
         .replace(/[^\w-]+/, '-')
+}
+
+export const displayPreviewImage = async (e) => {
+    const file = e.target.files[0]
+    const reader = new FileReader()
+    reader.onload = () => previewImage.src = reader.result;
+    reader.readAsDataURL(file)
 }
 
 export const sendDataToServer = async (api, method, formData) => {

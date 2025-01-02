@@ -14,7 +14,7 @@ const createStorage = (dir) => multer.diskStorage({
     }
 })
 
-const fileFilter = (req, file, cb) => { 
+const fileFilter = (req, file, cb) => {
     const allowedExtensions = ['.jpg', '.jpeg', '.png', '.webp']
     const ext = path.extname(file.originalname).toLowerCase()
 
@@ -26,8 +26,14 @@ const fileFilter = (req, file, cb) => {
 
 export const upload = multer()
 
-export const product = multer({
-    storage: createStorage('product_images'),
+export const brand = multer({
+    storage: createStorage('brands_images'),
+    limits: { fileSize: MAX_SIZE },
+    fileFilter: fileFilter
+})
+
+export const category = multer({
+    storage: createStorage('category_images'),
     limits: { fileSize: MAX_SIZE },
     fileFilter: fileFilter
 })

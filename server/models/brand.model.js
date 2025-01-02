@@ -8,6 +8,10 @@ const brandSchema = new mongoose.Schema({
         trim: true,
         match: [/^[a-zA-Z ]+$/, 'Invalid Title!'],
     },
+    image: {
+        type: mongoose.Schema.Types.String,
+        required: [true, 'Image Are Required!'],
+    },
     slug: {
         type: mongoose.Schema.Types.String,
         required: [true, 'Slug Are Required!'],

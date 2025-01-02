@@ -5,7 +5,6 @@ class DataService {
     constructor() {
         this.clientAPI = axios.create({ baseURL: config.severAPI })
     }
-
     async post(api, formdata, config = {}) { // POST Request
         const response = await this.clientAPI.post(api, formdata, config)
         return response.data

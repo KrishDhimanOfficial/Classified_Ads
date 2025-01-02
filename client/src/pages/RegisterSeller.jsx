@@ -9,20 +9,16 @@ import * as  yup from 'yup'
 const defaultValues = { name: '', username: '', phone: '', email: '', password: '' }
 
 const schema = yup.object().shape({
-    name: yup.string().trim()
-        .required('Name is Required')
+    name: yup.string().trim().required('Name is Required')
         .matches(/^[A-Za-z ]+$/, 'Invalid Name'),
-    username: yup.string().trim()
-        .required('Username is required')
+    username: yup.string().trim().required('Username is required')
         .matches(/^[a-z0-9]+$/, 'Invalid username'),
-    phone: yup.string().trim()
+    phone: yup.string().trim().required('Phone is required')
         .max(10, 'Incorrect Phone no.')
-        .required('Phone is required')
         .matches(/^[0-9]+$/, 'Invalid phone'),
     email: yup.string().email().trim()
         .matches(/^[a-z0-9]+@gmail.com$/, 'Invalid email!'),
-    password: yup.string().trim()
-        .required('Password is required')
+    password: yup.string().trim().required('Password is required')
 })
 
 const RegisterSeller = () => {

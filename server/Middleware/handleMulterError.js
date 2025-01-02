@@ -1,7 +1,7 @@
 import multer from "multer"
 
 // Error handling middleware
-const CheckmulterError = (err, req, res, next) => {
+const handlemulterError = (err, req, res, next) => {
     if (err instanceof multer.MulterError) {
         // A Multer error occurred when uploading.
         return res.status(400).json({ error: err.message })
@@ -13,4 +13,4 @@ const CheckmulterError = (err, req, res, next) => {
     }
 }
 
-export default CheckmulterError 
+export default handlemulterError

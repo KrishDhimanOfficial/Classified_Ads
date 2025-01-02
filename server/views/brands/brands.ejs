@@ -53,6 +53,7 @@
                                                     <thead>
                                                         <tr>
                                                             <th>S.no</th>
+                                                            <th>Image</th>
                                                             <th>Brand</th>
                                                             <th>Status</th>
                                                             <th>Actions</th>
@@ -65,14 +66,17 @@
                                                                     <%= i+1 %>
                                                                 </td>
                                                                 <td>
+                                                                    <img src="<%= brand_img_path %>/<%= brand.image %>" alt=""
+                                                                        style="width: 100px; height: 100px; border-radius: 2%;">
+                                                                </td>
+                                                                <td>
                                                                     <%= brand.title %>
                                                                 </td>
                                                                 <td>
                                                                     <label class="switch">
-                                                                        <input type="checkbox"
-                                                                        class="status"
-                                                                        data-id="<%= brand._id %>"
-                                                                         <%=brand.status ? "checked" : "" %>>
+                                                                        <input type="checkbox" class="status"
+                                                                            data-id="<%= brand._id %>" <%=brand.status
+                                                                            ? "checked" : "" %>>
                                                                         <span class="slider"></span>
                                                                     </label>
                                                                 </td>

@@ -52,6 +52,7 @@
                                                     <thead>
                                                         <tr>
                                                             <th>S.no</th>
+                                                            <th>Image</th>
                                                             <th>Category</th>
                                                             <th>Status</th>
                                                             <th>Actions</th>
@@ -64,14 +65,17 @@
                                                                     <%= i+1 %>
                                                                 </td>
                                                                 <td>
+                                                                    <img src="<%= category_img_path %>/<%= category.image %>" alt=""
+                                                                        style="width: 100px; height: 100px; border-radius: 2%;">
+                                                                </td>
+                                                                <td>
                                                                     <%= category.title %>
                                                                 </td>
                                                                 <td>
                                                                     <label class="switch">
-                                                                        <input type="checkbox"
-                                                                        class="status"
-                                                                        data-id="<%= category._id %>"
-                                                                         <%=category.status ? "checked" : "" %>>
+                                                                        <input type="checkbox" class="status"
+                                                                            data-id="<%= category._id %>"
+                                                                            <%=category.status ? "checked" : "" %>>
                                                                         <span class="slider"></span>
                                                                     </label>
                                                                 </td>
@@ -81,14 +85,16 @@
                                                                         <i class="fa-solid fa-pen-to-square"></i>
                                                                         update
                                                                     </a>
-                                                                    <% if (category.subcategories.length === 0) { %>
-                                                                        <button type="button" data-id="<%= category._id %>"
-                                                                            data-toggle="modal" data-target="#modal-danger"
+                                                                    <% if (category.subcategories.length===0) { %>
+                                                                        <button type="button"
+                                                                            data-id="<%= category._id %>"
+                                                                            data-toggle="modal"
+                                                                            data-target="#modal-danger"
                                                                             class="btn btn-danger openModal">
                                                                             <i class="fa-solid fa-trash-can"></i>
                                                                             Delete
                                                                         </button>
-                                                                    <% } %>
+                                                                        <% } %>
                                                                 </td>
                                                             </tr>
                                                             <% }) %>

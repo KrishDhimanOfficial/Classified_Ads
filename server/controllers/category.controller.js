@@ -1,6 +1,8 @@
 import parent_categoryModel from '../models/parent_category.model.js'
 import sub_categoryModel from '../models/sub_category.model.js';
 import validations from '../services/validateData.js'
+import deleteImg from '../services/deleteImg.js';
+import config from '../config/config.js';
 
 const category_controllers = {
     createParentCategory: async (req, res) => {
@@ -11,11 +13,12 @@ const category_controllers = {
             const existingcategory = await parent_categoryModel.findOne({ title, slug })
             if (existingcategory) return res.json({ warning: 'Value Already Exists' })
 
-            const response = await parent_categoryModel.create({ title, slug, status })
+            const response = await parent_categoryModel.create({ title, slug, status, image: req.file?.filename })
             if (!response) return res.json({ error: 'Failed to create brand' })
 
             return res.json({ message: 'successfully created' })
         } catch (error) {
+            await deleteImg(`category_images/${req.file?.filename}`)
             // Extract custom error messages
             if (error.name === 'ValidationError') validations(res, error.errors)
             console.log('createParentCategory : ' + error.message)
@@ -45,7 +48,10 @@ const category_controllers = {
                     $sort: { title: -1 }
                 }
             ])
-            return res.render('categories/parentCategories', { categories })
+            return res.render('categories/parentCategories', {
+                category_img_path: config.category_img_path,
+                categories
+            })
         } catch (error) {
             console.log('rendercategories : ' + error.message)
         }
@@ -53,19 +59,29 @@ const category_controllers = {
     getSingleCategory: async (req, res) => {
         try {
             const category = await parent_categoryModel.findById({ _id: req.params.id })
-            return res.render('categories/updateParentcategory', { category })
+            return res.render('categories/updateParentcategory', {
+                category_img_path: config.category_img_path,
+                category
+            })
         } catch (error) {
             console.log('getSingleCategory : ' + error.message)
         }
     },
     updateCategory: async (req, res) => {
         try {
+            const { title, slug, status } = req.body;
             const response = await parent_categoryModel.findByIdAndUpdate(
-                { _id: req.params.id }, req.body,
+                { _id: req.params.id },
+                {
+                    title, slug, status,
+                    image: req.file?.filename
+                },
                 { runValidators: true })
+            if (req.file?.filename) await deleteImg(`category_images/${response.image}`)
             if (!response) return res.json({ error: 'Failed to update brand' })
             return res.json({ message: 'update successfully' })
         } catch (error) {
+            await deleteImg(`category_images/${req.file?.filename}`)
             // Extract custom error messages
             if (error.name === 'ValidationError') validations(res, error.errors)
             console.log('updateCategory : ' + error.message)
@@ -167,6 +183,7 @@ const category_controllers = {
     deleteSubCategory: async (req, res) => {
         try {
             const response = await sub_categoryModel.findByIdAndDelete({ _id: req.params.id })
+            await deleteImg(`category_images/${response.image}`)
             if (!response) return res.json({ error: 'Not Found' })
             return res.json({ message: 'Deleted successfully' })
         } catch (error) {

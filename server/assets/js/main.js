@@ -1,6 +1,6 @@
 import {
-    serverAPI, inputTitle, inputSlug, SubmitForm, loginbtn,
-    CreateSlug, sendDataToServer, Notify
+    serverAPI, inputTitle, inputSlug, SubmitForm, inputImage, resetbtn, previewImage,
+    CreateSlug, sendDataToServer, displayPreviewImage
 } from './variable.js'
 
 'use strict'
@@ -9,6 +9,10 @@ inputTitle.onkeyup = () => {
     const title = inputTitle.value.trim()
     inputSlug.value = CreateSlug(title) // create slug 
 }
+
+inputImage.onchange = (e) => displayPreviewImage(e) // display image preview
+
+if (resetbtn) resetbtn.onclick = () => previewImage.src = '../../assets/images/upload_area.png';
 
 SubmitForm.onsubmit = async (e) => {
     e.preventDefault() // prevent default form submit
