@@ -10,7 +10,7 @@ const Footer = () => {
                         <div className="col-lg-3 md-mb-30">
                             <div className="footer-widget footer-widget-1">
                                 <div className="footer-logo white">
-                                    <Link to="" className="logo-text"> <img src="assets/images/logo.png" alt="logo" /></Link>
+                                    <Link to="/" className="logo-text"> <img src="assets/images/logo.png" alt="logo" /></Link>
                                 </div>
                                 <h5 className="footer-subtitle">We have lots of courses and programs from the main market experts.</h5>
                             </div>
@@ -30,7 +30,8 @@ const Footer = () => {
                                 <h3 className="footer-title">Quick links</h3>
                                 <div className="footer-menu">
                                     <ul>
-                                        <li><Link to="/">Browse products</Link></li>
+                                        <li><Link to="/browse-products">Browse products</Link></li>
+                                        <li><Link to="/browse-products">Browse category</Link></li>
                                     </ul>
                                 </div>
                             </div>

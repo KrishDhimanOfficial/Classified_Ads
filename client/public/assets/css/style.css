@@ -9212,16 +9212,196 @@ ul {
   padding: 20px;
   width: 250px;
 }
+
 .sidebar .nav-link {
   color: #6c757d;
   font-size: 16px;
   padding: 10px 15px;
   border-radius: 5px;
 }
+
 .sidebar .nav-link.active {
   background-color: #f0f0ff;
   color: #6c63ff;
 }
+
 .sidebar .nav-link svg {
   margin-right: 10px;
+}
+
+/* From Uiverse.io by vk-uiux */
+.card {
+  width: 18rem;
+  padding: 1rem;
+  text-align: center;
+  border-radius: .8rem;
+  background-color: white;
+}
+
+.card__skeleton {
+  background-image: linear-gradient(90deg,
+      #ccc 0px,
+      rgb(229 229 229 / 90%) 40px,
+      #ccc 80px);
+  background-size: 300%;
+  background-position: 100% 0;
+  border-radius: inherit;
+  animation: shimmer 1.5s infinite;
+}
+
+.card__title {
+  height: 15px;
+  margin-bottom: 15px;
+}
+
+.card__description {
+  height: 150px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+@keyframes shimmer {
+  to {
+    background-position: -100% 0;
+  }
+}
+
+.profile-header {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.profile-header img {
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+}
+
+.profile-header .btn {
+  margin-top: 10px;
+}
+
+.profile-stats {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.profile-stats .stat {
+  flex: 1;
+  text-align: center;
+  padding: 20px;
+  border-radius: 8px;
+  margin: 0 10px;
+}
+
+.profile-stats .stat:first-child {
+  margin-left: 0;
+}
+
+.profile-stats .stat:last-child {
+  margin-right: 0;
+}
+
+.stat-orange {
+  background-color: #fff7e6;
+}
+
+.stat-green {
+  background-color: #e6fff2;
+}
+
+.stat-red {
+  background-color: #ffe6e6;
+}
+
+.stat-blue {
+  background-color: #e6f0ff;
+}
+
+.nav-tabs .nav-link.active {
+  color: #6f42c1;
+  border-color: #6f42c1;
+}
+
+.review-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 15px 0;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.review-item:last-child {
+  border-bottom: none;
+}
+
+.review-item img {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  margin-right: 15px;
+}
+
+.review-item .review-content {
+  flex-grow: 1;
+}
+
+.review-item .review-date {
+  white-space: nowrap;
+}
+
+.review-item .review-stars {
+  color: #f39c12;
+}
+
+.review-item .review-stars .fa-star {
+  margin-right: 2px;
+}
+
+/* .form-container {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+} */
+
+.profile-photo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.profile-photo img {
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+}
+
+.upload-btn {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.upload-btn button {
+  background-color: #f8f9fa;
+  border: 1px solid #ced4da;
+  color: #495057;
+}
+
+.form-label {
+  font-weight: bold;
+}
+
+.form-control {
+  border-radius: 4px;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
 }

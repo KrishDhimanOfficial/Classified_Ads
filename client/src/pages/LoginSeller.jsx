@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Input, Submit } from '../components/component'
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -18,6 +18,7 @@ const validateData = yup.object().shape({
 })
 
 const LoginSeller = () => {
+    const navigate = useNavigate()
     const { handleSubmit, control, formState: { errors, isSubmitting } } = useForm({
         defaultValues,
         resolver: yupResolver(validateData),
@@ -29,6 +30,7 @@ const LoginSeller = () => {
             const date = new Date()
             const expDate = date.setTime(date.getTime() + (24 * 60 * 60 * 1000))
             document.cookie = `seller_token=${res.seller_token};expires=${expDate};path=/`;
+            if (res.message) navigate('/user/dashboard')
         } catch (error) {
             console.error(error)
         }

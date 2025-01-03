@@ -4,6 +4,8 @@ import authenticationcontroller from '../controllers/authentication.controller.j
 
 const router = express.Router()
 
+router.post('/auth/seller', authenticationcontroller.handleSellerAuthentication)
+
 router.post('/register/seller', authenticationcontroller.handelSellerRegister)
 router.post('/login/seller', authenticationcontroller.handleSellerLogin)
 

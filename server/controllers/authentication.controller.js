@@ -1,6 +1,6 @@
 import adminModel from "../models/admin.model.js"
 import sellerModel from "../models/seller.model.js"
-import { setUser } from '../services/createToken.js'
+import { setUser, getUser } from '../services/createToken.js'
 import validations from "../services/validateData.js"
 import bcrypt from 'bcrypt'
 
@@ -113,6 +113,17 @@ const authenticationcontroller = {
             console.log('handleSellerLogin : ' + error.message)
         }
     },
+    handleSellerAuthentication: async (req, res) => {
+        try {
+            const { token } = req.body;
+            const seller = getUser(token)
+            const response = await sellerModel.findById({ _id: seller.id })
+            if (!response) return res.json({ error: 'Unauthorized!' })
+            return res.json({ message: 'Authenticated!' })
+        } catch (error) {
+            console.log('handleSellerAuthentication : ' + error.message)
+        }
+    }
 }
 
 export default authenticationcontroller

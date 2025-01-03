@@ -1,29 +1,29 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 
 const Sidebar = () => {
     return (
         <div className="nav flex-column">
-            <Link className="nav-link active" to="/user/dashboard">
+            <NavLink className={`nav-link ${({ isActive }) => isActive ? 'active' : ''}`} to="/user/dashboard">
                 <i className="fas fa-user"></i>
                 Dashboard
-            </Link>
-            <Link className="nav-link" to="#">
+            </NavLink>
+            <NavLink className={`nav-link ${({ isActive }) => isActive ? 'active' : ''}`} to="/user1">
                 <i className="fas fa-th-list"></i>
                 My Listings
-            </Link>
-            <Link className="nav-link" to="#">
+            </NavLink>
+            <NavLink className={`nav-link ${({ isActive }) => isActive ? 'active' : ''}`} to="/user2">
                 <i className="fas fa-wallet"></i>
                 Wallet
-            </Link>
-            <Link className="nav-link" to="#">
+            </NavLink>
+            <NavLink className={`nav-link ${({ isActive }) => isActive ? 'active' : ''}`} to="/user/dashboard/profile">
                 <i className="fas fa-user-circle"></i>
                 Profile
-            </Link>
-            <Link className="nav-link" to="#">
+            </NavLink>
+            <NavLink className={`nav-link ${({ isActive }) => isActive ? 'active' : ''}`} to="/user3">
                 <i className="fas fa-cog"></i>
                 Settings
-            </Link>
+            </NavLink>
         </div>
     )
 }

@@ -1,7 +1,21 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { DataService, GetCookie, Notify } from '../../../hooks/hooks'
+import { Button } from '../../component'
 
 const Navbar = () => {
+    const navigate = useNavigate()
+
+    const handleLogin = async () => {
+        try {
+            const token = GetCookie(navigate)
+            const res = await DataService.post('/auth/seller', { token })
+            if (res.message) navigate('/user/dashboard')
+            Notify(res)
+        } catch (error) {
+            console.error('handleLogin : ' + error)
+        }
+    }
     return (
         <>
             <header id="back-header" className="back-header back-header-three header-profile">
@@ -25,60 +39,8 @@ const Navbar = () => {
                                     <ul id="backmenu" className="back-menus back-sub-shadow">
                                         <li className="mega-inner">
                                             <Link to='/'>Home</Link>
-                                            <ul className="mega-menu">
-                                                <li>
-                                                    <div className="mega-menu-container">
-                                                        <div className="menu-item">
-                                                            <div className="sub-menu-mega">
-                                                                <div className="menu-title">MultiPages</div>
-                                                                <div><Link to="/">Univercity</Link></div>
-                                                                <div><Link to="/">School One</Link></div>
-                                                                <div><Link to="/">School Two</Link></div>
-                                                                <div><Link to="/">Kids</Link></div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="menu-item">
-                                                            <div className="sub-menu-mega">
-                                                                <div className="menu-title">MultiPages</div>
-                                                                <div><Link to="/">Languages School</Link></div>
-                                                                <div><Link to="/">Distant Learning</Link></div>
-                                                                <div><Link to="/">Restaurant</Link></div>
-                                                                <div><Link to="/">Courses Hub </Link></div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="menu-item">
-                                                            <div className="sub-menu-mega">
-                                                                <div className="menu-title">MultiPages</div>
-                                                                <div><Link to="/">UX/UI Courses</Link></div>
-                                                                <div><Link to="/">Online School</Link></div>
-                                                                <div><Link to="/">Online Tutor</Link></div>
-                                                                <div><Link to="/">Freelancer Courses</Link></div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="menu-item">
-                                                            <div className="sub-menu-mega">
-                                                                <div className="menu-title">MultiPages</div>
-                                                                <div><Link to="/">Courses Archive</Link></div>
-                                                                <div><Link to="/">Gym Coach</Link></div>
-                                                                <div><Link to="/">One Instructor</Link></div>
-                                                                <div><Link to="/">Online Training</Link></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            </ul>
                                         </li>
-                                        <li> <Link to="#">Pages</Link>
-                                            <ul>
-                                                <li> <Link to="/">About</Link></li>
-                                                <li> <Link to="/">Instructor</Link></li>
-                                                <li> <Link to="/">Profile</Link></li>
-                                                <li> <Link to="/">Sign In</Link></li>
-                                                <li> <Link to="/">Sign Up</Link></li>
-                                                <li> <Link to="/">Error 404</Link></li>
-                                            </ul>
-                                        </li>
-                                        <li> <a href="#">Contact</a></li>
+                                        <li> <Link to="/browse-products">Products</Link> </li>
                                     </ul>
                                     <div className="searchbar-part">
                                         <div className="back-login">
@@ -87,9 +49,12 @@ const Navbar = () => {
                                                 Log In
                                             </Link>
                                         </div>
-                                        <Link to="/" className="back-btn">
-                                            Post Your Ad
-                                        </Link>
+                                        <Button
+                                            type={'button'}
+                                            text={' Post Your Ad'}
+                                            onClick={() => handleLogin()}
+                                            className="back-btn"
+                                        />
                                     </div>
                                 </div>
                             </nav>

@@ -15,7 +15,7 @@ const Banner = () => {
                         <p className="banner-desc">A simple way to connect buyers and sellers, promote services, or announce opportunities.</p>
                     </div>
                     <div className="banner-btn pt-15">
-                        <Link to="/" className="back-btn">Discover More Ads</Link>
+                        <Link to="/browse-products" className="back-btn">Discover More Ads</Link>
                     </div>
                 </div>
             </div>
