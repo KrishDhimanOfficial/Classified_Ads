@@ -37,3 +37,9 @@ export const category = multer({
     limits: { fileSize: MAX_SIZE },
     fileFilter: fileFilter
 })
+
+export const sellerprofileImg = multer({
+    storage: createStorage('seller_profile_images'),
+    limits: { fileSize: MAX_SIZE },
+    fileFilter: fileFilter
+})

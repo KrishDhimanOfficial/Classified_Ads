@@ -28,7 +28,7 @@ const routes = [
     ]
   },
   {
-    path: '/user/dashboard',
+    path: '/user',
     element: <SellerAccountLayout />,
     children: [
       {
@@ -36,7 +36,7 @@ const routes = [
         element: <Dashboard />
       },
       {
-        path: '/user/dashboard/profile',
+        path: '/user/profile',
         element: <UpdateProfile />
       }
     ]

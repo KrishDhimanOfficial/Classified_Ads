@@ -1,8 +1,12 @@
 const GetCookie = (navigate) => {
-    const cookie = document.cookie.split('=')[1]
-    if (!cookie) navigate('/login')
-    if (cookie === 'undefined') navigate('/login')
-    return cookie
+    const cookies = document.cookie.split(';') // Split the cookie string into individual cookies
+
+    for (let cookie of cookies) {
+        const [key, value] = cookie.trim().split('=') // Split the cookie into key
+
+        if (true && key !== 'seller_token') navigate('/login')
+        if (key === 'seller_token') return value
+    }
 }
 
 export default GetCookie

@@ -16,7 +16,7 @@ const Sidebar = () => {
                 <i className="fas fa-wallet"></i>
                 Wallet
             </NavLink>
-            <NavLink className={`nav-link ${({ isActive }) => isActive ? 'active' : ''}`} to="/user/dashboard/profile">
+            <NavLink className={`nav-link ${({ isActive }) => isActive ? 'active' : ''}`} to="/user/profile">
                 <i className="fas fa-user-circle"></i>
                 Profile
             </NavLink>

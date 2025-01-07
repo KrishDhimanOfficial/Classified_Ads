@@ -15,7 +15,7 @@ const Dashboard = () => {
                     <div className="profile-stats">
                         <div className="stat stat-orange">
                             <h4>
-                                12
+                                0
                             </h4>
                             <p>
                                 Ads Posted
@@ -23,7 +23,7 @@ const Dashboard = () => {
                         </div>
                         <div className="stat stat-green">
                             <h4>
-                                12
+                                0
                             </h4>
                             <p>
                                 Active Listing
@@ -39,7 +39,7 @@ const Dashboard = () => {
                         </div>
                         <div className="stat stat-blue">
                             <h4>
-                                4
+                                0
                             </h4>
                             <p>
                                 Favorite Ads

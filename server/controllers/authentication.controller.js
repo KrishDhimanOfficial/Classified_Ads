@@ -116,7 +116,11 @@ const authenticationcontroller = {
     handleSellerAuthentication: async (req, res) => {
         try {
             const { token } = req.body;
+            console.log(token);
+            
             const seller = getUser(token)
+            console.log(seller);
+            
             const response = await sellerModel.findById({ _id: seller.id })
             if (!response) return res.json({ error: 'Unauthorized!' })
             return res.json({ message: 'Authenticated!' })

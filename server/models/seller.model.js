@@ -25,6 +25,10 @@ const sellerSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.String,
         required: [true, 'Phone No is required!'],
         unique: true,
+        validate: {
+            validator: (v) => /^\d{10}$/.test(v),
+            message: `Not a valid phone number!`
+        },
         match: [/^[0-9]+$/, 'Incorrect phone no!']
     },
     status: {
@@ -39,6 +43,10 @@ const sellerSchema = new mongoose.Schema({
     wallet_amount: {
         type: mongoose.Schema.Types.Number,
         default: 0
+    },
+    createdAt: {
+        type: mongoose.Schema.Types.Date,
+        default: new Date()
     }
 })
 

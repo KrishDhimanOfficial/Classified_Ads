@@ -1,9 +1,10 @@
 import React from 'react'
+import defaultuser from '../../../public/assets/images/user.svg'
 
 function Review_Rating() {
     return (
         <div className="review-item">
-            <img alt="Profile picture of the reviewer" height="50" src="https://storage.googleapis.com/a1aa/image/P9eNLWpJZ00FPqnYL6piqG0Sez9op7iQw6tTseDm2gGHJ0CoA.jpg" width="50" />
+            <img alt="Profile picture of the reviewer" height="50" src={defaultuser} width="50" />
             <div className="review-content">
                 <div className="d-flex justify-content-between">
                     <div className='d-flex flex-column'>

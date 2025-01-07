@@ -1,13 +1,21 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import defaultuser from '../../../public/assets/images/user.svg'
+import config from '../../../config/config'
 
 const Seller_profile = () => {
+    const profile = useSelector(state => state.seller)
+
     return (
         <div className="profile-header d-flex align-items-center">
-            <img alt="Profile picture of the user" height="80" src="https://storage.googleapis.com/a1aa/image/pUW4uEdu8yLHBtc59eNJ0K4oItDZ39dbddkraIMiQc0P7sAKA.jpg" width="80" />
+            <img
+                alt="Profile picture of the user"
+                src={`${config.seller_profile_img_path}/${profile.seller.image}` || defaultuser}
+                height="80" width="80" />
             <div className="ms-3">
                 <h5 className="mb-0">
-                    Test User
+                    {profile.seller.name}
                     <span className="badge bg-success text-uppercase ms-3">
                         Verified
                     </span>
@@ -22,19 +30,20 @@ const Seller_profile = () => {
                     Member since 2024
                 </p>
                 <div className="d-flex align-items-center mt-2">
-                    <i className="fas fa-map-marker-alt me-2">
-                    </i>
-                    Dhaka, Bangladesh
-                    <i className="fas fa-envelope ms-4 me-2">
-                    </i>
-                    test_user@gmail.com
-                    <i className="fas fa-phone ms-4 me-2">
-                    </i>
-                    +8801799328264
+                    <p className='mb-0'>
+                        <i className="fas fa-envelope ms-4 me-2">
+                        </i>
+                        {profile.seller.email}
+                    </p>
+                    <p className='mb-0'>
+                        <i className="fas fa-phone ms-4 me-2">
+                        </i>
+                        {profile.seller.phone}
+                    </p>
                 </div>
             </div>
             <div className="ms-auto">
-                <Link to='/user/dashboard/profile' className="btn btn-primary">
+                <Link to='/user/profile' className="btn btn-primary">
                     Edit Profile
                 </Link>
             </div>
