@@ -9405,3 +9405,60 @@ ul {
   background-color: #007bff;
   border-color: #007bff;
 }
+
+.upload-container {
+  cursor: pointer;
+  border: 2px dashed #A0C4FF;
+  border-radius: 8px;
+  background-color: #F0F4FF;
+  text-align: center;
+  padding: 30px;
+  max-width: 600px;
+}
+
+.upload-container .uploadicon {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 20px;
+}
+.upload-container .featuredImg{
+  width: 48%;
+}
+
+.upload-container h5 {
+  color: #4C6EF5;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.upload-container p {
+  color: #6C757D;
+  font-size: 14px;
+  margin: 0;
+}
+
+.form-section {
+  border: 1px solid #e3e6f0;
+  border-radius: 0.35rem;
+  padding: 20px;
+}
+
+.form-section h5 {
+  font-weight: bold;
+  color: #212529;
+}
+
+.remove-btn {
+  background-color: #dc3545;
+  border: none;
+  color: white;
+  border-radius: 0.25rem;
+}
+
+.add-more-btn {
+  background-color: #007bff;
+  border: none;
+  color: white;
+  border-radius: 0.25rem;
+  padding: 0.375rem 0.75rem;
+}

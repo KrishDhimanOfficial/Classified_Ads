@@ -1,9 +1,12 @@
 import parent_categoryModel from '../models/parent_category.model.js'
 import sub_categoryModel from '../models/sub_category.model.js';
+import brandModel from '../models/brand.model.js'
 import validations from '../services/validateData.js'
 import deleteImg from '../services/deleteImg.js';
 import config from '../config/config.js';
+import mongoose from 'mongoose';
 
+const ObjectId = mongoose.Types.ObjectId
 const category_controllers = {
     createParentCategory: async (req, res) => {
         try {
@@ -189,7 +192,19 @@ const category_controllers = {
         } catch (error) {
             console.log('deleteSubCategory : ' + error.message)
         }
-    }
+    },
+    getparentCategory: async (req, res) => {
+        try {
+            const response = await parent_categoryModel.find({ status: true }, { image: 0, slug: 0, status: 0 })
+            return res.status(200).json(response)
+        } catch (error) {
+            console.log('getparentCategory : ' + error.message)
+        }
+    },
+    getsubCategory: async (req, res) => {
+        const response = await sub_categoryModel.find({ parentId: req.params.parentId, status: true }, { image: 0, slug: 0, status: 0 })
+        return res.status(200).json(response)
+    },
 }
 
 export default category_controllers

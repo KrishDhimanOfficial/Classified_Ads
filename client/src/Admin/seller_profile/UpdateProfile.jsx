@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Input, Button } from '../../components/component'
-import defaultuser from '../../../public/assets/images/user.svg'
+import { Input, Button, Image } from '../../components/component'
+import defaultuser from '../../assets/images/user.svg'
 import { useSelector } from 'react-redux'
 import { useForm } from 'react-hook-form'
 import DataService from '../../hooks/DataService'
@@ -22,12 +22,12 @@ const sellerPofileSchema = yup.object().shape({
 
 
 const UpdateProfile = () => {
-    const navigate = useNavigate
+    const navigate = useNavigate()
+    const [profileImg, setImg] = useState('')
     const profile = useSelector(state => state.seller)
     const { register, handleSubmit, setValue, formState: { errors, isSubmitting } } = useForm({
         resolver: yupResolver(sellerPofileSchema)
     })
-    const [profileImg, setImg] = useState('')
 
     const displayPreviewImage = async (e) => {
         const file = e.target.files[0]
@@ -60,10 +60,13 @@ const UpdateProfile = () => {
             <title>profile</title>
             <div className="back-login-page">
                 <div className="login-right-form pt-0">
-                    <form onSubmit={handleSubmit(handleupdateSellerProfile)}
-                        autoComplete='off' encType="multipart/form-data">
+                    <form onSubmit={handleSubmit(handleupdateSellerProfile)} autoComplete='off' encType="multipart/form-data">
                         <div className="profile-photo">
-                            <img src={`${profileImg || defaultuser}`} alt="Profile photo of a seller" height="100" width="100" />
+                            <Image
+                                src={`${profileImg || defaultuser}`}
+                                alt={"Profile photo of a seller"}
+                                height={"100"} width={"100"}
+                            />
                         </div>
                         <div className="upload-btn mb-4">
                             <Input

@@ -64,7 +64,7 @@ const seller_controllers = {
         } catch (error) {
             // Extract custom error messages                        
             if (error.name === 'ValidationError') validations(res, error.errors)
-            if (req.file?.filename) await deleteImg(`seller_profile_images/${req.file?.filename}`)
+            if (req.file.filename) await deleteImg(`seller_profile_images/${req.file?.filename}`)
             console.log('updateProfile : ' + error.message)
         }
     }

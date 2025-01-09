@@ -1,6 +1,6 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { LoginSeller, RegisterSeller, Index, BrowseProducts } from './pages/pages'
-import { Dashboard, UpdateProfile } from './Admin/admin'
+import { Dashboard, UpdateProfile, AddProduct } from './Admin/admin'
 import Layout from './Layout'
 import SellerAccountLayout from './SellerAccountLayout'
 
@@ -38,6 +38,10 @@ const routes = [
       {
         path: '/user/profile',
         element: <UpdateProfile />
+      },
+      {
+        path: '/user/add-product',
+        element: <AddProduct />
       }
     ]
   }

@@ -1,18 +1,20 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import defaultuser from '../../../public/assets/images/user.svg'
+import defaultuser from '../../assets/images/user.svg'
 import config from '../../../config/config'
+import { Image } from '../../components/component'
 
 const Seller_profile = () => {
     const profile = useSelector(state => state.seller)
 
     return (
         <div className="profile-header d-flex align-items-center">
-            <img
-                alt="Profile picture of the user"
+            <Image
                 src={`${config.seller_profile_img_path}/${profile.seller.image}` || defaultuser}
-                height="80" width="80" />
+                alt={"Profile picture of the user"}
+                height={"80"} width={"80"}
+            />
             <div className="ms-3">
                 <h5 className="mb-0">
                     {profile.seller.name}

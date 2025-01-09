@@ -110,6 +110,10 @@ const brandController = {
         } catch (error) {
             console.log('deleteBrand : ' + error.message)
         }
+    },
+    getbrands: async (req, res) => {
+        const response = await brandModel.find({ status: true }, { image: 0, slug: 0, status: 0 })
+        return res.status(200).json(response)
     }
 }
 

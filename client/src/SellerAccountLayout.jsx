@@ -29,7 +29,7 @@ const SellerAccountLayout = () => {
             <title>Dashboard</title>
             <Navbar />
             <div className="container pt-120 pb-90">
-                <div className="row">
+                <div className="row g-3">
                     <div className="col-md-3">
                         <div className="sidebar">
                             <Sidebar />

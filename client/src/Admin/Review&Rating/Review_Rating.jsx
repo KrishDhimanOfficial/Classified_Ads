@@ -1,5 +1,5 @@
 import React from 'react'
-import defaultuser from '../../../public/assets/images/user.svg'
+import defaultuser from '../../assets/images/user.svg'
 
 function Review_Rating() {
     return (

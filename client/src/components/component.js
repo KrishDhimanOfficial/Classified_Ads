@@ -10,6 +10,9 @@ import Counter from "./Counter/Counter";
 import Category from "./category/Category";
 import FilterSidebar from "./sidebar/FilterSidebar";
 import Placeholder from "./placeholder/Placeholder";
+import SelectBox from "./Inputs/SelectBox";
+import TextArea from "./Inputs/TextArea";
+import Image from "./Image/Image";
 
 export {
     Button,
@@ -23,5 +26,8 @@ export {
     Counter,
     Category,
     FilterSidebar,
-    Placeholder
+    Placeholder,
+    SelectBox,
+    TextArea,
+    Image
 }
