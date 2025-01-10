@@ -1,17 +1,19 @@
-import React from 'react'
+import React from 'react';
+import Select from 'react-select'
 
-const SelectBox = ({ Defaultoption, options, ref, ...props }) => {
+const SelectBox = ({ options, name, onChange, ...props }) => {
     return (
-        <select ref={ref}  {...props} >
-            {Defaultoption}
-            {
-                options?.map((option, i) => (
-                    <option value={option._id} key={i}>
-                        {option?.title}
-                    </option>
-                ))
-            }
-        </select>
+        <Select
+            className="basic-single"
+            classNamePrefix="select"
+            isClearable
+            isSearchable
+            isRtl={false}
+            name={name}
+            onChange={onChange}
+            options={options}
+            {...props}
+        />
     )
 }
 

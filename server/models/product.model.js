@@ -81,7 +81,7 @@ const productSchema = new mongoose.Schema({
                 value: mongoose.Schema.Types.String,
             }
         ],
-        max: [5, 'Maxinum limit reached!']
+        max: [10, 'Maxinum limit reached!']
     },
     created_At: {
         type: mongoose.Schema.Types.Date,
