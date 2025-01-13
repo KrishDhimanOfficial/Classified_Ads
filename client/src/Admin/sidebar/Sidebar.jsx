@@ -8,11 +8,11 @@ const Sidebar = () => {
                 <i className="fas fa-user me-3"></i>
                 Dashboard
             </NavLink>
-            <NavLink className={`nav-link ${({ isActive }) => isActive ? 'active' : ''}`} to="/user1">
+            <NavLink className={`nav-link ${({ isActive }) => isActive ? 'active' : ''}`} to="/user/my-listing">
                 <i className="fas fa-th-list me-3"></i>
                 My Listings
             </NavLink>
-            <NavLink className={`nav-link ${({ isActive }) => isActive ? 'active' : ''}`} to="/user2">
+            <NavLink className={`nav-link ${({ isActive }) => isActive ? 'active' : ''}`} to="/user/my-wallet">
                 <i className="fas fa-wallet me-3"></i>
                 Wallet
             </NavLink>
@@ -20,7 +20,7 @@ const Sidebar = () => {
                 <i className="fas fa-user-circle me-3"></i>
                 Profile
             </NavLink>
-            <NavLink className={`nav-link ${({ isActive }) => isActive ? 'active' : ''}`} to="/user3">
+            <NavLink className={`nav-link ${({ isActive }) => isActive ? 'active' : ''}`} to="/user/settings">
                 <i className="fas fa-cog me-3"></i>
                 Settings
             </NavLink>

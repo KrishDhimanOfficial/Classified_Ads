@@ -116,16 +116,34 @@ const authenticationcontroller = {
     handleSellerAuthentication: async (req, res) => {
         try {
             const { token } = req.body;
-            console.log(token);
-            
             const seller = getUser(token)
-            console.log(seller);
-            
+
             const response = await sellerModel.findById({ _id: seller.id })
             if (!response) return res.json({ error: 'Unauthorized!' })
             return res.json({ message: 'Authenticated!' })
         } catch (error) {
             console.log('handleSellerAuthentication : ' + error.message)
+        }
+    },
+    changeSellerPassword: async (req, res) => {
+        try {
+            const seller = getUser(req.headers['authorization'].split(' ')[1])
+            const { current_password, new_password } = req.body;
+
+            const prevPassword = await sellerModel.findById({ _id: seller.id }, { password: 1 })
+            const checkpassword = await bcrypt.compare(current_password, prevPassword.password)
+
+            if (!checkpassword) return res.json({ error: 'Incorrect password!' })
+
+            const response = await sellerModel.findByIdAndUpdate(
+                { _id: seller.id },
+                { password: await bcrypt.hash(new_password, 20) },
+                { new: true }
+            )
+            if (!response) return res.json({ error: 'unable to updated!' })
+            return res.json({ message: 'updated successfully!' })
+        } catch (error) {
+            console.log('changeSellerPassword' + error.message)
         }
     }
 }

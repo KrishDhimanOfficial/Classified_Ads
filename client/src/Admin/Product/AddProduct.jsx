@@ -2,26 +2,33 @@ import React, { useEffect, useState, useCallback } from 'react'
 import { Add_Atrribute } from '../admin'
 import { Input, Button, SelectBox, TextArea, Image } from '../../components/component'
 import * as yup from 'yup'
-import { useForm, useFieldArray } from 'react-hook-form'
+import { useForm, useFieldArray, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import DataService from '../../hooks/DataService'
+import Select from 'react-select'
+import GetCookie from '../../hooks/GetCookie'
+import { useNavigate } from 'react-router-dom'
+import Notify from '../../hooks/Notify'
 
 const productSchema = yup.object().shape({
-    title: yup.string().trim().required('Title is required!').matches(/^[a-zA-Z0-9\s]+$/, 'Title contains only characters,numbers!'),
-    price: yup.number().required('price is required!'),
-    description: yup.string().trim().required('Description is required!').matches(/^[a-zA-Z0-9\s]+$/, 'Description contains only characters,numbers!'),
-    brandId: yup.string().trim().required('Required!').matches(/^[a-zA-Z0-9]+$/, 'Invalid Brand Name!'),
-    parentcategoryId: yup.string().trim().required('Required!').matches(/^[a-zA-Z0-9]+$/, 'Invalid Parent Category Name!'),
-    subcategoryId: yup.string().trim().required('Required!').matches(/^[a-zA-Z0-9]+$/, 'Invalid Subcategory Name!'),
-    attributes: yup.array().of(
-        yup.object().shape({
-            name: yup.string().required('Required!'),   
-            value: yup.string().required('Required!'),
-        })
-    ).max(10, 'Attribute create limit exceded!'),
+    // title: yup.string().trim().required('Title is required!').matches(/^[a-zA-Z0-9\s]+$/, 'Title contains only characters,numbers!'),
+    // price: yup.number().required('price is required!'),
+    // description: yup.string().trim().required('Description is required!').matches(/^[a-zA-Z0-9\s]+$/, 'Description contains only characters,numbers!'),
+    // condition: yup.string().required('Required!'),
+    // attributes: yup.array().of(
+    //     yup.object().shape({
+    //         name: yup.string().required('Required!'),
+    //         value: yup.string().required('Required!'),
+    //     })
+    // ).max(10, 'Attribute create limit exceded!')
+    // brandId: yup.string().trim().required('Required!').matches(/^[a-z0-9]+$/, 'Invalid Brand Name!'),
+    // parentcategoryId: yup.string().trim().required('Required!').matches(/^[a-z0-9]+$/, 'Invalid Parent Category Name!'),
+    // subcategoryId: yup.string().trim().required('Required!').matches(/^[a-z0-9]+$/, 'Invalid Subcategory Name!'),
+    // featured_img: yup.mixed().required('Upload Featured Image!'),
 })
 
 const AddProduct = () => {
+    const navigate = useNavigate()
     const [priceInput, setPriceInput] = useState(0)
     const [productImg, setproductImg] = useState([])
     const [featuredImg, setfeaturedImg] = useState('#')
@@ -30,20 +37,21 @@ const AddProduct = () => {
     const [subcategory, setsubcategory] = useState([])
     const [brands, setbrands] = useState([])
 
-    const { handleSubmit, control, register, watch, formState: { errors, isSubmitting } } = useForm({
-        resolver: yupResolver(productSchema)
-    })
+    const { handleSubmit, control, register, reset, watch, formState: { errors, isSubmitting } } = useForm(
+        { resolver: yupResolver(productSchema) }
+    )
     const attributeLength = watch('attributes')
     const { fields, append, remove } = useFieldArray({ control, name: 'attributes' })
 
     const displayImgs = (e) => {
         const file = e.target.files;
-        setproductImg(Array.from(file).map(img => URL.createObjectURL(img)))
+        setproductImg(Array.from(file).slice(0, 4).map(img => URL.createObjectURL(img)))
     }
     const displayFImgs = (e) => {
         const file = e.target.files[0]
         setfeaturedImg(URL.createObjectURL(file))
     }
+
     const createSlug = (str) => {
         return str.toLowerCase()
             .replace(/\s+/g, '-')
@@ -63,15 +71,31 @@ const AddProduct = () => {
         setsubcategory(category)
     }, [])
 
-    const fetchBrand = async () => {
+    const fetchBrand = useCallback(async () => {
         const res = await DataService.get('/brands')
         const brands = res.map(item => ({ value: item._id, label: item.title }))
         setbrands(brands)
-    }
+    }, [])
 
-    const createProduct = async (formData) => {
-        console.log(formData)
-        const res = await DataService.post('/product', formData)
+    const createProduct = async (data) => {
+        console.log(data);
+
+        const formData = new FormData()
+        formData.append('featured_img', data.featured_img[0])
+        formData.append(`images`, data.images)
+        Object.entries(data).forEach(([key, value]) => formData.append(key, value))
+
+        Array.from(data.images).map((image, i) => {
+            formData.append(`image_${i}`, image);
+        })
+        const res = await DataService.post('/product', formData, data, {
+            headers: {
+                'Authorization': `Bearer ${GetCookie(navigate)}`
+            }
+        })
+        reset()
+        console.log(res)
+        Notify(res)
     }
 
     useEffect(() => { fetchCategorie(), fetchBrand() }, [])
@@ -90,41 +114,86 @@ const AddProduct = () => {
                                     onChange={(e) => setSlug(createSlug(e.target.value))}
                                     placeholder={'Enter item name'}
                                 />
-                                <Input
-                                    type={'text'} value={slug}
-                                    {...register('slug')}
-                                    hidden
-                                />
                                 <span className='mt-2 d-block text-primary'>{slug}</span>
                                 <span className='fs-6 text-danger m-0 mt-1'>{errors.title?.message}</span>
                             </div>
                             <div className='bg-light p-3 mb-3'>
                                 <div className='mb-3'>
                                     <label className='mb-2'>Parent Category</label>
-                                    <SelectBox
-                                        options={pcategory}
-                                        name={'parent_category'}
-                                        {...register('parentcategoryId')}
-                                        onChange={(selectedoption) => { fetchsubCategorie(selectedoption.value) }}
+                                    <Controller
+                                        name={'parent_category'} // Name of the field
+                                        control={control}
+                                        render={({ field }) => (
+                                            <Select
+                                                {...field}
+                                                isClearable
+                                                isSearchable
+                                                isRtl={false}
+                                                options={pcategory}
+                                                onChange={(selectedoption) => {
+                                                    field.onChange(selectedoption)
+                                                    fetchsubCategorie(selectedoption.value)
+                                                }}
+                                                styles={{
+                                                    control: (style) => ({
+                                                        ...style,
+                                                        border: errors.parentcategoryId?.message ? '1px solid red' : ''
+                                                    })
+                                                }}
+                                            />
+                                        )}
                                     />
+                                    <span className='fs-6 text-danger m-0 mt-2'>{errors.parentcategoryId?.message}</span>
                                 </div>
                                 <div>
                                     <label className='mb-2'>Sub Category</label>
-                                    <SelectBox
-                                        options={subcategory}
-                                        name={'sub_category'}
-                                        {...register('subcategoryId')}
+                                    <Controller
+                                        name={'sub_category'} // Name of the field
+                                        control={control}
+                                        render={({ field }) => (
+                                            <Select
+                                                {...field}
+                                                isClearable
+                                                isSearchable
+                                                isRtl={false}
+                                                options={subcategory}
+                                                onChange={(selectedoption) => field.onChange(selectedoption)}
+                                                styles={{
+                                                    control: (style) => ({
+                                                        ...style,
+                                                        border: errors.subcategoryId?.message ? '1px solid red' : ''
+                                                    })
+                                                }}
+                                            />
+                                        )}
                                     />
+                                    <span className='fs-6 text-danger m-0 mt-2'>{errors.subcategoryId?.message}</span>
                                 </div>
                             </div>
                             <div className='bg-light p-3 mb-3'>
                                 <div className='mb-3'>
                                     <label className='mb-2'>Brand</label>
-                                    <SelectBox
-                                        options={brands}
-                                        name={'brand'}
-                                        {...register('brandId')}
+                                    <Controller
+                                        name={'brand'} // Name of the field
+                                        control={control}
+                                        render={({ field }) => (
+                                            <Select
+                                                {...field}
+                                                isClearable
+                                                isSearchable
+                                                isRtl={false}
+                                                options={brands}
+                                                onChange={(selectedoption) => field.onChange(selectedoption)}
+                                                styles={{
+                                                    control: (style) => ({
+                                                        ...style,
+                                                        border: errors.brandId?.message ? '1px solid red' : ''
+                                                    })
+                                                }}
+                                            />
+                                        )}
                                     />
+                                    <span className='fs-6 text-danger m-0 mt-2'>{errors.brandId?.message}</span>
                                 </div>
                             </div>
                             <div className='bg-light p-3 mb-3'>
@@ -178,42 +247,45 @@ const AddProduct = () => {
                                         style={{ border: errors.price?.message ? '1px solid red' : '' }}
                                         onChange={(e) => e.target.value < 0 ? setPriceInput(0) : setPriceInput(e.target.value)}
                                     />
-                                    <span className='fs-6 text-danger m-0 mt-1'>{errors.pricer?.message}</span>
+                                    <span className='fs-6 text-danger m-0 mt-1'>{errors.price?.message}</span>
                                 </div>
                                 <div className='d-flex gap-2'>
-                                    <label>Negotiable</label>
                                     <Input
                                         type={'checkbox'}
-                                        className={'w-25'}
+                                        style={{ width: '10%' }}
                                         {...register('negotiable')}
                                     />
+                                    <label>Negotiable</label>
                                 </div>
                             </div>
                             <div className='bg-light p-3 mb-3'>
                                 <label className='mb-2'>Condtion</label>
                                 <div className="d-flex gap-3">
-                                    <label id='used' className='w-25'>Used
+                                    <label id='used' className='w-25'>
                                         <Input
-                                            htmlFor={'used'}
                                             type={'radio'}
+                                            htmlFor={'used'}
                                             className={'w-25'}
                                             value={'used'}
                                             {...register('condition')}
                                         />
+                                        Used
                                     </label>
-                                    <label id='new' className='w-25'>new
+                                    <label id='new' className='w-25'>
                                         <Input
-                                            htmlFor={'new'}
                                             type={'radio'}
+                                            htmlFor={'new'}
                                             className={'w-25'}
                                             value={'new'}
                                             {...register('condition')}
                                         />
+                                        New
                                     </label>
                                 </div>
+                                <span className='fs-6 text-danger m-0 mt-1'>{errors.condition?.message}</span>
                             </div>
                             <label id='featured' className="upload-container mb-3">
-                                <Image src={featuredImg} className={'mb-0 featuredImg'} />
+                                <Image src={featuredImg} className={'mb-2 featuredImg'} />
                                 <h5>
                                     Click to browse &amp; Upload Freatured Image
                                 </h5>
@@ -223,12 +295,14 @@ const AddProduct = () => {
                                 <p>
                                     recommended size 810x450
                                 </p>
+                                <span className='fs-6 text-danger m-0 mt-1'>{errors.featured_img?.message}</span>
                                 <Input
-                                    type={'file'}
-                                    onChange={(e) => { displayFImgs(e), register('featured_img').onChange(e) }}
-                                    max={1}
-                                    accept={'images/*'}
-                                    htmlFor={'featured'}
+                                    type={'file'} accept={'images/*'} htmlFor={'featured'}
+                                    {...register('featured_img')}
+                                    onChange={(e) => {
+                                        displayFImgs(e)
+                                        register('featured_img').onChange(e)
+                                    }}
                                     hidden
                                 />
                             </label>
@@ -260,15 +334,29 @@ const AddProduct = () => {
                                 <p>
                                     recommended size 810x450
                                 </p>
+                                <p>
+                                    upload  maximun 4 images
+                                </p>
+                                <span className='fs-6 text-danger m-0 mt-1'>{errors.images?.message}</span>
                                 <Input
                                     type={'file'}
+                                    multiple max={4} accept={'images/*'} htmlFor={'images'}
+                                    {...register('images')}
                                     onChange={(e) => { displayImgs(e), register('images').onChange(e) }}
-                                    multiple max={4} accept={'images/*'} htmlFor={'images'} hidden
+                                    hidden
                                 />
                             </label>
                             <Button
+                                disbaled={isSubmitting.toString()}
                                 type={"submit"}
-                                text={'Continue'}
+                                text={isSubmitting ? 'Loading...' : 'Draft'}
+                                id={"button"}
+                                className={'mb-3'}
+                            />
+                            <Button
+                                disbaled={isSubmitting.toString()}
+                                type={"submit"}
+                                text={isSubmitting ? 'Loading...' : 'Continue'}
                                 id={"button"}
                             />
                         </div>
