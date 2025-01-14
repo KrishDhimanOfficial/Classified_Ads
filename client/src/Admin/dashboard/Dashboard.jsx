@@ -18,7 +18,7 @@ const Dashboard = () => {
                                 0
                             </h4>
                             <p>
-                                Ads Posted
+                                All Listing
                             </p>
                         </div>
                         <div className="stat stat-green">

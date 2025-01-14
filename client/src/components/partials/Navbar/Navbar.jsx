@@ -8,8 +8,7 @@ const Navbar = () => {
 
     const handleLogin = async () => {
         try {
-            const token = GetCookie(navigate)
-            const res = await DataService.post('/auth/seller', { token })
+            const res = await DataService.post('/auth/seller', { token: GetCookie(navigate) })
             if (res.message) navigate('/user/add-product')
         } catch (error) {
             console.error('handleLogin : ' + error)

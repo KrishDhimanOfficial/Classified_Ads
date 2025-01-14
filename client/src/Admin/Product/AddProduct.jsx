@@ -13,17 +13,19 @@ import Notify from '../../hooks/Notify'
 const productSchema = yup.object().shape({
     // title: yup.string().trim().required('Title is required!').matches(/^[a-zA-Z0-9\s]+$/, 'Title contains only characters,numbers!'),
     // price: yup.number().required('price is required!'),
-    // description: yup.string().trim().required('Description is required!').matches(/^[a-zA-Z0-9\s]+$/, 'Description contains only characters,numbers!'),
+    // brandId: yup.object().required('Required!'),
+    // parentcategoryId: yup.object().required('Required!'),
+    // subcategoryId: yup.object().required('Required!'),
+    // description: yup.string().trim().required('Description is required!')
+    //     .matches(/^[a-zA-Z0-9\s]+$/, 'Description contains only characters,numbers!')
+    //     .max(300, 'Maximum 150 Characters are allowed!'),
     // condition: yup.string().required('Required!'),
     // attributes: yup.array().of(
     //     yup.object().shape({
-    //         name: yup.string().required('Required!'),
-    //         value: yup.string().required('Required!'),
+    //         name: yup.string().trim().required('Required!'),
+    //         value: yup.string().trim().required('Required!'),
     //     })
-    // ).max(10, 'Attribute create limit exceded!')
-    // brandId: yup.string().trim().required('Required!').matches(/^[a-z0-9]+$/, 'Invalid Brand Name!'),
-    // parentcategoryId: yup.string().trim().required('Required!').matches(/^[a-z0-9]+$/, 'Invalid Parent Category Name!'),
-    // subcategoryId: yup.string().trim().required('Required!').matches(/^[a-z0-9]+$/, 'Invalid Subcategory Name!'),
+    // ).max(10, 'Attribute create limit exceded!'),
     // featured_img: yup.mixed().required('Upload Featured Image!'),
 })
 
@@ -32,6 +34,7 @@ const AddProduct = () => {
     const [priceInput, setPriceInput] = useState(0)
     const [productImg, setproductImg] = useState([])
     const [featuredImg, setfeaturedImg] = useState('#')
+    const [showAddMoreButton, setShowAddMoreButton] = useState(true)
     const [slug, setSlug] = useState('')
     const [pcategory, setpcategory] = useState([])
     const [subcategory, setsubcategory] = useState([])
@@ -40,6 +43,7 @@ const AddProduct = () => {
     const { handleSubmit, control, register, reset, watch, formState: { errors, isSubmitting } } = useForm(
         { resolver: yupResolver(productSchema) }
     )
+
     const attributeLength = watch('attributes')
     const { fields, append, remove } = useFieldArray({ control, name: 'attributes' })
 
@@ -78,23 +82,18 @@ const AddProduct = () => {
     }, [])
 
     const createProduct = async (data) => {
-        console.log(data);
-
         const formData = new FormData()
         formData.append('featured_img', data.featured_img[0])
-        formData.append(`images`, data.images)
-        Object.entries(data).forEach(([key, value]) => formData.append(key, value))
+        Array.from(data.images).forEach((image) => formData.append('images', image))
+        formData.append('slug', slug)
+        formData.append('data', JSON.stringify(data))
 
-        Array.from(data.images).map((image, i) => {
-            formData.append(`image_${i}`, image);
-        })
-        const res = await DataService.post('/product', formData, data, {
+        const res = await DataService.post('/product', formData, {
             headers: {
                 'Authorization': `Bearer ${GetCookie(navigate)}`
             }
         })
         reset()
-        console.log(res)
         Notify(res)
     }
 
@@ -121,7 +120,7 @@ const AddProduct = () => {
                                 <div className='mb-3'>
                                     <label className='mb-2'>Parent Category</label>
                                     <Controller
-                                        name={'parent_category'} // Name of the field
+                                        name={'parentcategoryId'} // Name of the field
                                         control={control}
                                         render={({ field }) => (
                                             <Select
@@ -148,7 +147,7 @@ const AddProduct = () => {
                                 <div>
                                     <label className='mb-2'>Sub Category</label>
                                     <Controller
-                                        name={'sub_category'} // Name of the field
+                                        name={'subcategoryId'} // Name of the field
                                         control={control}
                                         render={({ field }) => (
                                             <Select
@@ -174,7 +173,7 @@ const AddProduct = () => {
                                 <div className='mb-3'>
                                     <label className='mb-2'>Brand</label>
                                     <Controller
-                                        name={'brand'} // Name of the field
+                                        name={'brandId'} // Name of the field
                                         control={control}
                                         render={({ field }) => (
                                             <Select
@@ -223,12 +222,15 @@ const AddProduct = () => {
                                     ))
                                 }
                                 {
-                                    attributeLength?.length < 10 && (
+                                    showAddMoreButton && (
                                         <Button
                                             type={'button'}
                                             icon={<i className="fas fa-plus me-2"></i>}
                                             text={'Add More'}
-                                            onClick={() => append({ name: '', value: '' })}
+                                            onClick={() => {
+                                                append({ name: '', value: '' })
+                                                setShowAddMoreButton(attributeLength?.length < 10)
+                                            }}
                                             className={"add-more-btn"}
                                         />
                                     )

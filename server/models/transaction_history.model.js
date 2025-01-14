@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import aggregatePaginate from 'mongoose-aggregate-paginate-v2'
 
 const transaction_history = new mongoose.Schema({
     sellerId: {
@@ -17,4 +18,5 @@ const transaction_history = new mongoose.Schema({
     }
 })
 
+transaction_history.plugin(aggregatePaginate)
 export default mongoose.model('transaction_history', transaction_history)

@@ -3,6 +3,8 @@ import transaction_historyModel from "../models/transaction_history.model.js"
 import { getUser } from "../services/createToken.js"
 import deleteImg from '../services/deleteImg.js'
 import validations from "../services/validateData.js"
+import handleAggregatePagination from '../services/handlepagination.js'
+import mongoose from "mongoose"
 
 const seller_controllers = {
     renderAllSellers: async (req, res) => {
@@ -38,7 +40,7 @@ const seller_controllers = {
     getProfile: async (req, res) => {
         try {
             const seller = getUser(req.body.token)
-            const sellerprofile = await sellerModel.findById({ _id: seller.id }, { password: 0, wallet_amount: 0, status: 0 })
+            const sellerprofile = await sellerModel.findById({ _id: seller.id }, { password: 0, status: 0 })
             if (!sellerprofile) res.json({ error: 'Account Not Found!' })
             return res.status(200).json(sellerprofile)
         } catch (error) {
@@ -72,22 +74,50 @@ const seller_controllers = {
     updateWallet: async (req, res) => {
         try {
             const seller = getUser(req.headers['authorization'].split(' ')[1])
-            const { amount } = req.body;
+            const { amount, status } = req.body;
 
-            const response = await sellerModel.findByIdAndUpdate(
-                { _id: seller.id },
-                { $inc: { wallet_amount: amount } },
-                { new: true }
-            )
+            if (status) { // update the wallet when payment is successfull
+                const response = await sellerModel.findByIdAndUpdate(
+                    { _id: seller.id },
+                    { $inc: { wallet_amount: amount } },
+                    { new: true }
+                )
+                if (!response) return res.json({ error: 'Unable to update wallet!' })
+            }
 
-            if (!response) return res.json({ error: 'Unable to update wallet!' })
-            else await transaction_historyModel.create(
-                { sellerId: seller.id, amount, status: true }
-            )
-
+            await transaction_historyModel.create({ sellerId: seller.id, amount, status })
             return res.json({ message: 'Amount Added to Wallet!' })
         } catch (error) {
             console.log('updateWallet : ' + error.message)
+        }
+    },
+    getpaymentTransactions: async (req, res) => {
+        try {
+            const seller = getUser(req.headers['authorization'].split(' ')[1])
+            const projection = [
+                { $match: { sellerId: new mongoose.Types.ObjectId(seller.id) } },
+                {
+                    $addFields: {
+                        formattedDate: {
+                            $dateToString: {
+                                date: "$date",
+                                format: "%Y-%m-%d"
+                            }
+                        },
+                        formattedtime: {
+                            $dateToString: {
+                                date: "$date",
+                                format: "%H:%M:%S"
+                            }
+                        }
+                    }
+                },
+                { $sort: { date: -1 } }
+            ]
+            const response = await handleAggregatePagination(transaction_historyModel, projection, req.query)
+            return res.json(response)
+        } catch (error) {
+            console.log('getpaymentTransactions : ' + error.message)
         }
     }
 }

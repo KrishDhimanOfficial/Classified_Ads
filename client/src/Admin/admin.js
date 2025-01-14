@@ -8,6 +8,7 @@ import Add_Atrribute from "./Add_Attribute/Add_Atrribute";
 import Setting from "./setiing/Setting";
 import Change_password from "./seller_profile/Change_password";
 import User_wallet from "./user_wallet/user_wallet";
+import Transactions from "./user_wallet/Transactions";
 
 export {
     Sidebar,
@@ -19,5 +20,6 @@ export {
     Add_Atrribute,
     Setting,
     Change_password,
-    User_wallet
+    User_wallet,
+    Transactions
 }

@@ -10,7 +10,7 @@ inputTitle.onkeyup = () => {
     inputSlug.value = CreateSlug(title) // create slug 
 }
 
-inputImage.onchange = (e) => displayPreviewImage(e) // display image preview
+if (inputImage) inputImage.onchange = (e) => displayPreviewImage(e) // display image preview
 
 if (resetbtn) resetbtn.onclick = () => previewImage.src = '../../assets/images/upload_area.png';
 

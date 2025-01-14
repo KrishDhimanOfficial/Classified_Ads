@@ -31,7 +31,7 @@ const productSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.Number,
         default: 0
     },
-    condtion: {
+    condition: {
         type: mongoose.Schema.Types.String,
         required: [true, 'Condition is required!'],
     },

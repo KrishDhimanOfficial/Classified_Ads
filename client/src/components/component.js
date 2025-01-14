@@ -29,5 +29,5 @@ export {
     Placeholder,
     SelectBox,
     TextArea,
-    Image
+    Image,
 }

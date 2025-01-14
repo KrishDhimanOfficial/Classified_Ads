@@ -29,7 +29,7 @@ const LoginSeller = () => {
             Notify(res)
             const date = new Date()
             const expDate = date.setTime(date.getTime() + (24 * 60 * 60 * 1000))
-            document.cookie = `seller_token=${res.seller_token};expires=${expDate};`;
+            document.cookie = `seller_token=${res.seller_token};expires=${expDate};path=/`;
             if (res.message) navigate('/user/dashboard')
         } catch (error) {
             console.error(error)
