@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Input, Button, Image } from '../../components/component'
+import { Input, Image,BTN } from '../../components/component'
 import defaultuser from '../../assets/images/user.svg'
 import { useSelector } from 'react-redux'
 import { useForm } from 'react-hook-form'
@@ -126,7 +126,7 @@ const UpdateProfile = () => {
                                 <span className='fs-6 text-danger m-0'>{errors.phone?.message}</span>
                             </p>
                         </div>
-                        <Button
+                        <BTN
                             disabled={isSubmitting}
                             type={"submit"}
                             className={'w-25'}

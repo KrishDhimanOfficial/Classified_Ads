@@ -1,6 +1,7 @@
+import React from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { LoginSeller, RegisterSeller, Index, BrowseProducts } from './pages/pages'
-import { Dashboard, UpdateProfile, AddProduct, Setting, User_wallet } from './Admin/admin'
+import { Dashboard, UpdateProfile, AddProduct, Setting, User_wallet, Listing_container } from './Admin/admin'
 import Layout from './Layout'
 import SellerAccountLayout from './SellerAccountLayout'
 
@@ -42,6 +43,10 @@ const routes = [
       {
         path: '/user/add-product',
         element: <AddProduct />
+      },
+      {
+        path: '/user/my-listing',
+        element: <Listing_container />
       },
       {
         path: '/user/my-wallet',

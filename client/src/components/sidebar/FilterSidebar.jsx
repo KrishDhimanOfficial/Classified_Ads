@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Input } from '../component'
+import { Input,BTN } from '../component'
 
 const FilterSidebar = () => {
     return (
@@ -53,7 +53,7 @@ const FilterSidebar = () => {
                 </select>
             </div>
             <div className="widget back-category px-4 py-4 d-flex justify-content-center">
-                <Button type='submit' text='Apply Filters' className={'btn btn-primary'} />
+                <BTN type='submit' text='Apply Filters' className={'btn btn-primary'} />
             </div>
         </div>
     )

@@ -9489,3 +9489,42 @@ ul {
   border-radius: 4px;
   padding: 5px 10px;
 }
+
+.card {
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+  padding: 15px;
+  margin: 20px;
+}
+
+.card img {
+  border-radius: 10px;
+}
+
+.status {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 14px;
+}
+.unstatus {
+  background-color: red;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.published-toggle {
+  display: flex;
+  align-items: center;
+}
+
+.published-toggle span {
+  margin-right: 5px;
+}
+
+.published-toggle .form-check-input {
+  margin-left: 5px;
+}

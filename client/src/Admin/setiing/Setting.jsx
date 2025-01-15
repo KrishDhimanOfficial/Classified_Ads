@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button } from '../../components/component'
+import { BTN } from '../../components/component'
 import { Change_password } from '../admin'
 const Setting = () => {
     return (
@@ -12,7 +12,7 @@ const Setting = () => {
                         </h5>
                         <ul className="nav nav-tabs" id="myTab" role="tablist">
                             <li className="nav-item" role="presentation">
-                                <Button
+                                <BTN
                                     text={'Change Password'}
                                     aria-controls={"received"}
                                     aria-selected={"true"}
@@ -25,7 +25,7 @@ const Setting = () => {
                                 />
                             </li>
                             <li className="nav-item" role="presentation">
-                                <Button
+                                <BTN
                                     role={"tab"} type={"button"}
                                     text={'Account Setting'}
                                     aria-controls={"given"}

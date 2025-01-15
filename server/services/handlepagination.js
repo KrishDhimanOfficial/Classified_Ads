@@ -1,6 +1,6 @@
 const handleAggregatePagination = async (collectionName, aggregation, query) => {
     try {
-        const { page = 1, limit = 8 } = query;
+        const { page = 1, limit = 10 } = query;
 
         const options = {
             page: parseInt(page, 10),

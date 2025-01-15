@@ -1,5 +1,5 @@
 import React from 'react'
-import { Input, Button } from '../../components/component'
+import { Input, BTN } from '../../components/component'
 
 const Add_Atrribute = ({ register, errors, index, remove, closebtn }) => {
     return (
@@ -10,7 +10,7 @@ const Add_Atrribute = ({ register, errors, index, remove, closebtn }) => {
                         <label htmlFor={`title2-${index}`} className="form-label">Title</label>
                         {
                             (closebtn && (
-                                <Button
+                                <BTN
                                     type={'button'}
                                     onClick={remove} // Call the `remove` to remove Attribute
                                     icon={<i className="fas fa-close"></i>}

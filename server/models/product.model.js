@@ -1,4 +1,6 @@
 import mongoose from 'mongoose'
+import aggregatePaginate from 'mongoose-aggregate-paginate-v2'
+
 
 const productSchema = new mongoose.Schema({
     sellerId: {
@@ -13,7 +15,6 @@ const productSchema = new mongoose.Schema({
     },
     slug: {
         type: mongoose.Schema.Types.String,
-        match: [/^[a-z-]+$/, 'Invalid Slug']
     },
     publishing_status: {
         type: mongoose.Schema.Types.Boolean,
@@ -56,6 +57,10 @@ const productSchema = new mongoose.Schema({
         ref: 'sub_category',
         required: [true, 'Select SubCategory!']
     },
+    sellerId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'seller',
+    },
     featured_img: {
         type: mongoose.Schema.Types.String,
         required: [true, 'Image is required!'],
@@ -89,4 +94,5 @@ const productSchema = new mongoose.Schema({
     }
 })
 
+productSchema.plugin(aggregatePaginate)
 export default mongoose.model('product', productSchema)

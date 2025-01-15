@@ -1,16 +1,19 @@
-import React, { useState } from 'react'
-import { Button, Input } from '../../components/component'
+import React, { useCallback, useEffect, useState } from 'react'
+import { BTN, Input } from '../../components/component'
 import config from '../../../config/config';
 import { useSelector } from 'react-redux'
 import DataService from '../../hooks/DataService';
 import GetCookie from '../../hooks/GetCookie';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate ,useLocation} from 'react-router-dom';
 import Notify from '../../hooks/Notify';
 import { toast } from 'react-toastify';
 import { Transactions } from '../admin'
 
 const User_wallet = () => {
     const navigate = useNavigate()
+    const location = useLocation()
+    console.log(location);
+    
     const profile = useSelector(state => state.seller)
     const [amount, setamount] = useState(0)
 
@@ -25,29 +28,31 @@ const User_wallet = () => {
         Notify(res)
     }
 
-    const handlepayment = () => {
-        try {
-            const options = {
-                key: config.razorpay_key,
-                amount: amount * 100,
-                currency: "INR",
-                name: 'Classified Ads',
-                description: 'Buy, Sell and Promote',
-                handler: (response) => updateWallet(true),
-                prefill: {
-                    name: `${profile.seller.name}`,
-                    email: `${profile.seller.email}`,
-                    contact: `${profile.seller.phone}`,
-                },
-                theme: { color: "#000" }
+    const handlepayment = useCallback(() => {
+        () => {
+            try {
+                const options = {
+                    key: config.razorpay_key,
+                    amount: amount * 100,
+                    currency: "INR",
+                    name: 'Classified Ads',
+                    description: 'Buy, Sell and Promote',
+                    handler: (response) => updateWallet(true),
+                    prefill: {
+                        name: `${profile.seller.name}`,
+                        email: `${profile.seller.email}`,
+                        contact: `${profile.seller.phone}`,
+                    },
+                    theme: { color: "#000" }
+                }
+                const razorpayInstance = new window.Razorpay(options)
+                razorpayInstance.open()
+                razorpayInstance.on('payment.failed', () => updateWallet(false))
+            } catch (error) {
+                console.error(error)
             }
-            const razorpayInstance = new window.Razorpay(options)
-            razorpayInstance.open()
-            razorpayInstance.on('payment.failed', () => updateWallet(false))
-        } catch (error) {
-            console.error(error)
         }
-    }
+    }, [])
     return (
         <>
             <div className="profile-header d-flex align-items-center justify-content-between">
@@ -62,7 +67,7 @@ const User_wallet = () => {
                         onChange={(e) => setamount(e.target.value)}
                         className={'form-control w-50'}
                     />
-                    <Button
+                    <BTN
                         type={'submit'}
                         text={'Add To Wallet'}
                         className={'btn btn-primary m-0 py-2'}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { Add_Atrribute } from '../admin'
-import { Input, Button, SelectBox, TextArea, Image } from '../../components/component'
+import { Input, TextArea, Image } from '../../components/component'
 import * as yup from 'yup'
 import { useForm, useFieldArray, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -9,24 +9,25 @@ import Select from 'react-select'
 import GetCookie from '../../hooks/GetCookie'
 import { useNavigate } from 'react-router-dom'
 import Notify from '../../hooks/Notify'
+import { toast } from 'react-toastify'
 
 const productSchema = yup.object().shape({
-    // title: yup.string().trim().required('Title is required!').matches(/^[a-zA-Z0-9\s]+$/, 'Title contains only characters,numbers!'),
-    // price: yup.number().required('price is required!'),
-    // brandId: yup.object().required('Required!'),
-    // parentcategoryId: yup.object().required('Required!'),
-    // subcategoryId: yup.object().required('Required!'),
-    // description: yup.string().trim().required('Description is required!')
-    //     .matches(/^[a-zA-Z0-9\s]+$/, 'Description contains only characters,numbers!')
-    //     .max(300, 'Maximum 150 Characters are allowed!'),
-    // condition: yup.string().required('Required!'),
-    // attributes: yup.array().of(
-    //     yup.object().shape({
-    //         name: yup.string().trim().required('Required!'),
-    //         value: yup.string().trim().required('Required!'),
-    //     })
-    // ).max(10, 'Attribute create limit exceded!'),
-    // featured_img: yup.mixed().required('Upload Featured Image!'),
+    title: yup.string().trim().required('Title is required!')
+        .matches(/^[a-zA-Z0-9\s]+$/, 'Title contains only characters,numbers!'),
+    price: yup.number().required('price is required!'),
+    brandId: yup.object().required('Required!'),
+    parentcategoryId: yup.object().required('Required!'),
+    subcategoryId: yup.object().required('Required!'),
+    description: yup.string().trim().required('Description is required!')
+        .max(300, 'Maximum 300 Characters are allowed!'),
+    condition: yup.string().required('Required!'),
+    attributes: yup.array().of(
+        yup.object().shape({
+            name: yup.string().trim().required('Required!'),
+            value: yup.string().trim().required('Required!'),
+        })
+    ).max(10, 'Attribute create limit exceded!'),
+    featured_img: yup.mixed().required('Upload Featured Image!'),
 })
 
 const AddProduct = () => {
@@ -34,15 +35,15 @@ const AddProduct = () => {
     const [priceInput, setPriceInput] = useState(0)
     const [productImg, setproductImg] = useState([])
     const [featuredImg, setfeaturedImg] = useState('#')
+    const [status, setstatus] = useState(true)
     const [showAddMoreButton, setShowAddMoreButton] = useState(true)
     const [slug, setSlug] = useState('')
     const [pcategory, setpcategory] = useState([])
     const [subcategory, setsubcategory] = useState([])
     const [brands, setbrands] = useState([])
 
-    const { handleSubmit, control, register, reset, watch, formState: { errors, isSubmitting } } = useForm(
-        { resolver: yupResolver(productSchema) }
-    )
+    const { handleSubmit, control, register, reset, watch, formState: {
+        errors, isSubmitting, } } = useForm({ resolver: yupResolver(productSchema) })
 
     const attributeLength = watch('attributes')
     const { fields, append, remove } = useFieldArray({ control, name: 'attributes' })
@@ -86,6 +87,7 @@ const AddProduct = () => {
         formData.append('featured_img', data.featured_img[0])
         Array.from(data.images).forEach((image) => formData.append('images', image))
         formData.append('slug', slug)
+        formData.append('status', status)
         formData.append('data', JSON.stringify(data))
 
         const res = await DataService.post('/product', formData, {
@@ -94,7 +96,7 @@ const AddProduct = () => {
             }
         })
         reset()
-        Notify(res)
+        if (res) Notify(res), setfeaturedImg([]), setproductImg([]), setSlug('')
     }
 
     useEffect(() => { fetchCategorie(), fetchBrand() }, [])
@@ -223,7 +225,7 @@ const AddProduct = () => {
                                 }
                                 {
                                     showAddMoreButton && (
-                                        <Button
+                                        <BTN
                                             type={'button'}
                                             icon={<i className="fas fa-plus me-2"></i>}
                                             text={'Add More'}
@@ -313,7 +315,7 @@ const AddProduct = () => {
                                     {
                                         productImg.map((img, i) => (
                                             <div key={i}>
-                                                <Button
+                                                <BTN
                                                     type={'button'}
                                                     onClick={(e) => setproductImg(productImg.filter(img => img !== e.target.dataset.id))}
                                                     icon={<i data-id={img} className="fas fa-close"></i>}
@@ -348,17 +350,18 @@ const AddProduct = () => {
                                     hidden
                                 />
                             </label>
-                            <Button
+                            <BTN
                                 disbaled={isSubmitting.toString()}
                                 type={"submit"}
-                                text={isSubmitting ? 'Loading...' : 'Draft'}
+                                text={'Draft'}
                                 id={"button"}
+                                onClick={() => setstatus(false)}
                                 className={'mb-3'}
                             />
-                            <Button
+                            <BTN
                                 disbaled={isSubmitting.toString()}
                                 type={"submit"}
-                                text={isSubmitting ? 'Loading...' : 'Continue'}
+                                text={'Continue'}
                                 id={"button"}
                             />
                         </div>

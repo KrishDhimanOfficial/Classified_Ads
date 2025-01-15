@@ -1,7 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import Image from '../../assets/images/slide1.jpg'
-import { Button } from '../component'
 
 const Product = ({ title = 'helo', category = 'helo', image, price, ad_status }) => {
     return (

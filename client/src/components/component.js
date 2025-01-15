@@ -1,5 +1,5 @@
-import Button from "./Buttons/Button";
-import Submit from "./Buttons/Submit";
+import BTN from './BTN';
+import Submit from "./SubmitBtn/Submit";
 import Banner from "./Banner/Banner";
 import Input from "./Inputs/Input";
 import Navbar from './partials/Navbar/Navbar'
@@ -10,12 +10,11 @@ import Counter from "./Counter/Counter";
 import Category from "./category/Category";
 import FilterSidebar from "./sidebar/FilterSidebar";
 import Placeholder from "./placeholder/Placeholder";
-import SelectBox from "./Inputs/SelectBox";
 import TextArea from "./Inputs/TextArea";
 import Image from "./Image/Image";
 
 export {
-    Button,
+    BTN,
     Submit,
     Input,
     Navbar,
@@ -27,7 +26,6 @@ export {
     Category,
     FilterSidebar,
     Placeholder,
-    SelectBox,
     TextArea,
     Image,
 }

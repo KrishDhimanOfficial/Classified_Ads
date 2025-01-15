@@ -19,12 +19,14 @@ router.route('/seller/profile/:id?')
     .put(sellerprofileImg.single('image'), seller_Controller.updateProfile)
 
 router.put('/update/seller-wallet', seller_Controller.updateWallet)
-router.post('/seller/payment-transactions',seller_Controller.getpaymentTransactions)
+router.post('/seller/payment-transactions', seller_Controller.getpaymentTransactions)
+
 
 router.get('/parent-category', category_controller.getparentCategory)
 router.get('/sub-category/:parentId', category_controller.getsubCategory)
 router.get('/brands', brand_controller.getbrands)
 
+router.post('/products', product_controller.allListings)
 router.route('/product')
     .post(product.fields(
         [
@@ -33,4 +35,5 @@ router.route('/product')
         ]
     ), handlemulterError, product_controller.createProduct)
 
+router.post('/listings', product_controller.getlistingDetails)
 export default router

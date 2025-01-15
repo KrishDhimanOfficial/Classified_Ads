@@ -1,8 +1,25 @@
-import React from 'react'
-import { Button } from '../../components/component'
+import React, { useEffect, useState } from 'react'
+import { BTN } from '../../components/component'
 import { Review_Rating, Seller_profile } from '../admin'
+import DataService from '../../hooks/DataService'
+import GetCookie from '../../hooks/GetCookie'
+import { useNavigate } from 'react-router-dom'
 
 const Dashboard = () => {
+    const navigate = useNavigate()
+    const [listing, setlisting] = useState({ totalActive: 0, totalDeActive: 0 })
+
+    const fetchListings = async () => {
+        const res = await DataService.post('/listings', {}, {
+            headers: {
+                'Authorization': `Bearer ${GetCookie(navigate)}`
+            }
+        })
+        setlisting(res[0])
+    }
+    useEffect(() => {
+        fetchListings()
+    }, [])
     return (
         <>
             <div className="row">
@@ -15,7 +32,7 @@ const Dashboard = () => {
                     <div className="profile-stats">
                         <div className="stat stat-orange">
                             <h4>
-                                0
+                                {listing?.totalActive + listing?.totalDeActive}
                             </h4>
                             <p>
                                 All Listing
@@ -23,7 +40,7 @@ const Dashboard = () => {
                         </div>
                         <div className="stat stat-green">
                             <h4>
-                                0
+                                {listing.totalActive}
                             </h4>
                             <p>
                                 Active Listing
@@ -31,10 +48,10 @@ const Dashboard = () => {
                         </div>
                         <div className="stat stat-red">
                             <h4>
-                                0
+                                {listing.totalDeActive}
                             </h4>
                             <p>
-                                Deactivate Ads
+                                Deactive Listing
                             </p>
                         </div>
                         <div className="stat stat-blue">
@@ -57,7 +74,7 @@ const Dashboard = () => {
                             </h5>
                             <ul className="nav nav-tabs" id="myTab" role="tablist">
                                 <li className="nav-item" role="presentation">
-                                    <Button
+                                    <BTN
                                         text={'Reviews Received'}
                                         aria-controls={"received"}
                                         aria-selected={"true"}
@@ -70,7 +87,7 @@ const Dashboard = () => {
                                     />
                                 </li>
                                 <li className="nav-item" role="presentation">
-                                    <Button
+                                    <BTN
                                         role={"tab"} type={"button"}
                                         text={'Reviews Given'}
                                         aria-controls={"given"}

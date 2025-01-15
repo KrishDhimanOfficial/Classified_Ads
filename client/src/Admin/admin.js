@@ -9,6 +9,8 @@ import Setting from "./setiing/Setting";
 import Change_password from "./seller_profile/Change_password";
 import User_wallet from "./user_wallet/user_wallet";
 import Transactions from "./user_wallet/Transactions";
+import Product from "./my_listing/Product";
+import Listing_container from "./my_listing/Listing_container";
 
 export {
     Sidebar,
@@ -16,10 +18,12 @@ export {
     Review_Rating,
     Seller_profile,
     UpdateProfile,
-    AddProduct ,
+    AddProduct,
     Add_Atrribute,
     Setting,
     Change_password,
     User_wallet,
-    Transactions
+    Transactions,
+    Listing_container,
+    Product
 }

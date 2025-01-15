@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { DataService, GetCookie } from '../../../hooks/hooks'
-import { Button } from '../../component'
+import { BTN } from '../../component'
 
 const Navbar = () => {
     const navigate = useNavigate()
@@ -51,7 +51,7 @@ const Navbar = () => {
                                                 {GetCookie(navigate) ? 'Log Out' : 'Log In'}
                                             </Link>
                                         </div>
-                                        <Button
+                                        <BTN
                                             type={'button'}
                                             text={' Post Your Ad'}
                                             onClick={() => handleLogin()}

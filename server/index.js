@@ -1,6 +1,7 @@
 import dotenv from 'dotenv'
 import express from 'express'
 import cors from 'cors'
+import fs from 'fs'
 import config from './config/config.js'
 import cluster from 'cluster'
 import numCPUs from 'os'
@@ -8,6 +9,7 @@ import cookie_parser from 'cookie-parser'
 import connectDB from './config/dbconnection.js'
 import superAdminRoutes from './routes/superAdmin.routes.js'
 import siteRoutes from './routes/site.routes.js'
+import path from 'path'
 
 dotenv.config()
 const app = express()
@@ -40,6 +42,11 @@ if (cluster.isPrimary) {
     app.set('views', 'views')
 
     // Routes
+    // app.get('/',async (req, res,next) => {
+    //     let html = fs.readFile(path.resolve(root,'index.html'),'utf-8')
+    //     html = await viteServer.tr
+        
+    // });
     app.use('/api', siteRoutes)
     app.use('/admin', superAdminRoutes)
 

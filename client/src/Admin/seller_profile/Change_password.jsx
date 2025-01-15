@@ -1,5 +1,5 @@
 import React from 'react'
-import { Input, Button } from '../../components/component'
+import { Input, BTN } from '../../components/component'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import DataService from '../../hooks/DataService'
@@ -52,7 +52,7 @@ const Change_password = () => {
                         </p>
                     </div>
                     <div className={'w-50 float-end'}>
-                        <Button
+                        <BTN
                             disabled={isSubmitting}
                             type={"submit"}
                             text={isSubmitting ? 'Loading...' : 'Change password'}
