@@ -12,7 +12,6 @@ import { Transactions } from '../admin'
 const User_wallet = () => {
     const navigate = useNavigate()
     const location = useLocation()
-    console.log(location);
     
     const profile = useSelector(state => state.seller)
     const [amount, setamount] = useState(0)

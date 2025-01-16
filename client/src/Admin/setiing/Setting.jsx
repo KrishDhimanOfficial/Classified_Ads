@@ -24,25 +24,10 @@ const Setting = () => {
                                     type={"button"}
                                 />
                             </li>
-                            <li className="nav-item" role="presentation">
-                                <BTN
-                                    role={"tab"} type={"button"}
-                                    text={'Account Setting'}
-                                    aria-controls={"given"}
-                                    aria-selected={"false"}
-                                    className={"nav-link"}
-                                    data-bs-target={"#given"}
-                                    data-bs-toggle={"tab"}
-                                    id={"given-tab"}
-                                />
-                            </li>
                         </ul>
                         <div className="tab-content mt-3" id="myTabContent">
                             <div aria-labelledby="received-tab" className="tab-pane fade show active" id="received" role="tabpanel">
                                 <Change_password />
-                            </div>
-                            <div aria-labelledby="given-tab" className="tab-pane fade" id="given" role="tabpanel">
-
                             </div>
                         </div>
                     </div>

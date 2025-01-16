@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Input, Image,BTN } from '../../components/component'
+import { Input, Image, BTN } from '../../components/component'
 import defaultuser from '../../assets/images/user.svg'
 import { useSelector } from 'react-redux'
 import { useForm } from 'react-hook-form'
@@ -48,7 +48,9 @@ const UpdateProfile = () => {
 
     useEffect(() => {
         if (profile.seller) {
-            setImg(`${config.seller_profile_img_path}/${profile.seller.image}`)
+            setImg(profile.seller.image
+                ? `${config.seller_profile_img_path}/${profile.seller.image}`
+                : defaultuser)
             setValue('username', profile.seller.username)
             setValue('name', profile.seller.name)
             setValue('email', profile.seller.email)
@@ -63,7 +65,7 @@ const UpdateProfile = () => {
                     <form onSubmit={handleSubmit(handleupdateSellerProfile)} autoComplete='off' encType="multipart/form-data">
                         <div className="profile-photo">
                             <Image
-                                src={`${profileImg || defaultuser}`}
+                                src={`${profileImg}`}
                                 alt={"Profile photo of a seller"}
                                 height={"100"} width={"100"}
                             />

@@ -23,16 +23,26 @@ const Listing_container = () => {
         <>
             <div className='back-course-filter bg-white'>
                 {
+                    listings.collectionData?.length == 0 && (
+                        <h1 className='text-center'>No Listing</h1>
+                    )
+                }
+                {
                     listings.collectionData?.map((listing, i) => (
                         <Product key={i}
+                            id={listing._id}
                             title={listing.title}
                             price={listing.price}
+                            status={listing.status}
+                            slug={`/listing/${listing.slug}`}
+                            updatelisting={`/user/update/${listing.slug}`}
                             publishStatus={listing.publishing_status}
+                            createdAt={listing.formattedDate}
                             path={`${config.server_product_img_path}/${listing.featured_img}`}
                         />
                     ))
                 }
-            </div>
+            </div >
             <div className='w-100 d-flex justify-content-center'>
                 <ul className="back-pagination">
                     {listings.prevpage && (
@@ -50,7 +60,7 @@ const Listing_container = () => {
                                     <Link to="#" onClick={(e) => {
                                         e.preventDefault()
                                         fetchLlisting(i + 1)
-                                    }}>{i + 1}</Link>
+                                    }}>{i + 1} </Link>
                                 </li>
                             ))
                         )
@@ -60,8 +70,7 @@ const Listing_container = () => {
                             <Link to="#" onClick={(e) => {
                                 e.preventDefault()
                                 fetchLlisting(listings.page + 1)
-                            }
-                            }> Next </Link>
+                            }}> Next </Link>
                         </li>
                     )}
                 </ul>

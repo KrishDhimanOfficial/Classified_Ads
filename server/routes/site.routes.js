@@ -27,13 +27,24 @@ router.get('/sub-category/:parentId', category_controller.getsubCategory)
 router.get('/brands', brand_controller.getbrands)
 
 router.post('/products', product_controller.allListings)
-router.route('/product')
+router.get('/product/:listing_slug', product_controller.getSingleListing)
+router.patch('/product/update-listing-images', product_controller.updateListingImages)
+router.route('/product/:id?')
     .post(product.fields(
         [
             { name: 'images', maxCount: 4 },
             { name: 'featured_img', maxCount: 1 },
         ]
     ), handlemulterError, product_controller.createProduct)
+    .put(product.fields(
+        [
+            { name: 'images', maxCount: 4 },
+            { name: 'featured_img', maxCount: 1 },
+        ]
+    ), product_controller.updateProduct)
+    .patch(product_controller.handleupdateStatus)
+    .delete(product_controller.deleteProduct)
+
 
 router.post('/listings', product_controller.getlistingDetails)
 export default router

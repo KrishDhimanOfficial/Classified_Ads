@@ -7,20 +7,23 @@ import { Image } from '../../components/component'
 
 const Seller_profile = () => {
     const profile = useSelector(state => state.seller)
-
+    const date = new Date(profile.seller.createdAt)
     return (
         <div className="profile-header d-flex align-items-center">
             <Image
-                src={`${config.seller_profile_img_path}/${profile.seller.image}` || defaultuser}
+                src={profile.seller.image
+                    ? `${config.seller_profile_img_path}/${profile.seller.image}`
+                    : defaultuser
+                }
                 alt={"Profile picture of the user"}
                 height={"80"} width={"80"}
             />
             <div className="ms-3">
                 <h5 className="mb-0">
                     {profile.seller.name}
-                    <span className="badge bg-success text-uppercase ms-3">
+                    {/* <span className="badge bg-success text-uppercase ms-3">
                         Verified
-                    </span>
+                    </span> */}
                     <span className="badge bg-purple text-uppercase">
                         Member
                     </span>
@@ -29,7 +32,7 @@ const Seller_profile = () => {
                     <span className="text-warning me-3">
                         12 listing
                     </span>
-                    Member since 2024
+                    Member since {date.getFullYear()}
                 </p>
                 <div className="d-flex align-items-center mt-2">
                     <p className='mb-0'>

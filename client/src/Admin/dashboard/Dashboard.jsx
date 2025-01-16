@@ -32,7 +32,7 @@ const Dashboard = () => {
                     <div className="profile-stats">
                         <div className="stat stat-orange">
                             <h4>
-                                {listing?.totalActive + listing?.totalDeActive}
+                                {listing?.totalActive + listing?.totalDeActive || 0}
                             </h4>
                             <p>
                                 All Listing
@@ -40,7 +40,7 @@ const Dashboard = () => {
                         </div>
                         <div className="stat stat-green">
                             <h4>
-                                {listing.totalActive}
+                                {listing?.totalActive || 0}
                             </h4>
                             <p>
                                 Active Listing
@@ -48,7 +48,7 @@ const Dashboard = () => {
                         </div>
                         <div className="stat stat-red">
                             <h4>
-                                {listing.totalDeActive}
+                                {listing?.totalDeActive || 0}
                             </h4>
                             <p>
                                 Deactive Listing

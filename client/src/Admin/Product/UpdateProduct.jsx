@@ -1,22 +1,20 @@
 import React, { useEffect, useState, useCallback } from 'react'
-import { Add_Atrribute } from '../admin'
-import { Input,BTN, TextArea, Image } from '../../components/component'
-import * as yup from 'yup'
+import { useParams, useNavigate } from 'react-router-dom'
 import { useForm, useFieldArray, Controller } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import DataService from '../../hooks/DataService'
+import { Input, BTN, TextArea, Image, } from '../../components/component'
+import { Add_Atrribute } from '../admin'
 import Select from 'react-select'
-import GetCookie from '../../hooks/GetCookie'
-import { useNavigate } from 'react-router-dom'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
+import DataService from '../../hooks/DataService'
 import Notify from '../../hooks/Notify'
+import config from '../../../config/config'
+import GetCookie from '../../hooks/GetCookie'
 
 const productSchema = yup.object().shape({
     title: yup.string().trim().required('Title is required!')
         .matches(/^[a-zA-Z0-9\s]+$/, 'Title contains only characters,numbers!'),
-    price: yup.number().required('price is required!'),
-    brandId: yup.object().required('Required!'),
-    parentcategoryId: yup.object().required('Required!'),
-    subcategoryId: yup.object().required('Required!'),
+    price: yup.number('Input must be a number'),
     description: yup.string().trim().required('Description is required!')
         .max(300, 'Maximum 300 Characters are allowed!'),
     condition: yup.string().required('Required!'),
@@ -29,19 +27,24 @@ const productSchema = yup.object().shape({
     featured_img: yup.mixed().required('Upload Featured Image!'),
 })
 
-const AddProduct = () => {
+
+const UpdateProduct = () => {
+    const { listing_slug } = useParams()
     const navigate = useNavigate()
+    const [listing, setlisting] = useState({})
     const [priceInput, setPriceInput] = useState(0)
     const [productImg, setproductImg] = useState([])
     const [featuredImg, setfeaturedImg] = useState('#')
     const [status, setstatus] = useState(true)
+    const [negotiable, setnegotiable] = useState(false)
     const [showAddMoreButton, setShowAddMoreButton] = useState(true)
-    const [slug, setSlug] = useState('')
+    const [slug, setSlug] = useState(listing.slug)
     const [pcategory, setpcategory] = useState([])
     const [subcategory, setsubcategory] = useState([])
     const [brands, setbrands] = useState([])
+    // ALL States
 
-    const { handleSubmit, control, register, reset, watch, formState: {
+    const { handleSubmit, control, register, watch, setValue, formState: {
         errors, isSubmitting, } } = useForm({ resolver: yupResolver(productSchema) })
 
     const attributeLength = watch('attributes')
@@ -49,18 +52,17 @@ const AddProduct = () => {
 
     const displayImgs = (e) => {
         const file = e.target.files;
-        setproductImg(Array.from(file).slice(0, 4).map(img => URL.createObjectURL(img)))
+        const newimges = Array.from(file).slice(0, 4 - listing.images.length).map(img => URL.createObjectURL(img))
+        setproductImg(prev => ([...prev, ...newimges]))
     }
+
     const displayFImgs = (e) => {
         const file = e.target.files[0]
         setfeaturedImg(URL.createObjectURL(file))
     }
 
     const createSlug = (str) => {
-        return str.toLowerCase()
-            .replace(/\s+/g, '-')
-            .replace(/&/g, 'and')
-            .replace(/[^\w-]+/, '-')
+        return str.toLowerCase().replace(/\s+/g, '-').replace(/&/g, 'and').replace(/[^\w-]+/, '-')
     }
 
     const fetchCategorie = useCallback(async () => {
@@ -81,28 +83,65 @@ const AddProduct = () => {
         setbrands(brands)
     }, [])
 
-    const createProduct = async (data) => {
-        const formData = new FormData()
-        formData.append('featured_img', data.featured_img[0])
-        Array.from(data.images).forEach((image) => formData.append('images', image))
-        formData.append('slug', slug)
-        formData.append('status', status)
-        formData.append('data', JSON.stringify(data))
+    const updateLisingImages = useCallback(async (images, image) => {
+        try {
+            const res = await DataService.patch('/product/update-listing-images', { images, image }, {
+                headers: {
+                    'Authorization': `Bearer ${GetCookie(navigate)}`
+                }
+            })
+            Notify(res)
+        } catch (error) {
+            console.error('updateLisingImages : ' + error)
+        }
+    }, [])
 
-        const res = await DataService.post('/product', formData, {
-            headers: {
-                'Authorization': `Bearer ${GetCookie(navigate)}`
-            }
-        })
-        reset()
-        if (res) Notify(res), setfeaturedImg([]), setproductImg([]), setSlug('')
+    const updateListing = async (data) => {
+        try {
+            const formData = new FormData()
+            formData.append('featured_img', data.featured_img[0])
+            Array.from(data.images).forEach((image) => formData.append('images', image))
+            formData.append('slug', slug)
+            formData.append('status', status)
+            formData.append('data', JSON.stringify(data))
+
+            const res = await DataService.put(`/product/${listing._id}`, formData, {
+                headers: {
+                    'Authorization': `Bearer ${GetCookie(navigate)}`
+                }
+            })
+            Notify(res)
+        } catch (error) {
+            console.error('updateListing : ', error)
+        }
     }
 
-    useEffect(() => { fetchCategorie(), fetchBrand() }, [])
+    const getlisting = async () => {
+        try {
+            const res = await DataService.get(`/product/${listing_slug}`, {
+                headers: {
+                    'Authorization': `Bearer ${GetCookie(navigate)}`
+                }
+            })
+            Notify(res), setlisting(res)
+            setValue('title', res.title)
+            setValue('condition', res.condition)
+            setValue('attributes', res.features)
+            setValue('description', res.description)
+            setSlug(res.slug)
+            setPriceInput(res.price)
+            setnegotiable(res.negotiable)
+            setfeaturedImg(`${config.server_product_img_path}/${res.featured_img}`)
+            setproductImg(res.images.map(img => `${config.server_product_img_path}/${img}`))
+        } catch (error) {
+            console.error('getlisting : ', error)
+        }
+    }
+    useEffect(() => { getlisting(), fetchCategorie(), fetchBrand() }, [])
     return (
         <div className="back-login-page">
             <div className="login-right-form pt-0 px-0">
-                <form onSubmit={handleSubmit(createProduct)} autoComplete='off' encType="multipart/form-data">
+                <form onSubmit={handleSubmit(updateListing)} autoComplete='off' encType="multipart/form-data">
                     <div className="row">
                         <div className="col-md-7">
                             <div className='bg-light p-3 mb-3'>
@@ -130,6 +169,10 @@ const AddProduct = () => {
                                                 isSearchable
                                                 isRtl={false}
                                                 options={pcategory}
+                                                value={{
+                                                    value: listing.parent_category?._id,
+                                                    label: listing.parent_category?.title
+                                                }}
                                                 onChange={(selectedoption) => {
                                                     field.onChange(selectedoption)
                                                     fetchsubCategorie(selectedoption.value)
@@ -157,6 +200,10 @@ const AddProduct = () => {
                                                 isSearchable
                                                 isRtl={false}
                                                 options={subcategory}
+                                                value={{
+                                                    value: listing.sub_category?._id,
+                                                    label: listing.sub_category?.title
+                                                }}
                                                 onChange={(selectedoption) => field.onChange(selectedoption)}
                                                 styles={{
                                                     control: (style) => ({
@@ -183,6 +230,10 @@ const AddProduct = () => {
                                                 isSearchable
                                                 isRtl={false}
                                                 options={brands}
+                                                value={{
+                                                    value: listing.brand?._id,
+                                                    label: listing.brand?.title
+                                                }}
                                                 onChange={(selectedoption) => field.onChange(selectedoption)}
                                                 styles={{
                                                     control: (style) => ({
@@ -255,6 +306,7 @@ const AddProduct = () => {
                                 <div className='d-flex gap-2'>
                                     <Input
                                         type={'checkbox'}
+                                        checked={negotiable}
                                         style={{ width: '10%' }}
                                         {...register('negotiable')}
                                     />
@@ -309,14 +361,17 @@ const AddProduct = () => {
                                     hidden
                                 />
                             </label>
-                            <label id='images' className="upload-container mb-3">
+                            <label id='images' htmlFor='input-images' className="upload-container mb-3">
                                 <div className='d-flex flex-wrap justify-content-between gap-2 mb-3'>
                                     {
                                         productImg.map((img, i) => (
                                             <div key={i}>
                                                 <BTN
                                                     type={'button'}
-                                                    onClick={(e) => setproductImg(productImg.filter(img => img !== e.target.dataset.id))}
+                                                    onMouseDown={(e) => {
+                                                        setproductImg(productImg.filter(img => img !== e.target.dataset.id))
+                                                        updateLisingImages(productImg, img)
+                                                    }}
                                                     icon={<i data-id={img} className="fas fa-close"></i>}
                                                     className={"remove-btn float-end"}
                                                 />
@@ -342,25 +397,34 @@ const AddProduct = () => {
                                 </p>
                                 <span className='fs-6 text-danger m-0 mt-1'>{errors.images?.message}</span>
                                 <Input
-                                    type={'file'}
-                                    multiple max={4} accept={'images/*'} htmlFor={'images'}
+                                    id={'input-images'}
+                                    type={'file'} accept={'images/*'}
                                     {...register('images')}
-                                    onChange={(e) => { displayImgs(e), register('images').onChange(e) }}
+                                    onChange={(e) => {
+                                        displayImgs(e)
+                                        register('images').onChange(e)
+                                    }}
                                     hidden
+                                    multiple
                                 />
                             </label>
+                            {
+                                listing.status && (
+                                    <BTN
+                                        disbaled={isSubmitting.toString()}
+                                        type={"submit"}
+                                        text={'Draft'}
+                                        id={"button"}
+                                        onClick={() => setstatus(false)}
+                                        className={'mb-3'}
+                                    />
+                                )
+                            }
                             <BTN
                                 disbaled={isSubmitting.toString()}
                                 type={"submit"}
-                                text={'Draft'}
-                                id={"button"}
-                                onClick={() => setstatus(false)}
-                                className={'mb-3'}
-                            />
-                            <BTN
-                                disbaled={isSubmitting.toString()}
-                                type={"submit"}
-                                text={'Continue'}
+                                text={'update'}
+                                onClick={() => setstatus(true)}
                                 id={"button"}
                             />
                         </div>
@@ -371,4 +435,4 @@ const AddProduct = () => {
     )
 }
 
-export default AddProduct
+export default UpdateProduct

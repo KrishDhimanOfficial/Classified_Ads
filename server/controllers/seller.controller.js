@@ -40,7 +40,7 @@ const seller_controllers = {
     getProfile: async (req, res) => {
         try {
             const seller = getUser(req.body.token)
-            const sellerprofile = await sellerModel.findById({ _id: seller.id }, { password: 0, status: 0 })
+            const sellerprofile = await sellerModel.findById({ _id: seller.id }, { password: 0, status: 0,   })
             if (!sellerprofile) res.json({ error: 'Account Not Found!' })
             return res.status(200).json(sellerprofile)
         } catch (error) {

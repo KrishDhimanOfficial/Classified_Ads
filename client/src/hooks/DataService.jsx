@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios from 'axios'
 import config from "../../config/config"
 
 class DataService {
@@ -10,8 +10,8 @@ class DataService {
         return response.data
     }
 
-    async get(api) { // GET Request 
-        const response = await this.clientAPI.get(api)
+    async get(api, config = {}) { // GET Request 
+        const response = await this.clientAPI.get(api, config)
         return response.data
     }
 
@@ -22,6 +22,10 @@ class DataService {
 
     async delete(api) { // DELETE Request
         const response = await this.clientAPI.delete(api)
+        return response.data
+    }
+    async patch(api, formData, config = {}) {
+        const response = await this.clientAPI.patch(api, formData, config)
         return response.data
     }
 }
