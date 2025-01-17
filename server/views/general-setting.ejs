@@ -82,7 +82,7 @@
                                                 </div>
                                                 <!-- /.card-body -->
                                                 <div class="card-footer">
-                                                    <BTN type="submit" class="btn btn-primary">Submit</button>
+                                                    <button type="submit" class="btn btn-primary">Submit</button>
                                                 </div>
                                             </form>
                                         </div>
@@ -96,22 +96,40 @@
                                             </div>
                                             <!-- /.card-header -->
                                             <!-- form start -->
-                                            <form action="#" method="post" enctype="multipart/form-data">
+                                            <form id="submitgeneralSetting" data-id="<%= settings._id %>"
+                                                enctype="multipart/form-data">
                                                 <div class="card-body">
                                                     <div class="form-group">
                                                         <label for="sname">Site Name</label>
-                                                        <input type="text" class="form-control" id="sname"
-                                                            name="current_password" placeholder="Enter Name">
+                                                        <input type="text" class="form-control" id="sname" name="name"
+                                                            placeholder="Enter Name" value="<%= settings.name %>">
+                                                    </div>
+                                                    <div>
+                                                        <img src="<%= logo_img %>/<%= settings.logo  %> " alt="" class="img-fluid" style="height: 150px;">
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="logo">Logo</label>
-                                                        <input type="file" class="form-control" id="logo"
-                                                            name="current_password">
+                                                        <input type="file" accept="images/*" class="form-control"
+                                                            id="logo" name="logo">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="banner">Banner Image</label>
+                                                        <input type="file" accept="images/*" class="form-control"
+                                                            id="banner" name="banner_image">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="desc">Description</label>
+                                                        <textarea name="desc" id="desc" class="form-control"
+                                                            style="height: 150px;"><%= settings.desc %> 
+                                                        </textarea>
                                                     </div>
                                                 </div>
                                                 <!-- /.card-body -->
                                                 <div class="card-footer">
-                                                    <BTN type="submit" class="btn btn-primary">Submit</button>
+                                                    <button type="submit" id="submitbtn" class="btn btn-primary">
+                                                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                                                        Submit
+                                                    </button>
                                                 </div>
                                             </form>
                                         </div>
@@ -129,6 +147,8 @@
     </div>
     <!-- ./wrapper -->
     <%- include('./partials/script') %>
+        <script> const EndAPI = 'general-setting';</script>
+        <script async type="module" src="/assets/js/main.js"></script>
 </body>
 
 </html>

@@ -23,8 +23,8 @@ const updatetableDataStatus = async (status, api) => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ status })
         })
-        const res = await response.json()
         if (!response.ok) toastr.error('Network Error')
+        const res = await response.json()
         Notify(res)
     } catch (error) {
         console.error(error)

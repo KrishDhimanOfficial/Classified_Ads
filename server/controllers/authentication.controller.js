@@ -1,6 +1,9 @@
+import config from "../config/config.js"
 import adminModel from "../models/admin.model.js"
+import generalSettingModel from "../models/general-setting.model.js"
 import sellerModel from "../models/seller.model.js"
 import { setUser, getUser } from '../services/createToken.js'
+import deleteImage from "../services/deleteImg.js"
 import validations from "../services/validateData.js"
 import bcrypt from 'bcrypt'
 
@@ -8,6 +11,7 @@ const authenticationcontroller = {
     handleSuperAdminLogin: async (req, res) => {
         try {
             const { email, password } = req.body;
+
             const admin = await adminModel.findOne({ email })
             if (!admin) return res.render('login', { error: 'Invalid Input Fields!' })
 
@@ -39,17 +43,19 @@ const authenticationcontroller = {
     },
     changeDashboardPassword: async (req, res) => {
         try {
+            const settings = await generalSettingModel.findOne({})
             const { current_password, new_password, re_enter_passsword } = req.body;
             if (!current_password || !new_password || !re_enter_passsword) {
                 return res.render('general-setting',
                     {
+                        settings,
                         error: 'All Fields Are Required!',
                         current_password, new_password, re_enter_passsword
                     }
                 )
             }
             if (new_password !== re_enter_passsword) {
-                return res.render('general-setting', { error: 'Password Must Be Same!', current_password })
+                return res.render('general-setting', { settings, error: 'Password Must Be Same!', current_password })
             }
 
             const admin = await adminModel.findOne({}, { _id: 1, password: 1 })
@@ -57,7 +63,7 @@ const authenticationcontroller = {
 
             if (!isMatch) {
                 return res.render('general-setting',
-                    { error: 'Invalid Current Password!', current_password }
+                    { settings, error: 'Invalid Current Password!', current_password }
                 )
             } // Check match current password with saved password
 
@@ -67,8 +73,9 @@ const authenticationcontroller = {
                 { new: true }
             ) // Hashing a new password
 
-            if (!response) return res.render('general-setting', { error: 'Unable to update!' })
+            if (!response) return res.render('general-setting', { settings, error: 'Unable to update!' })
             return res.render('general-setting', {
+                settings,
                 success: 'Password Changed Successfully!',
             })
         } catch (error) {
@@ -144,6 +151,54 @@ const authenticationcontroller = {
             return res.json({ message: 'updated successfully!' })
         } catch (error) {
             console.log('changeSellerPassword' + error.message)
+        }
+    },
+    General_Settings: async (req, res) => {
+        try {
+            const { desc, name } = req.body;
+            const existingRecored = await generalSettingModel.findOne({})
+            const response = await generalSettingModel.findByIdAndUpdate(
+                { _id: req.params.id },
+                {
+                    name: name.trim(),
+                    desc: desc.trim(),
+                    banner_image: req.files['banner_image']
+                        ? req.files['banner_image'][0].filename
+                        : existingRecored.banner_image,
+                    logo: req.files['logo']
+                        ? req.files['logo'][0].filename
+                        : existingRecored.logo
+                },
+                { runValidators: true }
+            )
+            if (!response) return res.json({ error: 'unable to updated!' })
+
+            if (req.files['logo']) await deleteImage(`images/${response.logo}`)
+            if (req.files['banner_image']) await deleteImage(`images/${response.banner_image}`)
+            return res.json({ message: 'updated successfully!' })
+        } catch (error) {
+            // Extract custom error messages
+            if (error.name === 'ValidationError') validations(res, error.errors)
+            if (req.files['logo'] || req.files['banner_image']) {
+                await deleteImage(`images/${req.files['logo'][0].filename || req.files['banner_image'][0].filename}`)
+            }
+            console.log('General_Settings' + error.message)
+        }
+    },
+    renderGN: async (req, res) => {
+        try {
+            const settings = await generalSettingModel.findOne({})
+            return res.render('general-setting', { settings, logo_img: config.site_img_path })
+        } catch (error) {
+            console.log('renderGN : ' + error.message)
+        }
+    },
+    getGNSettings: async (req, res) => {
+        try {
+            const response = await generalSettingModel.findOne({})
+            return res.status(200).json(response)
+        } catch (error) {
+            console.log('getGNSettings : ' + error.message)
         }
     }
 }

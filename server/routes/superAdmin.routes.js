@@ -1,11 +1,12 @@
 import express from 'express'
 import brandController from '../controllers/brand.controller.js'
-import { upload, brand, category } from '../Middleware/multer.middleware.js'
+import { upload, brand, category, GN } from '../Middleware/multer.middleware.js'
+import handlemulterError from '../Middleware/handleMulterError.js'
 import category_controllers from '../controllers/category.controller.js'
 import authenticationcontroller from '../controllers/authentication.controller.js'
 import seller_controllers from '../controllers/seller.controller.js'
 import { checkAdminIsLogged, checkToken } from '../Middleware/CheckAdminAuthentication.js'
-import handlemulterError from '../Middleware/handleMulterError.js'
+import product_controller from '../controllers/product.controller.js'
 const router = express.Router()
 
 // Routes for Super Admin
@@ -51,7 +52,10 @@ router.route('/product/sub-category/:id?')
     .delete(category_controllers.deleteSubCategory)
 
 // product listings
-router.get('/product/listings', checkAdminIsLogged, (req, res) => res.render('listing/listings'))
+router.get('/product/listings', checkAdminIsLogged, product_controller.renderSellersListingOnAdminPanel)
+router.get('/product/deactivated-listings', product_controller.renderAllDeActiveListingOnAdminPanel)
+router.patch('/listing/:id', product_controller.handleupdatePusblishStatus)
+
 
 // Routes for Sellers
 router.get('/all-sellers', checkAdminIsLogged, seller_controllers.renderAllSellers)
@@ -60,8 +64,12 @@ router.route('/seller/:id?')
     .patch(seller_controllers.updateSellerStatus)
 
 // General-Settings
-router.get('/general-settings', checkAdminIsLogged, (req, res) => res.render('general-setting'))
+router.get('/general-settings', checkAdminIsLogged, authenticationcontroller.renderGN)
 router.post('/change-password', upload.none(), authenticationcontroller.changeDashboardPassword)
+router.put('/general-setting/:id', GN.fields([
+    { name: 'logo', maxCount: 1 },
+    { name: 'banner_image', maxCount: 1 },
+]), handlemulterError, authenticationcontroller.General_Settings)
 
 router.get('/*', (req, res) => res.render('404'))
 

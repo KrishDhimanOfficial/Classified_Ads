@@ -7,6 +7,7 @@ export const SubmitForm = document.querySelector('#submitFormData') || document.
 export const submitbtn = document.querySelector('#submitbtn')
 export const resetbtn = document.querySelector('#reset')
 export const loginbtn = document.querySelector('#loginbtn')
+export const submitgeneralSetting = document.querySelector('#submitgeneralSetting')
 
 export const Notify = (data) => {
     if (data.message) toastr.success(data.message)

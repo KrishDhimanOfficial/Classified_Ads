@@ -3,7 +3,8 @@ import productModel from "../models/product.model.js";
 import deleteImage from "../services/deleteImg.js";
 import mongoose from "mongoose";
 import handleAggregatePagination from "../services/handlepagination.js";
-import { response } from "express";
+import config from "../config/config.js";
+const ObjectId = mongoose.Types.ObjectId;
 
 const product_controller = {
     createProduct: async (req, res) => {
@@ -120,7 +121,6 @@ const product_controller = {
             const seller = getUser(req.headers['authorization'].split(' ')[1])
             const { images, image } = req.body;
             const listedImages = images.map(img => img.split('/')[5])
-            const newimages = listedImages.filter(img => img != image.split('/')[5])
 
             const response = await productModel.findOneAndUpdate(
                 { sellerId: new mongoose.Types.ObjectId(seller.id) },
@@ -200,7 +200,6 @@ const product_controller = {
     updateProduct: async (req, res) => {
         try {
             const existingRecored = await productModel.findById({ _id: req.params.id })
-            if (g) return res.json({ error: 'Please select aleast one image!' })
 
             const { slug, status } = req.body;
             const { title, description, parentcategoryId, subcategoryId, brandId,
@@ -256,6 +255,145 @@ const product_controller = {
             return res.status(200).json({ message: 'delete successfully!' })
         } catch (error) {
             console.log('deleteProduct : ' + error.message)
+        }
+    },
+    renderSellersListingOnAdminPanel: async (req, res) => {
+        try {
+            const response = await productModel.aggregate([
+                {
+                    $lookup: {
+                        from: 'parent_categories',
+                        localField: 'parentcategoryId',
+                        foreignField: '_id',
+                        as: 'parentcategory'
+                    }
+                },
+                { $unwind: '$parentcategory' },
+                {
+                    $lookup: {
+                        from: 'sellers',
+                        localField: 'sellerId',
+                        foreignField: '_id',
+                        as: 'sellerInfo'
+                    }
+                },
+                { $unwind: '$sellerInfo' },
+                {
+                    $project: {
+                        title: 1,
+                        featured_img: 1,
+                        'parentcategory.title': 1,
+                        'sellerInfo.username': 1,
+                        publishing_status: 1,
+                        status: 1,
+                        price: 1,
+                        createdAt: {
+                            $dateToString: {
+                                format: "%d-%m-%Y",
+                                date: "$created_At"
+                            }
+                        },
+                        img_path: {
+                            $concat: [`${config.product_img_path}`, '/', '$featured_img']
+                        }
+                    }
+                },
+            ])
+            return res.render('listing/listings', { response })
+        } catch (error) {
+            console.log('renderSellersListingOnAdminPanel : ' + error.message)
+        }
+    },
+    handleupdatePusblishStatus: async (req, res) => {
+        try {
+            const { status } = req.body;
+            const response = await productModel.findByIdAndUpdate(
+                { _id: req.params.id }, { publishing_status: status }, { new: true }
+            )
+            if (!response) return res.json({ error: 'Failed to update brand!' })
+            return res.json({ message: 'update successfully!' })
+        } catch (error) {
+            console.log('handleupdatePusblishStatus : ' + error.message)
+        }
+    },
+    renderAllDeActiveListingOnAdminPanel: async (req, res) => {
+        try {
+            const response = await productModel.aggregate([
+                {
+                    $match: {
+                        publishing_status: false
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'parent_categories',
+                        localField: 'parentcategoryId',
+                        foreignField: '_id',
+                        as: 'parentcategory'
+                    }
+                },
+                { $unwind: '$parentcategory' },
+                {
+                    $lookup: {
+                        from: 'sellers',
+                        localField: 'sellerId',
+                        foreignField: '_id',
+                        as: 'sellerInfo'
+                    }
+                },
+                { $unwind: '$sellerInfo' },
+                {
+                    $project: {
+                        title: 1,
+                        featured_img: 1,
+                        'parentcategory.title': 1,
+                        'sellerInfo.username': 1,
+                        publishing_status: 1,
+                        status: 1,
+                        price: 1,
+                        createdAt: {
+                            $dateToString: {
+                                format: "%d-%m-%Y",
+                                date: "$created_At"
+                            }
+                        },
+                        img_path: {
+                            $concat: [`${config.product_img_path}`, '/', '$featured_img']
+                        }
+                    }
+                },
+            ])
+            return res.render('listing/listings', { response })
+        } catch (error) {
+            console.log('renderAllDeActiveListingOnAdminPanel : ' + error.message)
+        }
+    },
+    handleFilteringListing: async (req, res) => {
+        try {
+            const { brandId, condition, parentcategoryId, subcategoryId, price, type } = req.body;
+            console.log(
+                {
+                    brandId, condition, parentcategoryId,
+                    subcategoryId, price, type
+                }
+            )
+            const response = await productModel.aggregate([
+                {
+                    $match: {
+                        $or: [
+                            { parentcategoryId: new ObjectId(parentcategoryId?.value) },
+                            { brandId: new ObjectId(brandId?.value) },
+                            { subcategoryId: new ObjectId(subcategoryId?.value) },
+                            { condition }
+                        ]
+                    }
+                },
+            ])
+            console.log(response);
+            if (response.length === 0) return res.status(200).json({ error: 'Not Found' })
+            return res.status(200).json(response)
+        } catch (error) {
+            console.log('handleFilteringListing : ' + error.message)
         }
     }
 }

@@ -1,10 +1,13 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { DataService, GetCookie } from '../../../hooks/hooks'
-import { BTN } from '../../component'
+import { useSelector } from 'react-redux'
+import { BTN, Image } from '../../component'
+import config from '../../../../config/config'
 
 const Navbar = () => {
     const navigate = useNavigate()
+    const settings = useSelector(state => state.setting)
 
     const handleLogin = async () => {
         try {
@@ -25,7 +28,11 @@ const Navbar = () => {
                                 <div className="menu-toggle">
                                     <div className="logo">
                                         <Link to='/' className="logo-text">
-                                            <img src="#" alt="logo" />
+                                            <Image
+                                                src={`${config.site_img_path}/${settings.setting.logo}`}
+                                                alt="logo"
+                                                style={{ height: '60px' }}
+                                            />
                                         </Link>
                                     </div>
                                     <button type="button" id="menu-btn">

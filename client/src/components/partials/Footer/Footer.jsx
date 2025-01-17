@@ -1,7 +1,11 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { Image } from '../../component'
+import config from '../../../../config/config'
 
 const Footer = () => {
+    const settings = useSelector(state => state.setting)
     return (
         <footer id="back-footer" className="back-footer">
             <div className="footer-top">
@@ -10,9 +14,17 @@ const Footer = () => {
                         <div className="col-lg-3 md-mb-30">
                             <div className="footer-widget footer-widget-1">
                                 <div className="footer-logo white">
-                                    <Link to="/" className="logo-text"> <img src="assets/images/logo.png" alt="logo" /></Link>
+                                    <Link to="/" className="logo-text">
+                                        <Image
+                                            src={`${config.site_img_path}/${settings.setting.logo}`}
+                                            alt="logo"
+                                            style={{ height: '60px' }}
+                                        />
+                                    </Link>
                                 </div>
-                                <h5 className="footer-subtitle">We have lots of courses and programs from the main market experts.</h5>
+                                <h5 className="footer-subtitle">
+                                    {settings.setting.desc}
+                                </h5>
                             </div>
                         </div>
                         <div className="col-lg-3 md-mb-30">

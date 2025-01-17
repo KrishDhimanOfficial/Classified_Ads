@@ -17,10 +17,8 @@ router.put('/change/password', authenticationcontroller.changeSellerPassword)
 router.route('/seller/profile/:id?')
     .post(upload.none(), seller_Controller.getProfile)
     .put(sellerprofileImg.single('image'), seller_Controller.updateProfile)
-
 router.put('/update/seller-wallet', seller_Controller.updateWallet)
 router.post('/seller/payment-transactions', seller_Controller.getpaymentTransactions)
-
 
 router.get('/parent-category', category_controller.getparentCategory)
 router.get('/sub-category/:parentId', category_controller.getsubCategory)
@@ -41,10 +39,15 @@ router.route('/product/:id?')
             { name: 'images', maxCount: 4 },
             { name: 'featured_img', maxCount: 1 },
         ]
-    ), product_controller.updateProduct)
+    ), handlemulterError, product_controller.updateProduct)
     .patch(product_controller.handleupdateStatus)
     .delete(product_controller.deleteProduct)
 
-
 router.post('/listings', product_controller.getlistingDetails)
+
+// Filters listings
+router.post('/filters/listings',product_controller.handleFilteringListing)
+
+// Settings
+router.get('/settings', authenticationcontroller.getGNSettings)
 export default router
