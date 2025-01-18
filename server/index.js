@@ -42,11 +42,6 @@ if (cluster.isPrimary) {
     app.set('views', 'views')
 
     // Routes
-    // app.get('/',async (req, res,next) => {
-    //     let html = fs.readFile(path.resolve(root,'index.html'),'utf-8')
-    //     html = await viteServer.tr
-        
-    // });
     app.use('/api', siteRoutes)
     app.use('/admin', superAdminRoutes)
 

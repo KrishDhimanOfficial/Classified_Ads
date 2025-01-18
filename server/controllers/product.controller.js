@@ -371,25 +371,16 @@ const product_controller = {
     handleFilteringListing: async (req, res) => {
         try {
             const { brandId, condition, parentcategoryId, subcategoryId, price, type } = req.body;
-            console.log(
-                {
-                    brandId, condition, parentcategoryId,
-                    subcategoryId, price, type
-                }
-            )
-            const response = await productModel.aggregate([
-                {
-                    $match: {
-                        $or: [
-                            { parentcategoryId: new ObjectId(parentcategoryId?.value) },
-                            { brandId: new ObjectId(brandId?.value) },
-                            { subcategoryId: new ObjectId(subcategoryId?.value) },
-                            { condition }
-                        ]
-                    }
-                },
-            ])
-            console.log(response);
+            const query = {}
+            
+            if (price) query.price = parseInt(price);
+            if (parentcategoryId?.value) query.parentcategoryId = new ObjectId(parentcategoryId.value)
+            if (brandId?.value) query.brandId = new ObjectId(brandId.value)
+            if (subcategoryId?.value) query.subcategoryId = new ObjectId(subcategoryId.value)
+            if (condition) query.condition = condition;
+            if (type) query.type = !!type[0]
+
+            const response = await handleAggregatePagination(productModel, [{ $match: query }], req.query)
             if (response.length === 0) return res.status(200).json({ error: 'Not Found' })
             return res.status(200).json(response)
         } catch (error) {

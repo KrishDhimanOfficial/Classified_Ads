@@ -3,12 +3,14 @@ import { Input, BTN } from '../component'
 import Select from 'react-select'
 import DataService from '../../hooks/DataService'
 import { useForm, Controller } from 'react-hook-form'
+import { useDispatch } from 'react-redux'
+import { setfilterListing } from '../../../controller/filterListing'
 
 const FilterSidebar = () => {
+    const dispatch = useDispatch()
     const [pcategory, setpcategory] = useState([])
     const [subcategory, setsubcategory] = useState([])
     const [brands, setbrands] = useState([])
-    const [loading, setloading] = useState(false)
 
     const { handleSubmit, control, register, formState: { errors } } = useForm()
 
@@ -31,12 +33,14 @@ const FilterSidebar = () => {
         setbrands(brands)
     }, [])
 
-    const filiters = async (formData) => {
-        setloading(true)
-        const res = await DataService.post('/filters/listings', formData)
-        console.log(res);
-        setloading(false)
-    }
+    const filiters = useCallback(async (formData) => {
+        try {
+            const res = await DataService.post('/filters/listings', formData)
+            dispatch(setfilterListing(res))
+        } catch (error) {
+            console.error('filiters : ', error)
+        }
+    }, [])
 
     useEffect(() => { fetchCategorie(), fetchBrand() }, [])
     return (

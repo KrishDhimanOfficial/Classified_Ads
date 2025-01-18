@@ -1,10 +1,11 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import { Product } from '../admin'
+import React, { Suspense, useCallback, useEffect, lazy, useState } from 'react'
 import { Link } from 'react-router-dom'
 import DataService from '../../hooks/DataService'
 import { useNavigate } from 'react-router-dom'
 import GetCookie from '../../hooks/GetCookie'
 import config from '../../../config/config'
+
+const Product = lazy(() => import('../my_listing/Product'))
 
 const Listing_container = () => {
     const navigate = useNavigate()
@@ -27,21 +28,23 @@ const Listing_container = () => {
                         <h1 className='text-center'>No Listing</h1>
                     )
                 }
-                {
-                    listings.collectionData?.map((listing, i) => (
-                        <Product key={i}
-                            id={listing._id}
-                            title={listing.title}
-                            price={listing.price}
-                            status={listing.status}
-                            slug={`/listing/${listing.slug}`}
-                            updatelisting={`/user/update/${listing.slug}`}
-                            publishStatus={listing.publishing_status}
-                            createdAt={listing.formattedDate}
-                            path={`${config.server_product_img_path}/${listing.featured_img}`}
-                        />
-                    ))
-                }
+                <Suspense fallback={<h2 className='text-center'>Loading...</h2>}>
+                    {
+                        listings.collectionData?.map((listing, i) => (
+                            <Product key={i}
+                                id={listing._id}
+                                title={listing.title}
+                                price={listing.price}
+                                status={listing.status}
+                                slug={`/listing/${listing.slug}`}
+                                updatelisting={`/user/update/${listing.slug}`}
+                                publishStatus={listing.publishing_status}
+                                createdAt={listing.formattedDate}
+                                path={`${config.server_product_img_path}/${listing.featured_img}`}
+                            />
+                        ))
+                    }
+                </Suspense>
             </div >
             <div className='w-100 d-flex justify-content-center'>
                 <ul className="back-pagination">

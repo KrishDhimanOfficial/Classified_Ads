@@ -1,8 +1,10 @@
 import React from 'react'
 import { FilterSidebar, Product, Placeholder } from '../components/component'
 import { Link } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
 const BrowseProducts = () => {
+    const state = useSelector(state => state.state)
     return (
         <>
             <title>Browse products</title>
