@@ -22,7 +22,9 @@
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.1.1",
     "react-select": "^5.9.0",
+    "react-slideshow-image": "^4.3.2",
     "react-toastify": "^11.0.2",
+    "swiper": "^11.2.1",
     "yup": "^1.6.1"
   },
   "devDependencies": {

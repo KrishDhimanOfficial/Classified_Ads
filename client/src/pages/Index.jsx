@@ -88,7 +88,9 @@ const Index = () => {
                                 </div>
                             </div>
                             <div className="text-center pt-20">
-                                <Link to="/browse-products" className="back-btn-border">Browse more Products</Link>
+                                <Link to="/browse-products" className="back-btn-border">
+                                    Browse more Products
+                                </Link>
                             </div>
                         </div>
                     </div>

@@ -2,25 +2,25 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import Image from '../../assets/images/slide1.jpg'
 
-const Product = ({ title = 'helo', category = 'helo', image, price, ad_status }) => {
+const Product = ({ title, category, image, slug, price, ad_status }) => {
     return (
         <div className="course__item mb-30">
-            <div className="course__thumb">
-                <Link to="/">
-                    <img src={Image} alt="image" />
+            <div className="course__thumb d-flex justify-content-center">
+                <Link to={slug}>
+                    <img src={image} alt="image" style={{ height: '180px' }} />
                 </Link>
             </div>
             <div className="course__inner px-4 pb-3">
                 <div className="d-flex justify-content-between">
                     <span className="back-category cate-1"> {category} </span>
-                    <span className='text-black fw-light fs-6'>6 months ago</span>
+                    {/* <span className='text-black fw-light fs-6'>6 months ago</span> */}
                 </div>
                 <h3 className="back-course-title mb-2">
-                    <Link to="/"> {title} </Link>
+                    <Link to={slug}> {title} </Link>
                 </h3>
                 <div className="course__card-icon d-flex">
                     <div className="back__user d-flex flex-column gap-2">
-                        ${price || 0}
+                        ${price}
                         {
                             ad_status && (
                                 <div style={{ padding: '0.2rem 0.5rem' }}

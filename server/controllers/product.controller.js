@@ -135,7 +135,7 @@ const product_controller = {
             console.log('updateListingImages : ' + error.message)
         }
     },
-    getSingleListing: async (req, res) => {
+    getSingleListingtoUpdate: async (req, res) => {
         try {
             const seller = getUser(req.headers['authorization'].split(' ')[1])
             const response = await productModel.aggregate([
@@ -368,23 +368,147 @@ const product_controller = {
             console.log('renderAllDeActiveListingOnAdminPanel : ' + error.message)
         }
     },
+    browseListings: async (req, res) => {
+        try {
+            const projection = [
+                {
+                    $match: { status: true, publishing_status: true }
+                },
+                {
+                    $lookup: {
+                        from: 'parent_categories',
+                        localField: 'parentcategoryId',
+                        foreignField: '_id',
+                        as: 'parentcategory'
+                    }
+                },
+                { $unwind: '$parentcategory' },
+                {
+                    $project: {
+                        'parentcategory.image': 0,
+                        'parentcategory.slug': 0,
+                        images: 0,
+                        brandId: 0,
+                        parentcategoryId: 0,
+                        subcategoryId: 0,
+                        sellerId: 0,
+                        publishing_status: 0,
+                        click_count: 0,
+                        condition: 0,
+                        description: 0,
+                        negotiable: 0,
+                        features: 0,
+                        created_At: 0,
+                    }
+                },
+            ]
+            const response = await handleAggregatePagination(productModel, projection, req.query)
+            if (response.length === 0) return res.json({ error: 'Not Found' })
+            return res.status(200).json(response)
+        } catch (error) {
+            console.log('browseListings : ' + error.message)
+        }
+    },
     handleFilteringListing: async (req, res) => {
         try {
-            const { brandId, condition, parentcategoryId, subcategoryId, price, type } = req.body;
+            const { brandId, condition, parentcategoryId, subcategoryId, price, type } = req.query;
             const query = {}
-            
-            if (price) query.price = parseInt(price);
+
+            if (price) query.price = parseInt(price)
             if (parentcategoryId?.value) query.parentcategoryId = new ObjectId(parentcategoryId.value)
             if (brandId?.value) query.brandId = new ObjectId(brandId.value)
             if (subcategoryId?.value) query.subcategoryId = new ObjectId(subcategoryId.value)
             if (condition) query.condition = condition;
             if (type) query.type = !!type[0]
 
-            const response = await handleAggregatePagination(productModel, [{ $match: query }], req.query)
-            if (response.length === 0) return res.status(200).json({ error: 'Not Found' })
+            const projection = [
+                {
+                    $match: query, status: true, publishing_status: true
+
+                },
+                {
+                    $lookup: {
+                        from: 'parent_categories',
+                        localField: 'parentcategoryId',
+                        foreignField: '_id',
+                        as: 'parentcategory'
+                    }
+                },
+                { $unwind: '$parentcategory' },
+                {
+                    $project: {
+                        'parentcategory.image': 0,
+                        'parentcategory.slug': 0,
+                        images: 0,
+                        brandId: 0,
+                        parentcategoryId: 0,
+                        subcategoryId: 0,
+                        sellerId: 0,
+                        publishing_status: 0,
+                        click_count: 0,
+                        condition: 0,
+                        description: 0,
+                        negotiable: 0,
+                        features: 0,
+                        created_At: 0,
+                    }
+                },
+            ]
+            const response = await handleAggregatePagination(productModel, projection, req.query)
+            if (response.length === 0) return res.json({ error: 'Not Found' })
             return res.status(200).json(response)
         } catch (error) {
             console.log('handleFilteringListing : ' + error.message)
+        }
+    },
+    getSingleListing: async (req, res) => {
+        try {
+            const response = await productModel.aggregate([
+                {
+                    $match: { slug: req.params.listing_slug, status: true, publishing_status: true }
+                },
+                {
+                    $lookup: {
+                        from: 'sellers',
+                        localField: 'sellerId',
+                        foreignField: '_id',
+                        as: 'seller'
+                    }
+                },
+                { $unwind: '$seller' },
+                {
+                    $lookup: {
+                        from: 'brands',
+                        localField: 'brandId',
+                        foreignField: '_id',
+                        as: 'brand'
+                    }
+                },
+                { $unwind: '$brand' },
+                {
+                    $addFields: {
+                        createdAt: {
+                            $dateToString: {
+                                format: "%d/%m/%Y",
+                                date: "$created_At"
+                            }
+                        },
+                    }
+                },
+                {
+                    $project: {
+                        'seller.name': 0, 'seller.status': 0, 'seller.email': 0,
+                        'seller.password': 0, 'seller.wallet_amount': 0,
+                        'brand.slug': 0, 'brand.status': 0, 'brand.image': 0,
+                        ad_status: 0, click_count: 0, publishing_status: 0,
+                        sellerId: 0, brandId: 0, created_At: 0,
+                    }
+                }
+            ])
+            if (response.length === 0) return res.json({ error: 'Not Found' })
+            return res.status(200).json(response)
+        } catch (error) {
+            console.log('getSingleListing : ' + error.message)
         }
     }
 }

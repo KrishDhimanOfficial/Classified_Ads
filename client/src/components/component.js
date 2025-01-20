@@ -12,6 +12,7 @@ import FilterSidebar from "./sidebar/FilterSidebar";
 import Placeholder from "./placeholder/Placeholder";
 import TextArea from "./Inputs/TextArea";
 import Image from "./Image/Image";
+import SellerProfileListings from './SellerListings/SellerProfileListings';
 
 export {
     BTN,
@@ -28,4 +29,5 @@ export {
     Placeholder,
     TextArea,
     Image,
+    SellerProfileListings
 }

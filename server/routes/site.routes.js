@@ -19,13 +19,14 @@ router.route('/seller/profile/:id?')
     .put(sellerprofileImg.single('image'), seller_Controller.updateProfile)
 router.put('/update/seller-wallet', seller_Controller.updateWallet)
 router.post('/seller/payment-transactions', seller_Controller.getpaymentTransactions)
+router.get('/get/seller-profile/:seller_username',seller_Controller.getSeller)
 
 router.get('/parent-category', category_controller.getparentCategory)
 router.get('/sub-category/:parentId', category_controller.getsubCategory)
 router.get('/brands', brand_controller.getbrands)
 
 router.post('/products', product_controller.allListings)
-router.get('/product/:listing_slug', product_controller.getSingleListing)
+router.get('/product/:listing_slug', product_controller.getSingleListingtoUpdate)
 router.patch('/product/update-listing-images', product_controller.updateListingImages)
 router.route('/product/:id?')
     .post(product.fields(
@@ -44,9 +45,11 @@ router.route('/product/:id?')
     .delete(product_controller.deleteProduct)
 
 router.post('/listings', product_controller.getlistingDetails)
+router.get('/single-listing/:listing_slug', product_controller.getSingleListing)
 
 // Filters listings
-router.post('/filters/listings',product_controller.handleFilteringListing)
+router.get('/browse-listing', product_controller.browseListings)
+router.get('/filters/listings', product_controller.handleFilteringListing)
 
 // Settings
 router.get('/settings', authenticationcontroller.getGNSettings)

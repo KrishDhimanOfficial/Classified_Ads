@@ -1,12 +1,13 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, } from 'react-router-dom'
+import { Image } from '../component'
 import bannerIMG from '../../assets/images/slide1.jpg'
 
 const Banner = () => {
     return (
         <div className="home-banner-part">
             <div className="banner-img">
-                <img className="desktop" src={bannerIMG} alt="Banner Image" />
+                <Image className="desktop" src={bannerIMG} alt="Banner Image" />
             </div>
             <div className="container">
                 <div className="banner-content">

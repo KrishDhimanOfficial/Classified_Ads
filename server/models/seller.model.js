@@ -1,4 +1,6 @@
 import mongoose from "mongoose"
+import aggregatePaginate from 'mongoose-aggregate-paginate-v2'
+
 
 const sellerSchema = new mongoose.Schema({
     username: {
@@ -50,4 +52,5 @@ const sellerSchema = new mongoose.Schema({
     }
 })
 
+sellerSchema.plugin(aggregatePaginate)
 export default mongoose.model('seller', sellerSchema)

@@ -40,7 +40,7 @@ const seller_controllers = {
     getProfile: async (req, res) => {
         try {
             const seller = getUser(req.body.token)
-            const sellerprofile = await sellerModel.findById({ _id: seller.id }, { password: 0, status: 0,   })
+            const sellerprofile = await sellerModel.findById({ _id: seller.id }, { password: 0, status: 0, })
             if (!sellerprofile) res.json({ error: 'Account Not Found!' })
             return res.status(200).json(sellerprofile)
         } catch (error) {
@@ -118,6 +118,70 @@ const seller_controllers = {
             return res.json(response)
         } catch (error) {
             console.log('getpaymentTransactions : ' + error.message)
+        }
+    },
+    getSeller: async (req, res) => {
+        try {
+            const projection = [
+                {
+                    $match: { username: req.params.seller_username }
+                },
+                {
+                    $lookup: {
+                        from: 'products',
+                        localField: '_id',
+                        foreignField: 'sellerId',
+                        as: 'products'
+                    }
+                },
+                { $unwind: '$products' },
+                { $replaceRoot: { newRoot: '$products' } },
+                {
+                    $match: {
+                        status: true,
+                        publishing_status: true,
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'parent_categories',
+                        localField: 'parentcategoryId',
+                        foreignField: '_id',
+                        as: 'parentcategory'
+                    }
+                },
+                {
+                    $unwind: '$parentcategory'
+                },
+                {
+                    $lookup: {
+                        from: 'sellers',
+                        localField: 'sellerId',
+                        foreignField: '_id',
+                        as: 'seller'
+                    }
+                },
+                { $unwind: '$seller' },
+                {
+                    $project: {
+                        'parentcategory.image':0,'parentcategory.slug':0,'parentcategory.status':0,
+                        sellerId: 0, 'seller.wallet_amount': 0, 'sellerpassword': 0, publishing_status: 0,
+                        status: 0, ad_status: 0, click_count: 0, condition: 0,
+                        description: 0, brandId: 0, parentcategoryId: 0,
+                        subcategoryId: 0, images: 0, negotiable: 0, features: 0
+                    }
+                }
+            ]
+            const response = await handleAggregatePagination(sellerModel, projection, req.query)
+            console.log(response.collectionData);
+
+            if (response.collectionData === 0) {
+                const response = await sellerModel.find({ username: req.params.seller_username }, { password: 0, wallet_amount: 0 })
+                return res.status(200).json(response)
+            }
+            return res.status(200).json(response)
+        } catch (error) {
+            console.log('getSeller : ' + error.message)
         }
     }
 }

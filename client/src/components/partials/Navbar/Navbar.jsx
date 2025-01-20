@@ -17,7 +17,7 @@ const Navbar = () => {
             console.error('handleLogin : ' + error)
         }
     }
-    const clearCookie = () => { sessionStorage.clear() }
+    const clearCookie = () => { localStorage.clear() }
     return (
         <>
             <header id="back-header" className="back-header back-header-three header-profile">
@@ -57,7 +57,7 @@ const Navbar = () => {
                                                     <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
                                                     <path d="M7 11V7a5 5 0 0 1 9.9-1"></path>
                                                 </svg>
-                                                {GetCookie(navigate) ? 'Log Out' : 'Log In'}
+                                                {sessionStorage.getItem('seller_token') ? 'Log Out' : 'Log In'}
                                             </Link>
                                         </div>
                                         <BTN

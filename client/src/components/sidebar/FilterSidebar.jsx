@@ -3,11 +3,10 @@ import { Input, BTN } from '../component'
 import Select from 'react-select'
 import DataService from '../../hooks/DataService'
 import { useForm, Controller } from 'react-hook-form'
-import { useDispatch } from 'react-redux'
-import { setfilterListing } from '../../../controller/filterListing'
+import { useNavigate } from 'react-router-dom'
 
 const FilterSidebar = () => {
-    const dispatch = useDispatch()
+    const navigate = useNavigate()
     const [pcategory, setpcategory] = useState([])
     const [subcategory, setsubcategory] = useState([])
     const [brands, setbrands] = useState([])
@@ -33,10 +32,14 @@ const FilterSidebar = () => {
         setbrands(brands)
     }, [])
 
-    const filiters = useCallback(async (formData) => {
+    const getfilterData = useCallback(async (formData) => {
         try {
-            const res = await DataService.post('/filters/listings', formData)
-            dispatch(setfilterListing(res))
+            let filters = '?'
+            Object.entries(formData).forEach(([key, value]) => {
+                if (value) filters += `${key}=${value}&`;
+            })
+            if (filters.endsWith('&')) filters = filters.slice(0, -1)
+            navigate(`/browse-products${filters}`)
         } catch (error) {
             console.error('filiters : ', error)
         }
@@ -50,7 +53,7 @@ const FilterSidebar = () => {
                     <Input type={'text'} placeholder={'Filiters'} readOnly />
                 </form>
             </div>
-            <form onSubmit={handleSubmit(filiters)} autoComplete='off'>
+            <form onSubmit={handleSubmit(getfilterData)} autoComplete='off'>
                 <div className="widget back-category  px-4">
                     <h3 className="widget-title">Condition</h3>
                     <ul className="recent-category">
@@ -179,4 +182,4 @@ const FilterSidebar = () => {
     )
 }
 
-export default FilterSidebar
+export default React.memo(FilterSidebar)
