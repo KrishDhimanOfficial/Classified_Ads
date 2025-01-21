@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { BTN } from '../../components/component'
-import { Review_Rating, Seller_profile } from '../admin'
+import { Seller_profile } from '../admin'
+import { Review_container } from '../../components/component'
 import DataService from '../../hooks/DataService'
 import GetCookie from '../../hooks/GetCookie'
 import { useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
 const Dashboard = () => {
+    const profile = useSelector(state => state.seller)
     const navigate = useNavigate()
     const [listing, setlisting] = useState({ totalActive: 0, totalDeActive: 0 })
 
@@ -86,24 +89,10 @@ const Dashboard = () => {
                                         type={"button"}
                                     />
                                 </li>
-                                <li className="nav-item" role="presentation">
-                                    <BTN
-                                        role={"tab"} type={"button"}
-                                        text={'Reviews Given'}
-                                        aria-controls={"given"}
-                                        aria-selected={"false"}
-                                        className={"nav-link"}
-                                        data-bs-target={"#given"}
-                                        data-bs-toggle={"tab"}
-                                        id={"given-tab"}
-                                    />
-                                </li>
                             </ul>
                             <div className="tab-content mt-3" id="myTabContent">
                                 <div aria-labelledby="received-tab" className="tab-pane fade show active" id="received" role="tabpanel">
-                                    <Review_Rating />
-                                </div>
-                                <div aria-labelledby="given-tab" className="tab-pane fade" id="given" role="tabpanel">
+                                    <Review_container id={profile.seller?._id} />
                                 </div>
                             </div>
                         </div>

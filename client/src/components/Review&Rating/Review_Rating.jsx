@@ -1,10 +1,15 @@
 import React from 'react'
+import { Image } from '../component'
 import defaultuser from '../../assets/images/user.svg'
 
-function Review_Rating() {
+const Review_Rating = ({ image, name, review, date }) => {
+    const createdDate = new Date(date)
+    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
     return (
         <div className="review-item">
-            <img alt="Profile picture of the reviewer" height="50" src={defaultuser} width="50" />
+            <Image
+                alt="Profile picture of the reviewer"
+                height="50" src={image || defaultuser} width="50" />
             <div className="review-content">
                 <div className="d-flex justify-content-between">
                     <div className='d-flex flex-column'>
@@ -16,15 +21,15 @@ function Review_Rating() {
                             <i className="fas fa-star"></i>
                         </div>
                         <strong className='text-start'>
-                            Test Two
+                            {name}
                         </strong>
                     </div>
                     <div className="review-date">
-                        27, Apr, 2024
+                        {monthNames[createdDate.getMonth()]} {createdDate.getDate()},  {createdDate.getFullYear()}
                     </div>
                 </div>
                 <p className='text-start'>
-                    Cameron sold me a laptop which was this much awesome that I couldn’t express my gratitude.
+                    {review}
                 </p>
             </div>
         </div>

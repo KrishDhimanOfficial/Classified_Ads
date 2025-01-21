@@ -5,6 +5,8 @@ import deleteImg from '../services/deleteImg.js'
 import validations from "../services/validateData.js"
 import handleAggregatePagination from '../services/handlepagination.js'
 import mongoose from "mongoose"
+import config from "../config/config.js"
+import reviewRatingModel from "../models/review&rating.model.js"
 
 const seller_controllers = {
     renderAllSellers: async (req, res) => {
@@ -163,9 +165,17 @@ const seller_controllers = {
                 },
                 { $unwind: '$seller' },
                 {
+                    $addFields: {
+                        sellerImage: {
+                            $concat: [`${config.sellerImage}`, '/', '$seller.image']
+                        },
+                        sellerusername: '$seller.username'
+                    }
+                },
+                {
                     $project: {
-                        'parentcategory.image':0,'parentcategory.slug':0,'parentcategory.status':0,
-                        sellerId: 0, 'seller.wallet_amount': 0, 'sellerpassword': 0, publishing_status: 0,
+                        'parentcategory.image': 0, 'parentcategory.slug': 0, 'parentcategory.status': 0,
+                        sellerId: 0, 'seller.wallet_amount': 0, 'seller.password': 0, publishing_status: 0,
                         status: 0, ad_status: 0, click_count: 0, condition: 0,
                         description: 0, brandId: 0, parentcategoryId: 0,
                         subcategoryId: 0, images: 0, negotiable: 0, features: 0
@@ -173,15 +183,55 @@ const seller_controllers = {
                 }
             ]
             const response = await handleAggregatePagination(sellerModel, projection, req.query)
-            console.log(response.collectionData);
-
-            if (response.collectionData === 0) {
-                const response = await sellerModel.find({ username: req.params.seller_username }, { password: 0, wallet_amount: 0 })
-                return res.status(200).json(response)
-            }
+            if (response.collectionData.length === 0) return res.json({ error: 'not found' })
             return res.status(200).json(response)
         } catch (error) {
             console.log('getSeller : ' + error.message)
+        }
+    },
+    writeSellerReview: async (req, res) => {
+        try {
+            const { formData, rating, id } = req.body;
+            const { name, review, email } = formData;
+
+            const response = await reviewRatingModel.create({
+                name, review, email, rating,
+                sellerId: new mongoose.Types.ObjectId(id),
+            })
+            if (!response) return res.json({ error: 'Failed to write review!' })
+            return res.json({ message: 'Review written under Approval!' })
+        } catch (error) {
+            // Extract custom error messages                        
+            if (error.name === 'ValidationError') validations(res, error.errors)
+            console.log('writeSellerReview : ' + error.message)
+        }
+    },
+    getSellerReviews: async (req, res) => {
+        try {
+            const projection = [
+                {
+                    $match: { sellerId: new mongoose.Types.ObjectId(req.params.id) }
+                },
+                {
+                    $lookup: {
+                        from: 'sellers',
+                        localField: 'sellerId',
+                        foreignField: '_id',
+                        as: 'seller'
+                    }
+                },
+                { $unwind: '$seller' },
+                {
+                    $addFields: {
+                        sellerImg: { $concat: [`${config.sellerImage}`, '/', '$seller.image'] }
+                    }
+                }
+            ]
+            const response = await handleAggregatePagination(reviewRatingModel, projection, req.query)
+            if (response.collectionData.length == 0) return res.json({ error: 'No reviews found!' })
+            if (response.collectionData.length > 0) return res.json(response)
+        } catch (error) {
+            console.log('getSellerReviews : ' + error.message)
         }
     }
 }

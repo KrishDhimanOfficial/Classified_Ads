@@ -19,7 +19,7 @@ router.route('/seller/profile/:id?')
     .put(sellerprofileImg.single('image'), seller_Controller.updateProfile)
 router.put('/update/seller-wallet', seller_Controller.updateWallet)
 router.post('/seller/payment-transactions', seller_Controller.getpaymentTransactions)
-router.get('/get/seller-profile/:seller_username',seller_Controller.getSeller)
+router.get('/get/seller-profile/:seller_username', seller_Controller.getSeller)
 
 router.get('/parent-category', category_controller.getparentCategory)
 router.get('/sub-category/:parentId', category_controller.getsubCategory)
@@ -51,6 +51,12 @@ router.get('/single-listing/:listing_slug', product_controller.getSingleListing)
 router.get('/browse-listing', product_controller.browseListings)
 router.get('/filters/listings', product_controller.handleFilteringListing)
 
+// Reviews & Rating 
+router.route('/seller-reviews/:id?')
+    .post(seller_Controller.writeSellerReview)
+    .get(seller_Controller.getSellerReviews)
+
 // Settings
 router.get('/settings', authenticationcontroller.getGNSettings)
+
 export default router

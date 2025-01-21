@@ -140,7 +140,7 @@ const SingleListing = () => {
                                         <div className="widget back-post related__courses">
                                             <h3 className="widget-title">Seller Details</h3>
                                             <ul className="user-section d-flex flex-column gap-4 align-items-start pb-0">
-                                                <li className="user d-flex gap-3 align-items-center">
+                                                <li className="user d-flex gap-3 align-items-center pe-2">
                                                     <span>
                                                         <Link to={`/user/${listing.seller?.username}`}>
                                                             <Image
@@ -152,7 +152,7 @@ const SingleListing = () => {
                                                     <span>
                                                         <Link to={`/user/${listing.seller?.username}`}>
                                                             <em className='fs-5 text-uppercase mb-1'> {listing.seller?.username}</em>
-                                                            Since {sellerJoinDate.getFullYear()}
+                                                           Member Since {sellerJoinDate.getFullYear()}
                                                         </Link>
                                                     </span>
                                                 </li>

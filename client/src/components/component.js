@@ -13,6 +13,9 @@ import Placeholder from "./placeholder/Placeholder";
 import TextArea from "./Inputs/TextArea";
 import Image from "./Image/Image";
 import SellerProfileListings from './SellerListings/SellerProfileListings';
+import ReviewForm from './Review&Rating/ReviewForm';
+import Review_container from './Review&Rating/Review_container';
+import Review_Rating from './Review&Rating/Review_Rating';
 
 export {
     BTN,
@@ -29,5 +32,8 @@ export {
     Placeholder,
     TextArea,
     Image,
-    SellerProfileListings
+    SellerProfileListings,
+    ReviewForm,
+    Review_container,
+    Review_Rating
 }

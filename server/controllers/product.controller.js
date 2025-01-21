@@ -384,9 +384,27 @@ const product_controller = {
                 },
                 { $unwind: '$parentcategory' },
                 {
+                    $lookup: {
+                        from: 'sellers',
+                        localField: 'sellerId',
+                        foreignField: '_id',
+                        as: 'seller'
+                    }
+                },
+                { $unwind: '$seller' },
+                {
+                    $addFields: {
+                        sellerImage: {
+                            $concat: [`${config.sellerImage}`, '/', '$seller.image']
+                        },
+                        sellerusername: '$seller.username'
+                    }
+                },
+                {
                     $project: {
                         'parentcategory.image': 0,
                         'parentcategory.slug': 0,
+                        seller: 0,
                         images: 0,
                         brandId: 0,
                         parentcategoryId: 0,
@@ -403,8 +421,8 @@ const product_controller = {
                 },
             ]
             const response = await handleAggregatePagination(productModel, projection, req.query)
-            if (response.length === 0) return res.json({ error: 'Not Found' })
-            return res.status(200).json(response)
+            if (response.collectionData.length === 0) return res.json({ error: 'No Results' })
+            if (response.collectionData.length > 0) return res.status(200).json(response)
         } catch (error) {
             console.log('browseListings : ' + error.message)
         }
@@ -412,19 +430,18 @@ const product_controller = {
     handleFilteringListing: async (req, res) => {
         try {
             const { brandId, condition, parentcategoryId, subcategoryId, price, type } = req.query;
-            const query = {}
+            const query = []
 
-            if (price) query.price = parseInt(price)
-            if (parentcategoryId?.value) query.parentcategoryId = new ObjectId(parentcategoryId.value)
-            if (brandId?.value) query.brandId = new ObjectId(brandId.value)
-            if (subcategoryId?.value) query.subcategoryId = new ObjectId(subcategoryId.value)
-            if (condition) query.condition = condition;
-            if (type) query.type = !!type[0]
+            if (price) query.push({ price: parseInt(price) })
+            if (condition) query.push({ condition: condition })
+            if (brandId) query.push({ brandId: new ObjectId(brandId) })
+            if (parentcategoryId) query.push({ parentcategoryId: new ObjectId(parentcategoryId) })
+            if (subcategoryId) query.push({ subcategoryId: new ObjectId(subcategoryId) })
+            if (type) query.push({ ad_status: !!type[0] })
 
             const projection = [
                 {
-                    $match: query, status: true, publishing_status: true
-
+                    $match: { $and: query },
                 },
                 {
                     $lookup: {
@@ -436,26 +453,42 @@ const product_controller = {
                 },
                 { $unwind: '$parentcategory' },
                 {
+                    $lookup: {
+                        from: 'sellers',
+                        localField: 'sellerId',
+                        foreignField: '_id',
+                        as: 'seller'
+                    }
+                },
+                { $unwind: '$seller' },
+                {
+                    $addFields: {
+                        sellerImage: {
+                            $concat: [`${config.sellerImage}`, '/', '$seller.image']
+                        },
+                        sellerusername: '$seller.username'
+                    }
+                },
+                {
                     $project: {
                         'parentcategory.image': 0,
                         'parentcategory.slug': 0,
+                        seller: 0,
                         images: 0,
-                        brandId: 0,
-                        parentcategoryId: 0,
-                        subcategoryId: 0,
                         sellerId: 0,
-                        publishing_status: 0,
                         click_count: 0,
-                        condition: 0,
                         description: 0,
                         negotiable: 0,
                         features: 0,
                         created_At: 0,
                     }
                 },
+                {
+                    $match: { status: true, publishing_status: true }
+                }
             ]
             const response = await handleAggregatePagination(productModel, projection, req.query)
-            if (response.length === 0) return res.json({ error: 'Not Found' })
+            if (response.collectionData.length === 0) return res.json({ error: 'No Results' })
             return res.status(200).json(response)
         } catch (error) {
             console.log('handleFilteringListing : ' + error.message)

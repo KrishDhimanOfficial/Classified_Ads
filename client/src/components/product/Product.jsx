@@ -1,13 +1,14 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import Image from '../../assets/images/slide1.jpg'
+import { Image } from '../component'
+import defaultUser from '../../assets/images/user.svg'
 
-const Product = ({ title, category, image, slug, price, ad_status }) => {
+const Product = ({ title, category, image, slug, price, ad_status, sellerImg,sellerUsername }) => {
     return (
         <div className="course__item mb-30">
             <div className="course__thumb d-flex justify-content-center">
                 <Link to={slug}>
-                    <img src={image} alt="image" style={{ height: '180px' }} />
+                    <Image src={image} alt="image" style={{ height: '180px' }} />
                 </Link>
             </div>
             <div className="course__inner px-4 pb-3">
@@ -18,7 +19,7 @@ const Product = ({ title, category, image, slug, price, ad_status }) => {
                 <h3 className="back-course-title mb-2">
                     <Link to={slug}> {title} </Link>
                 </h3>
-                <div className="course__card-icon d-flex">
+                {/* <div className="course__card-icon d-flex">
                     <div className="back__user d-flex flex-column gap-2">
                         ${price}
                         {
@@ -30,13 +31,27 @@ const Product = ({ title, category, image, slug, price, ad_status }) => {
                             )
                         }
                     </div>
+                </div> */}
+                <div className="course__card-icon d-flex align-items-center">
                     <div className="course__card-icon--1">
-                        <div className="blog__card--icon-2-first">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-heart">
-                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                            </svg>
-                            <span>5</span>
-                        </div>
+                        {
+                            ad_status && (
+                                <div style={{ padding: '0.2rem 0.5rem' }}
+                                    className={'btn btn-sm btn-primary'}>
+                                    Featured
+                                </div>
+                            )
+                        }
+                    </div>
+                    <div className="back__user">
+                        ${price}
+                        <Link to={`/user/${sellerUsername}`}>
+                            <Image
+                                src={sellerImg || defaultUser}
+                                style={{ width: '40px', height: '40px' }}
+                                alt="user"
+                            />
+                        </Link>
                     </div>
                 </div>
             </div>

@@ -7,14 +7,10 @@ import DataService from '../hooks/DataService'
 const BrowseProducts = () => {
     const location = useLocation()
     const [urlQueryParams, seturlQueryParams] = useSearchParams()
-    const entries = urlQueryParams.entries()
     const [listing, setlisting] = useState({})
     const [isloading, setloading] = useState(false)
-
-
-    let filters = '?' // fetching filters data
-    for (const [key, value] of entries) filters += `${key}=${value}&`;
-    if (filters.endsWith('&')) filters = filters.slice(0, -1)
+    const [error, seterror] = useState('')
+    const [applyfilters, setFilters] = useState('')
 
     const browseListing = async () => {
         try {
@@ -28,26 +24,40 @@ const BrowseProducts = () => {
 
     const getfilterData = useCallback(async () => {
         try {
-            setloading(true)
-            const res = await DataService.get(`/filters/listings${filters}`)
+            setloading(true), setlisting({})
+            const res = await DataService.get(`/filters/listings${applyfilters}`)
+            if (res.error) return seterror(res.error), setloading(false)
             setloading(false), setlisting(res)
         } catch (error) {
             console.error('filiters : ', error)
         }
-    }, [])
+    }, [location.key, applyfilters])
 
     const filterLlistingwithPagination = useCallback(async (page) => {
         try {
-            setloading(true)
-            const api = location.search ? `/filters/listings${filters}&page=${page}` : `/browse-listing?page=${page}`;
+            setloading(true), setlisting({})
+            const api = location.search
+                ? `/filters/listings${applyfilters}&page=${page}`
+                : `/browse-listing?page=${page}`;
             const res = await DataService.get(api)
+            if (res.error) return seterror(res.error), setloading(false)
             setloading(false), setlisting(res)
         } catch (error) {
             console.error('fetchLlistingwithPagination : ' + error)
         }
-    }, [])
+    }, [location.key, applyfilters])
 
-    useEffect(() => { location.search ? getfilterData() : browseListing() }, [])
+    useEffect(() => {
+        let filters = '?'
+        const entries = urlQueryParams.entries()
+        for (const [key, value] of entries) filters += `${key}=${value}&`;
+        if (filters.endsWith('&')) filters = filters.slice(0, -1)
+        setFilters(filters)
+    }, [location.key])
+
+    useEffect(() => {
+        location.search ? getfilterData() : browseListing()
+    }, [applyfilters])
     return (
         <>
             <title>Browse products</title>
@@ -73,6 +83,15 @@ const BrowseProducts = () => {
                                         )
                                     }
                                     {
+                                        error && (
+                                            <div className="col-md-12">
+                                                <div className="text-center">
+                                                    <h2>{error}</h2>
+                                                </div>
+                                            </div>
+                                        )
+                                    }
+                                    {
                                         listing.collectionData?.map((listing, i) => (
                                             <div className="col-md-4" key={i}>
                                                 <Product
@@ -82,6 +101,8 @@ const BrowseProducts = () => {
                                                     image={`${config.server_product_img_path}/${listing.featured_img}`}
                                                     category={listing.parentcategory.title}
                                                     ad_status={listing.ad_status}
+                                                    sellerImg={listing.sellerImage}
+                                                    sellerUsername={listing.sellerusername}
                                                 />
                                             </div>
                                         ))

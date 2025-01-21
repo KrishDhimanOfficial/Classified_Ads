@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { Product } from '../component'
 import { Link, useParams } from 'react-router-dom'
 import config from '../../../config/config'
@@ -9,7 +9,7 @@ const SellerProfileListings = () => {
     const { seller_username } = useParams()
     const [sellerlisting, setsellerlistingInfo] = useState({})
 
-    const sellerDetails = async (page) => {
+    const sellerDetails = useCallback(async (page) => {
         try {
             const res = await DataService.get(`/get/seller-profile/${seller_username}?page=${page}`)
             if (res.error) navigate('not-found')
@@ -17,7 +17,8 @@ const SellerProfileListings = () => {
         } catch (error) {
             console.error('sellerDetails : ' + error)
         }
-    }
+    }, [])
+
     useEffect(() => { sellerDetails() }, [])
     return (
         <>
@@ -31,6 +32,8 @@ const SellerProfileListings = () => {
                             image={`${config.server_product_img_path}/${listing.featured_img}`}
                             category={listing.parentcategory.title}
                             ad_status={listing.ad_status}
+                            sellerImg={listing.sellerImage}
+                            sellerUsername={listing.sellerusername}
                         />
                     </div>
                 ))

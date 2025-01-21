@@ -4,11 +4,13 @@ import Select from 'react-select'
 import DataService from '../../hooks/DataService'
 import { useForm, Controller } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
+import Form from 'react-bootstrap/Form'
 
 const FilterSidebar = () => {
     const navigate = useNavigate()
     const [pcategory, setpcategory] = useState([])
     const [subcategory, setsubcategory] = useState([])
+    const [price, setPrice] = useState(0)
     const [brands, setbrands] = useState([])
 
     const { handleSubmit, control, register, formState: { errors } } = useForm()
@@ -36,7 +38,8 @@ const FilterSidebar = () => {
         try {
             let filters = '?'
             Object.entries(formData).forEach(([key, value]) => {
-                if (value) filters += `${key}=${value}&`;
+                if (typeof value === 'object' && value) filters += `${key}=${value.value}&`;
+                if (typeof value !== 'object' && value) filters += `${key}=${value}&`;
             })
             if (filters.endsWith('&')) filters = filters.slice(0, -1)
             navigate(`/browse-products${filters}`)
@@ -90,7 +93,6 @@ const FilterSidebar = () => {
                         type={"text"}
                         id="price"
                         className={'py-2'}
-                        placeholder={'Enter Price'}
                     />
                 </div>
                 <div className="widget back-category px-4">

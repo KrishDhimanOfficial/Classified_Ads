@@ -33,7 +33,7 @@ const User_wallet = () => {
                 const options = {
                     key: config.razorpay_key,
                     amount: amount * 100,
-                    currency: "INR",
+                    currency: 'USD',
                     name: 'Classified Ads',
                     description: 'Buy, Sell and Promote',
                     handler: (response) => updateWallet(true),
