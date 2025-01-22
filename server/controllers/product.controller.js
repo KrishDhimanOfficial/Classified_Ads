@@ -422,22 +422,24 @@ const product_controller = {
             ]
             const response = await handleAggregatePagination(productModel, projection, req.query)
             if (response.collectionData.length === 0) return res.json({ error: 'No Results' })
-            if (response.collectionData.length > 0) return res.status(200).json(response)
+            if (response.collectionData.length > 0) {
+                setTimeout(() => res.status(200).json(response), 1500)
+            }
         } catch (error) {
             console.log('browseListings : ' + error.message)
         }
     },
     handleFilteringListing: async (req, res) => {
         try {
-            const { brandId, condition, parentcategoryId, subcategoryId, price, type } = req.query;
+            const { brandId, condition, parentcategoryId, subcategoryId, featured, listed } = req.query;
             const query = []
 
-            if (price) query.push({ price: parseInt(price) })
             if (condition) query.push({ condition: condition })
             if (brandId) query.push({ brandId: new ObjectId(brandId) })
             if (parentcategoryId) query.push({ parentcategoryId: new ObjectId(parentcategoryId) })
             if (subcategoryId) query.push({ subcategoryId: new ObjectId(subcategoryId) })
-            if (type) query.push({ ad_status: !!type[0] })
+            if (featured) query.push({ ad_status: true })
+            if (listed) query.push({ ad_status: false })
 
             const projection = [
                 {
@@ -489,7 +491,7 @@ const product_controller = {
             ]
             const response = await handleAggregatePagination(productModel, projection, req.query)
             if (response.collectionData.length === 0) return res.json({ error: 'No Results' })
-            return res.status(200).json(response)
+            setTimeout(() => res.status(200).json(response), 1500)
         } catch (error) {
             console.log('handleFilteringListing : ' + error.message)
         }
@@ -526,6 +528,9 @@ const product_controller = {
                                 date: "$created_At"
                             }
                         },
+                        sellerImg: {
+                            $concat: [`${config.sellerImage}`, '/', '$seller.image']
+                        }
                     }
                 },
                 {

@@ -1,9 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import { Image, SellerProfileListings, ReviewForm, Review_container } from '../components/component'
+import React, { lazy, useEffect, useState } from 'react'
+import { Image, SellerProfileListings, Review_container, ReviewForm } from '../components/component'
 import DataService from '../hooks/DataService'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import config from '../../config/config'
 import defaultUser from '../assets/images/user.svg'
+
 
 const SellerProfile = () => {
     const navigate = useNavigate()
@@ -27,7 +28,7 @@ const SellerProfile = () => {
     useEffect(() => { sellerDetails() }, [])
     return (
         <>
-            <title>{`profile - ${seller_username}`}</title>
+            <title>{`seller - ${seller_username}`}</title>
             <div className="back-wrapper">
                 <div className="back-wrapper-inner">
                     <div className='profile-top back__course__area back-courses__single-page pt-120 pb-90 md-pt-80 md-pb-50'>
@@ -55,12 +56,12 @@ const SellerProfile = () => {
                                         </li>
                                         <li>Review:
                                             <em className="back-ratings">
-                                                <i className="fa-solid fa-star"></i>
-                                                <i className="fa-solid fa-star"></i>
-                                                <i className="fa-solid fa-star"></i>
-                                                <i className="fa-solid fa-star"></i>
-                                                <i className="fa-solid fa-star"></i>
-                                                4.5
+                                                <i className="fa fa-star" style={{ color: sellerInfo.avg_rating >= 1 ? 'gold' : 'grey' }}></i>
+                                                <i className="fa fa-star" style={{ color: sellerInfo.avg_rating >= 2 ? 'gold' : 'grey' }}></i>
+                                                <i className="fa fa-star" style={{ color: sellerInfo.avg_rating >= 3 ? 'gold' : 'grey' }}></i>
+                                                <i className="fa fa-star" style={{ color: sellerInfo.avg_rating >= 4 ? 'gold' : 'grey' }}></i>
+                                                <i className="fa fa-star me-2" style={{ color: sellerInfo.avg_rating >= 5 ? 'gold' : 'grey' }}></i>
+                                                {sellerInfo.avg_rating}
                                             </em>
                                         </li>
                                     </ul>
@@ -94,10 +95,10 @@ const SellerProfile = () => {
                                             </div>
                                             <div className="tab-pane fade" id="features" role="tabpanel" aria-labelledby="features">
                                                 <h3>Review & Rating</h3>
-                                                <ReviewForm id={sellerInfo._id} /> {/* // This is the form to submit a review */}
+                                                <ReviewForm id={`${sellerInfo._id}`} /> {/* // This is the form to submit a review */}
                                                 <div className="row">
                                                     <div className="col-12 my-3">
-                                                        <Review_container id={sellerInfo._id} />
+                                                        {sellerInfo._id && (<Review_container id={`${sellerInfo._id}`} />)}
                                                     </div>
                                                 </div>
                                             </div>

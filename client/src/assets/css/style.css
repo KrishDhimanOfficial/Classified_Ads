@@ -9529,7 +9529,8 @@ ul {
 .published-toggle .form-check-input {
   margin-left: 5px;
 }
-.react-slideshow-container  button{
+
+.react-slideshow-container button {
   margin-inline: 20px;
   padding-left: 8px;
 }

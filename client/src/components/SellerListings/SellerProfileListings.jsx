@@ -52,10 +52,12 @@ const SellerProfileListings = () => {
                         sellerlisting?.totalDocs > sellerlisting?.limit && (
                             Array.from({ length: sellerlisting.totalPages })?.map((_, i) => (
                                 <li key={i}>
-                                    <Link to="#" onClick={(e) => {
-                                        e.preventDefault()
-                                        sellerDetails(i + 1)
-                                    }}>{i + 1} </Link>
+                                    <Link to="#"
+                                        className={sellerlisting.page === i + 1 ? 'bg-primary text-white' : ''}
+                                        onClick={(e) => {
+                                            e.preventDefault()
+                                            sellerDetails(i + 1)
+                                        }}>{i + 1} </Link>
                                 </li>
                             ))
                         )

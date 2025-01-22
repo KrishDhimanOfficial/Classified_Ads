@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Review_Rating } from '../component'
 import { Link } from 'react-router-dom'
 import DataService from '../../hooks/DataService';
@@ -6,14 +6,15 @@ import DataService from '../../hooks/DataService';
 const Review_container = ({ id }) => {
     const [reviews, setReviews] = useState({})
 
-    const fetchReviews = useCallback(async (page) => {
+
+    const fetchReviews = async (page) => {
         try {
             const res = await DataService.get(`/seller-reviews/${id}?page=${page}`)
             setReviews(res)
         } catch (error) {
             console.error(error)
         }
-    }, [id])
+    }
 
     useEffect(() => { fetchReviews() }, [id])
     return (
@@ -22,6 +23,7 @@ const Review_container = ({ id }) => {
                 reviews.collectionData?.map((review, i) => (
                     <Review_Rating
                         key={i}
+                        rating={review.rating}
                         name={review.name}
                         review={review.review}
                         date={review.created_At}
@@ -44,10 +46,12 @@ const Review_container = ({ id }) => {
                         reviews?.totalDocs > reviews?.limit && (
                             Array.from({ length: reviews.totalPages })?.map((_, i) => (
                                 <li key={i}>
-                                    <Link to="#" onClick={(e) => {
-                                        e.preventDefault()
-                                        fetchReviews(i + 1)
-                                    }}>{i + 1} </Link>
+                                    <Link to="#"
+                                        className={reviews.page === i + 1 ? 'bg-primary text-white' : ''}
+                                        onClick={(e) => {
+                                            e.preventDefault()
+                                            fetchReviews(i + 1)
+                                        }}>{i + 1} </Link>
                                 </li>
                             ))
                         )
@@ -67,4 +71,4 @@ const Review_container = ({ id }) => {
     )
 }
 
-export default React.memo(Review_container)
+export default Review_container

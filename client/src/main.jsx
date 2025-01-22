@@ -5,7 +5,7 @@ import store from '../store/store.js'
 import App from './App.jsx'
 
 createRoot(document.querySelector('#root')).render(
-        <Provider store={store}>
-            <App />
-        </Provider>
+    <Provider store={store}>
+        <App />
+    </Provider>
 )

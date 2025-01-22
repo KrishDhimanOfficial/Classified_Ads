@@ -199,6 +199,11 @@ const seller_controllers = {
                 sellerId: new mongoose.Types.ObjectId(id),
             })
             if (!response) return res.json({ error: 'Failed to write review!' })
+            if (response) {
+                const totalRating = await reviewRatingModel.find({ sellerId: id }, { rating: 1 })
+                const total = totalRating.reduce((acc, curr) => acc + curr.rating, 0)
+                await sellerModel.findByIdAndUpdate({ _id: id }, { avg_rating: total / totalRating.length })
+            }
             return res.json({ message: 'Review written under Approval!' })
         } catch (error) {
             // Extract custom error messages                        
@@ -223,11 +228,16 @@ const seller_controllers = {
                 { $unwind: '$seller' },
                 {
                     $addFields: {
-                        sellerImg: { $concat: [`${config.sellerImage}`, '/', '$seller.image'] }
+                        sellerImg: { $concat: [`${config.sellerImage}`, '/', '$seller.image'] },
                     }
+                },
+                {
+                    $sort: { created_At: -1 }
                 }
             ]
             const response = await handleAggregatePagination(reviewRatingModel, projection, req.query)
+            console.log(response);
+
             if (response.collectionData.length == 0) return res.json({ error: 'No reviews found!' })
             if (response.collectionData.length > 0) return res.json(response)
         } catch (error) {

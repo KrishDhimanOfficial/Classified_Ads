@@ -72,13 +72,25 @@ const ReviewForm = ({ id }) => {
                     </div>
 
                     <div className="col-lg-12">
-                        <div className="back-ratings" onClick={(e) => setRating(e.target.dataset.rating)} style={{ cursor: 'pointer' }}>
-                            <b>Ratings:</b>
-                            <i data-rating="1" className="fa-solid fa-star"></i>
-                            <i data-rating="2" className="fa-solid fa-star"></i>
-                            <i data-rating="3" className="fa-solid fa-star"></i>
-                            <i data-rating="4" className="fa-solid fa-star"></i>
-                            <i data-rating="5" className="fa-solid fa-star"></i>
+                        <div id='rating' className="d-flex my-3" onClick={(e) => setRating(e.target.dataset.rating)} style={{ cursor: 'pointer' }}>
+                            <b className='me-1'>Ratings:</b>
+                            <ul className='ms-3 d-flex gap-2'>
+                                <li>
+                                    <i data-rating="1" style={{ color: rating >= 1 ? 'gold' : 'grey' }} className="fa-solid fa-star"></i>
+                                </li>
+                                <li>
+                                    <i data-rating="2" style={{ color: rating >= 2 ? 'gold' : 'grey' }} className="fa-solid fa-star"></i>
+                                </li>
+                                <li>
+                                    <i data-rating="3" style={{ color: rating >= 3 ? 'gold' : 'grey' }} className="fa-solid fa-star"></i>
+                                </li>
+                                <li>
+                                    <i data-rating="4" style={{ color: rating >= 4 ? 'gold' : 'grey' }} className="fa-solid fa-star"></i>
+                                </li>
+                                <li>
+                                    <i data-rating="5" style={{ color: rating >= 5 ? 'gold' : 'grey' }} className="fa-solid fa-star"></i>
+                                </li>
+                            </ul>
                         </div>
                         <div className="back-textarea">
                             <TextArea

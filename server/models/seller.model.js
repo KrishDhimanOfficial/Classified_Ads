@@ -46,6 +46,10 @@ const sellerSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.Number,
         default: 0
     },
+    avg_rating: {
+        type: mongoose.Schema.Types.Number,
+        default: 0
+    },
     createdAt: {
         type: mongoose.Schema.Types.Date,
         default: new Date()

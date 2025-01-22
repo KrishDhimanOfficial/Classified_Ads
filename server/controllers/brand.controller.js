@@ -13,7 +13,7 @@ const brandController = {
             const existingBrand = await brandModel.findOne({ title, slug })
             if (existingBrand) return res.json({ warning: 'Value Already Exists' })
 
-            const response = await brandModel.create({ title, slug, status })
+            const response = await brandModel.create({ title, slug, status,image: req.file?.filename })
             if (!response) return res.json({ error: 'Failed to create brand' })
 
             return res.json({ message: 'successfully created' })

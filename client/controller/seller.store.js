@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
     seller: {},
+    rating: 0
 }
 
 const sellerSlice = createSlice({
@@ -10,9 +11,12 @@ const sellerSlice = createSlice({
     reducers: {
         setProfile: (state, action) => {
             state.seller = action.payload
+        },
+        setRating: (state, action) => {
+            state.rating = action.payload
         }
     }
 })
 
-export const { setProfile } = sellerSlice.actions;
+export const { setProfile, setRating } = sellerSlice.actions;
 export const sellerSliceReducer = sellerSlice.reducer;

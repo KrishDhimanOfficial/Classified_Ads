@@ -60,10 +60,12 @@ const Listing_container = () => {
                         listings?.totalDocs > listings?.limit && (
                             Array.from({ length: listings.totalPages })?.map((_, i) => (
                                 <li key={i}>
-                                    <Link to="#" onClick={(e) => {
-                                        e.preventDefault()
-                                        fetchLlisting(i + 1)
-                                    }}>{i + 1} </Link>
+                                    <Link to="#"
+                                        className={listings.page === i + 1 ? 'bg-primary text-white' : ''}
+                                        onClick={(e) => {
+                                            e.preventDefault()
+                                            fetchLlisting(i + 1)
+                                        }}>{i + 1} </Link>
                                 </li>
                             ))
                         )

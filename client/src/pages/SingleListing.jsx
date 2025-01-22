@@ -5,7 +5,7 @@ import DataService from '../hooks/DataService'
 import config from '../../config/config'
 import { Fade } from 'react-slideshow-image';
 import 'react-slideshow-image/dist/styles.css'
-import 'swiper/css'
+import defaultUser from '../assets/images/user.svg'
 
 
 const SingleListing = () => {
@@ -39,7 +39,7 @@ const SingleListing = () => {
                                         <li className="user">
                                             <span>
                                                 <Image
-                                                    src={`${config.seller_profile_img_path}/${listing.seller?.image}`}
+                                                    src={listing.sellerImg || defaultUser}
                                                     className={'h-100'}
                                                     alt="seller" />
                                             </span>
@@ -144,7 +144,7 @@ const SingleListing = () => {
                                                     <span>
                                                         <Link to={`/user/${listing.seller?.username}`}>
                                                             <Image
-                                                                src={`${config.seller_profile_img_path}/${listing.seller?.image}`}
+                                                                src={`${listing.sellerImg || defaultUser}`}
                                                                 style={{ height: '80px', width: '80px' }}
                                                                 alt="seller" />
                                                         </Link>
@@ -152,7 +152,7 @@ const SingleListing = () => {
                                                     <span>
                                                         <Link to={`/user/${listing.seller?.username}`}>
                                                             <em className='fs-5 text-uppercase mb-1'> {listing.seller?.username}</em>
-                                                           Member Since {sellerJoinDate.getFullYear()}
+                                                            Member Since {sellerJoinDate.getFullYear()}
                                                         </Link>
                                                     </span>
                                                 </li>
