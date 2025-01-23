@@ -205,6 +205,34 @@ const category_controllers = {
         const response = await sub_categoryModel.find({ parentId: req.params.parentId, status: true }, { image: 0, slug: 0, status: 0 })
         return res.status(200).json(response)
     },
+    getPopularCategories: async (req, res) => {
+        try {
+            const response = await parent_categoryModel.aggregate([
+                {
+                    $lookup: {
+                        from: 'products',
+                        localField: '_id',
+                        foreignField: 'parentcategoryId',
+                        as: 'products'
+                    }
+                },
+                {
+                    $addFields: {
+                        maximum: { $max: { $size: '$products' } },
+                        category_img: {
+                            $concat: [config.category_img_path, '/', '$image']
+                        }
+                    }
+                },
+                {
+                    $limit: 4
+                },
+            ])
+            return res.status(200).json(response)
+        } catch (error) {
+            console.log('getPopularCategories : ' + error.message)
+        }
+    }
 }
 
 export default category_controllers

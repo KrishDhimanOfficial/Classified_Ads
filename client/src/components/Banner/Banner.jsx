@@ -1,13 +1,13 @@
 import React from 'react'
 import { Link, } from 'react-router-dom'
 import { Image } from '../component'
-import bannerIMG from '../../assets/images/slide1.jpg'
+import bannerIMG from '../../assets/images/banner.webp'
 
 const Banner = () => {
     return (
         <div className="home-banner-part">
             <div className="banner-img">
-                <Image className="desktop" src={bannerIMG} alt="Banner Image" />
+                <Image className="desktop img-fluid w-100" src={bannerIMG}  alt="Banner Image" />
             </div>
             <div className="container">
                 <div className="banner-content">

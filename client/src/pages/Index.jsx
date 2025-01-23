@@ -1,8 +1,38 @@
-import React from 'react'
-import { Banner, Category, Counter, Product, Sec_Heading } from '../components/component'
+import React, { useState, useEffect } from 'react'
+import { Banner, Category, Product, Sec_Heading } from '../components/component'
 import { Link } from 'react-router-dom'
+import DataService from '../hooks/DataService'
 
 const Index = () => {
+    const [categories, setcategories] = useState([])
+    const [listings, setlistings] = useState([])
+    const [featuredListings, setfeaturedListings] = useState([])
+
+    const fetchcategories = async () => {
+        try {
+            const res = await DataService.get('/popular-categories')
+            setcategories(res)
+        } catch (error) {
+            console.error('fetchcategories : ' + error)
+        }
+    }
+    const fetchfeaturedListings = async () => {
+        try {
+            const res = await DataService.get('/featured-listings')
+            setfeaturedListings(res)
+        } catch (error) {
+            console.error('fetchfeaturedListings : ' + error)
+        }
+    }
+    const fetchproducts = async () => {
+        try {
+            const res = await DataService.get('/popular-listings')
+            setlistings(res)
+        } catch (error) {
+            console.log('fetchproducts : ' + error)
+        }
+    }
+    useEffect(() => { fetchcategories(), fetchproducts(), fetchfeaturedListings() }, [])
     return (
         <>
             <title>Home</title>
@@ -16,13 +46,19 @@ const Index = () => {
                                 subtitle={'Popular Category to Browse'}
                             />
                             <div className="row">
-                                <div className="col-md-3">
-                                    <Category
-                                        category={'Mobile'}
-                                        listedProduct={'1000+ Listed Product'}
-                                        imgpath={''}
-                                    />
-                                </div>
+                                {
+                                    categories?.map((category, i) => (
+                                        category.maximum > 0 && (
+                                            <div className="col-md-3" key={i}>
+                                                <Category
+                                                    category={category.title}
+                                                    listedProduct={`${category.maximum} Listed Product`}
+                                                    imgpath={category.category_img}
+                                                />
+                                            </div>
+                                        )
+                                    ))
+                                }
                             </div>
                         </div>
                         <div className="text-center pt-20">
@@ -36,22 +72,23 @@ const Index = () => {
                                 subtitle={'Popular Ads To Browse'}
                             />
                             <div className="row">
-                                <div className="col-md-3">
-                                    <Product ad_status={true} />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="container pt-120 pb-90">
-                        <div className="row">
-                            <div className="col-md-4 d-flex justify-content-center">
-                                <Counter count={100} text={'Verified Sellers'} />
-                            </div>
-                            <div className="col-md-4 d-flex justify-content-center">
-                                <Counter count={100} text={'Listed Product'} />
-                            </div>
-                            <div className="col-md-4 d-flex justify-content-center">
-                                <Counter count={100} text={'Listed Categories'} />
+                                {
+                                    featuredListings?.map((listing, i) => (
+                                        <div className="col-md-3" key={i}>
+                                            <Product
+                                                id={listing._id}
+                                                title={listing.title}
+                                                price={listing.price}
+                                                slug={`/listing/${listing.slug}`}
+                                                image={listing.listing_img}
+                                                category={listing.category.title}
+                                                ad_status={listing.ad_status}
+                                                sellerImg={listing.sellerImg}
+                                                sellerUsername={listing.seller.username}
+                                            />
+                                        </div>
+                                    ))
+                                }
                             </div>
                         </div>
                     </div>
@@ -62,30 +99,23 @@ const Index = () => {
                                 subtitle={'Browse More Products'}
                             />
                             <div className="row">
-                                <div className="col-md-3">
-                                    <Product />
-                                </div>
-                                <div className="col-md-3">
-                                    <Product />
-                                </div>
-                                <div className="col-md-3">
-                                    <Product />
-                                </div>
-                                <div className="col-md-3">
-                                    <Product />
-                                </div>
-                                <div className="col-md-3">
-                                    <Product />
-                                </div>
-                                <div className="col-md-3">
-                                    <Product />
-                                </div>
-                                <div className="col-md-3">
-                                    <Product />
-                                </div>
-                                <div className="col-md-3">
-                                    <Product />
-                                </div>
+                                {
+                                    listings?.map((listing, i) => (
+                                        <div className="col-md-3" key={i}>
+                                            <Product
+                                                id={listing._id}
+                                                title={listing.title}
+                                                price={listing.price}
+                                                slug={`/listing/${listing.slug}`}
+                                                image={listing.listing_img}
+                                                category={listing.category.title}
+                                                ad_status={listing.ad_status}
+                                                sellerImg={listing.sellerImg}
+                                                sellerUsername={listing.seller.username}
+                                            />
+                                        </div>
+                                    ))
+                                }
                             </div>
                             <div className="text-center pt-20">
                                 <Link to="/browse-products" className="back-btn-border">

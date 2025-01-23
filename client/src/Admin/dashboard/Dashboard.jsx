@@ -20,14 +20,12 @@ const Dashboard = () => {
         })
         setlisting(res[0])
     }
-    useEffect(() => {
-        fetchListings()
-    }, [])
+    useEffect(() => { fetchListings() }, [])
     return (
         <>
             <div className="row">
                 <div className="col-12">
-                    <Seller_profile />
+                    <Seller_profile totalListing={listing?.totalActive + listing?.totalDeActive} />
                 </div>
             </div>
             <div className="row">

@@ -105,7 +105,7 @@ const authenticationcontroller = {
     handleSellerLogin: async (req, res) => {
         try {
             const { email, password } = req.body;
-            const seller = await sellerModel.findOne({ email }, { password: 1 }, { runValidators: true })
+            const seller = await sellerModel.findOne({ email, status: true }, { password: 1 }, { runValidators: true })
             if (!seller) return res.json({ error: 'Invalid Email or Password!' })
 
             const isMatch = await bcrypt.compare(password, seller.password)
@@ -125,7 +125,7 @@ const authenticationcontroller = {
             const { token } = req.body;
             const seller = getUser(token)
 
-            const response = await sellerModel.findById({ _id: seller.id })
+            const response = await sellerModel.findOne({ _id: seller.id, status: true })
             if (!response) return res.json({ error: 'Unauthorized!' })
             return res.json({ message: 'Authenticated!' })
         } catch (error) {
@@ -162,9 +162,6 @@ const authenticationcontroller = {
                 {
                     name: name.trim(),
                     desc: desc.trim(),
-                    banner_image: req.files['banner_image']
-                        ? req.files['banner_image'][0].filename
-                        : existingRecored.banner_image,
                     logo: req.files['logo']
                         ? req.files['logo'][0].filename
                         : existingRecored.logo

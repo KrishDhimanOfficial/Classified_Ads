@@ -24,7 +24,7 @@ const BrowseProducts = () => {
 
     const getfilterData = useCallback(async () => {
         try {
-            setloading(true), setlisting({})
+            setlisting({}), setloading(true)
             const res = await DataService.get(`/filters/listings${applyfilters}`)
             if (res.error) return seterror(res.error), setloading(false)
             setloading(false), setlisting(res)
@@ -35,7 +35,7 @@ const BrowseProducts = () => {
 
     const filterLlistingwithPagination = useCallback(async (page) => {
         try {
-            setloading(true), setlisting({})
+            setlisting({}), setloading(true)
             const api = location.search
                 ? `/filters/listings${applyfilters}&page=${page}`
                 : `/browse-listing?page=${page}`;
@@ -95,6 +95,7 @@ const BrowseProducts = () => {
                                         listing.collectionData?.map((listing, i) => (
                                             <div className="col-md-4" key={i}>
                                                 <Product
+                                                    id={listing._id}
                                                     title={listing.title}
                                                     price={listing.price}
                                                     slug={`/listing/${listing.slug}`}

@@ -236,8 +236,6 @@ const seller_controllers = {
                 }
             ]
             const response = await handleAggregatePagination(reviewRatingModel, projection, req.query)
-            console.log(response);
-
             if (response.collectionData.length == 0) return res.json({ error: 'No reviews found!' })
             if (response.collectionData.length > 0) return res.json(response)
         } catch (error) {

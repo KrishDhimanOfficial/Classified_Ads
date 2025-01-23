@@ -36,6 +36,8 @@ const Listing_container = () => {
                                 title={listing.title}
                                 price={listing.price}
                                 status={listing.status}
+                                clicks={listing.click_count}
+                                ad_status={listing.ad_status}
                                 slug={`/listing/${listing.slug}`}
                                 updatelisting={`/user/update/${listing.slug}`}
                                 publishStatus={listing.publishing_status}

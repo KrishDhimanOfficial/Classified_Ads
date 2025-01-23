@@ -26,6 +26,7 @@ const SellerProfileListings = () => {
                 sellerlisting.collectionData?.map((listing, i) => (
                     <div className="col-md-6" key={i}>
                         <Product
+                            id={listing._id}
                             title={listing.title}
                             price={listing.price}
                             slug={`/listing/${listing.slug}`}

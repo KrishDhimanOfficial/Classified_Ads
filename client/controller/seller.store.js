@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
     seller: {},
-    rating: 0
+    rating: 0,
 }
 
 const sellerSlice = createSlice({
@@ -14,7 +14,7 @@ const sellerSlice = createSlice({
         },
         setRating: (state, action) => {
             state.rating = action.payload
-        }
+        },
     }
 })
 

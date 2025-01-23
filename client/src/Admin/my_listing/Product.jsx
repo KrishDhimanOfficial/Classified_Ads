@@ -6,7 +6,7 @@ import GetCookie from '../../hooks/GetCookie'
 import Notify from '../../hooks/Notify'
 import Dropdown from 'react-bootstrap/Dropdown'
 
-const Product = ({ id, path, status, title, price, publishStatus, createdAt, slug, updatelisting }) => {
+const Product = ({ id, path, status, title, price, ad_status, clicks, publishStatus, createdAt, slug, updatelisting }) => {
     const navigate = useNavigate()
     const [checkedStatus, setCheckedInput] = useState(status)
 
@@ -22,7 +22,7 @@ const Product = ({ id, path, status, title, price, publishStatus, createdAt, slu
             console.error('deleteListing : ', error)
         }
     }
-    
+
     const updateStatus = useCallback(async (status) => {
         try {
             const res = await DataService.patch(`/product/${id}`, { status }, {
@@ -35,6 +35,19 @@ const Product = ({ id, path, status, title, price, publishStatus, createdAt, slu
             console.error('updateStatus : ', error)
         }
     }, [])
+
+    const promoteListing = async () => {
+        try {
+            const res = await DataService.patch(`/promote-listing/${id}`, { status: !ad_status }, {
+                headers: {
+                    'Authorization': `Bearer ${GetCookie(navigate)}`
+                }
+            })
+            Notify(res)
+        } catch (error) {
+            console.error('promoteListing : ', error)
+        }
+    }
 
     return (
         <div className="card d-flex flex-row align-items-start w-100">
@@ -62,11 +75,20 @@ const Product = ({ id, path, status, title, price, publishStatus, createdAt, slu
                             publishStatus ? ' APPROVED' : 'PENDING'
                         }
                     </span>
-                    {/* <i className="fas fa-eye me-1">
-                    </i>
-                    <span className="text-muted">
-                        381
-                    </span> */}
+                    {
+                        ad_status && (
+                            <>
+                                <span className='status bg-primary text-white text-uppercase'>
+                                    Featured
+                                </span>
+                                <i className="fas fa-eye ms-3 me-1">
+                                </i>
+                                <span className="text-muted">
+                                    {clicks}
+                                </span>
+                            </>
+                        )
+                    }
                 </div>
             </div>
             <div className="ms-auto published-toggle">
@@ -89,12 +111,10 @@ const Product = ({ id, path, status, title, price, publishStatus, createdAt, slu
                     <Dropdown.Menu>
                         <Dropdown.Item href={slug}>View</Dropdown.Item>
                         <Dropdown.Item href={updatelisting}>Edit</Dropdown.Item>
-                        <Dropdown.Item href="#" onClick={(e) => {
-                            e.preventDefault()
-                            deleteListing()
-                        }}>
+                        <Dropdown.Item href="#" onClick={(e) => { e.preventDefault(), deleteListing() }}>
                             Delete
                         </Dropdown.Item>
+                        <Dropdown.Item href='#' onClick={(e) => { e.preventDefault(), promoteListing() }}>Promote</Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>
             </div>

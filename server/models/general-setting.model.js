@@ -4,9 +4,6 @@ const general_settingSchema = mongoose.Schema({
     logo: {
         type: mongoose.Schema.Types.String
     },
-    banner_image: {
-        type: mongoose.Schema.Types.String
-    },
     name: {
         type: mongoose.Schema.Types.String,
         match: [/^[a-zA-Z ]+$/, 'Name must contain only characters and spaces!']

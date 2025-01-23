@@ -24,6 +24,7 @@ router.get('/get/seller-profile/:seller_username', seller_Controller.getSeller)
 router.get('/parent-category', category_controller.getparentCategory)
 router.get('/sub-category/:parentId', category_controller.getsubCategory)
 router.get('/brands', brand_controller.getbrands)
+router.get('/popular-categories', category_controller.getPopularCategories)
 
 router.post('/products', product_controller.allListings)
 router.get('/product/:listing_slug', product_controller.getSingleListingtoUpdate)
@@ -46,6 +47,10 @@ router.route('/product/:id?')
 
 router.post('/listings', product_controller.getlistingDetails)
 router.get('/single-listing/:listing_slug', product_controller.getSingleListing)
+router.get('/popular-listings', product_controller.getPopularListings)
+router.get('/featured-listings', product_controller.getFeaturedListings)
+router.patch('/promote-listing/:id', product_controller.promoteListing)
+router.patch('/update-ad-click/:id', product_controller.updateAdClick)
 
 // Filters listings
 router.get('/browse-listing', product_controller.browseListings)

@@ -1,6 +1,7 @@
 import { getUser } from "../services/createToken.js";
 import productModel from "../models/product.model.js";
 import deleteImage from "../services/deleteImg.js";
+import sellerModel from "../models/seller.model.js";
 import mongoose from "mongoose";
 import handleAggregatePagination from "../services/handlepagination.js";
 import config from "../config/config.js";
@@ -87,8 +88,8 @@ const product_controller = {
                 },
                 {
                     $project: {
-                        featured_img: 1, title: 1, price: 1,
-                        publishing_status: 1, status: 1, slug: 1,
+                        featured_img: 1, title: 1, price: 1, ad_status: 1,
+                        publishing_status: 1, status: 1, slug: 1, click_count: 1,
                         formattedDate: {
                             $dateToString: {
                                 format: "%d-%m-%Y",
@@ -393,6 +394,9 @@ const product_controller = {
                 },
                 { $unwind: '$seller' },
                 {
+                    $match: { 'seller.status': true }
+                },
+                {
                     $addFields: {
                         sellerImage: {
                             $concat: [`${config.sellerImage}`, '/', '$seller.image']
@@ -400,6 +404,7 @@ const product_controller = {
                         sellerusername: '$seller.username'
                     }
                 },
+                { $sort: { created_At: -1 } },
                 {
                     $project: {
                         'parentcategory.image': 0,
@@ -438,8 +443,12 @@ const product_controller = {
             if (brandId) query.push({ brandId: new ObjectId(brandId) })
             if (parentcategoryId) query.push({ parentcategoryId: new ObjectId(parentcategoryId) })
             if (subcategoryId) query.push({ subcategoryId: new ObjectId(subcategoryId) })
-            if (featured) query.push({ ad_status: true })
-            if (listed) query.push({ ad_status: false })
+            if (featured && listed) {
+                query.push({ $or: [{ ad_status: true }, { ad_status: false }] })
+            } else {
+                if (featured) query.push({ ad_status: true })
+                if (listed) query.push({ ad_status: false })
+            }
 
             const projection = [
                 {
@@ -464,6 +473,9 @@ const product_controller = {
                 },
                 { $unwind: '$seller' },
                 {
+                    $match: { 'seller.status': true }
+                },
+                {
                     $addFields: {
                         sellerImage: {
                             $concat: [`${config.sellerImage}`, '/', '$seller.image']
@@ -471,6 +483,7 @@ const product_controller = {
                         sellerusername: '$seller.username'
                     }
                 },
+                { $sort: { created_At: -1 } },
                 {
                     $project: {
                         'parentcategory.image': 0,
@@ -487,7 +500,7 @@ const product_controller = {
                 },
                 {
                     $match: { status: true, publishing_status: true }
-                }
+                },
             ]
             const response = await handleAggregatePagination(productModel, projection, req.query)
             if (response.collectionData.length === 0) return res.json({ error: 'No Results' })
@@ -547,6 +560,153 @@ const product_controller = {
             return res.status(200).json(response)
         } catch (error) {
             console.log('getSingleListing : ' + error.message)
+        }
+    },
+    getPopularListings: async (req, res) => {
+        try {
+            const response = await productModel.aggregate([
+                {
+                    $match: { ad_status: false, status: true, publishing_status: true }
+                },
+                { $sort: { created_At: -1 } },
+                { $limit: 8 },
+                {
+                    $lookup: {
+                        from: 'parent_categories',
+                        localField: 'parentcategoryId',
+                        foreignField: '_id',
+                        as: 'category'
+                    }
+                },
+                { $unwind: '$category' },
+                {
+                    $lookup: {
+                        from: 'sellers',
+                        localField: 'sellerId',
+                        foreignField: '_id',
+                        as: 'seller'
+                    }
+                },
+                { $unwind: '$seller' },
+                {
+                    $addFields: {
+                        listing_img: {
+                            $concat: [config.product_img_path, '/', '$featured_img']
+                        },
+                        sellerImg: {
+                            $concat: [config.sellerImage, '/', '$seller.image']
+                        }
+                    }
+                },
+                {
+                    $project: {
+                        listing_img: 1, sellerImg: 1,
+                        title: 1, slug: 1,
+                        price: 1,
+                        ad_status: 1,
+                        'seller.username': 1,
+                        'category.title': 1,
+                    }
+                }
+            ])
+            return res.status(200).json(response)
+        } catch (error) {
+            console.log('getPopularListings : ' + error.message)
+        }
+    },
+    getFeaturedListings: async (req, res) => {
+        try {
+            const response = await productModel.aggregate([
+                {
+                    $match: { ad_status: true, status: true, publishing_status: true }
+                },
+                { $sort: { created_At: -1 } },
+                { $limit: 8 },
+                {
+                    $lookup: {
+                        from: 'parent_categories',
+                        localField: 'parentcategoryId',
+                        foreignField: '_id',
+                        as: 'category'
+                    }
+                },
+                { $unwind: '$category' },
+                {
+                    $lookup: {
+                        from: 'sellers',
+                        localField: 'sellerId',
+                        foreignField: '_id',
+                        as: 'seller'
+                    }
+                },
+                { $unwind: '$seller' },
+                {
+                    $addFields: {
+                        listing_img: {
+                            $concat: [config.product_img_path, '/', '$featured_img']
+                        },
+                        sellerImg: {
+                            $concat: [config.sellerImage, '/', '$seller.image']
+                        }
+                    }
+                },
+                {
+                    $project: {
+                        listing_img: 1, sellerImg: 1,
+                        title: 1, slug: 1,
+                        price: 1,
+                        ad_status: 1,
+                        'seller.username': 1,
+                        'category.title': 1,
+                    }
+                }
+            ])
+            return res.status(200).json(response)
+        } catch (error) {
+            console.log('getFeaturedListings : ' + error.message)
+        }
+    },
+    promoteListing: async (req, res) => {
+        try {
+            const { status } = req.body;
+            const response = await productModel.findByIdAndUpdate(
+                { _id: req.params.id },
+                { ad_status: status },
+                { new: true }
+            )
+            if (!response) return res.json({ error: 'unable to update!' })
+            return res.json({ message: 'update successfully!' })
+        } catch (error) {
+            console.log('promoteListing : ' + error.message)
+        }
+    },
+    updateAdClick: async (req, res) => {
+        const controller = new AbortController()
+        try {
+            const response = await productModel.findByIdAndUpdate(
+                { _id: req.params.id },
+                { $inc: { click_count: 1 } },
+                { signal: controller.signal }
+            )
+            const checkIsNotSeller = await sellerModel.findById({ _id: response.sellerId }, { _id: 1 })
+
+            if (checkIsNotSeller) {
+                await productModel.findByIdAndUpdate(
+                    { _id: req.params.id },
+                    { $inc: { click_count: -1 } },
+                    { signal: controller.signal }
+                )
+            } else {
+                await sellerModel.findByIdAndUpdate(
+                    { _id: response.sellerId },
+                    { $inc: { wallet_amount: -0.20 } }
+                )
+            }
+
+        } catch (error) {
+            console.log('updateAdClick : ' + error.message)
+            if (controller.signal.aborted) console.log('Request was cancelled')
+            controller.abort()
         }
     }
 }

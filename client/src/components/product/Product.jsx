@@ -2,12 +2,21 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { Image } from '../component'
 import defaultUser from '../../assets/images/user.svg'
+import DataService from '../../hooks/DataService'
 
-const Product = ({ title, category, image, slug, price, ad_status, sellerImg,sellerUsername }) => {
+const Product = ({ id, title, category, image, slug, price, ad_status, sellerImg, sellerUsername }) => {
+
+    const updateClickCount = async () => {
+        try {
+            await DataService.patch(`/update-ad-click/${id}`)
+        } catch (error) {
+            console.error('updateClickCount : ', error)
+        }
+    }
     return (
         <div className="course__item mb-30">
             <div className="course__thumb d-flex justify-content-center">
-                <Link to={slug}>
+                <Link to={slug} onClick={() => ad_status ? updateClickCount() : null} >
                     <Image src={image} alt="image" style={{ height: '180px' }} />
                 </Link>
             </div>
@@ -17,21 +26,8 @@ const Product = ({ title, category, image, slug, price, ad_status, sellerImg,sel
                     {/* <span className='text-black fw-light fs-6'>6 months ago</span> */}
                 </div>
                 <h3 className="back-course-title mb-2">
-                    <Link to={slug}> {title} </Link>
+                    <Link to={slug} onClick={() => ad_status ? updateClickCount() : null}> {title} </Link>
                 </h3>
-                {/* <div className="course__card-icon d-flex">
-                    <div className="back__user d-flex flex-column gap-2">
-                        ${price}
-                        {
-                            ad_status && (
-                                <div style={{ padding: '0.2rem 0.5rem' }}
-                                    className={'btn btn-sm btn-primary'}>
-                                    Featured
-                                </div>
-                            )
-                        }
-                    </div>
-                </div> */}
                 <div className="course__card-icon d-flex align-items-center">
                     <div className="course__card-icon--1">
                         {

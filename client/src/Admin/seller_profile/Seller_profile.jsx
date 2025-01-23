@@ -5,7 +5,7 @@ import defaultuser from '../../assets/images/user.svg'
 import config from '../../../config/config'
 import { Image } from '../../components/component'
 
-const Seller_profile = () => {
+const Seller_profile = ({ totalListing }) => {
     const profile = useSelector(state => state.seller)
     const date = new Date(profile.seller.createdAt)
     return (
@@ -30,7 +30,7 @@ const Seller_profile = () => {
                 </h5>
                 <p className="mb-0">
                     <span className="text-warning me-3">
-                        12 listing
+                        {totalListing} listing
                     </span>
                     Member since {date.getFullYear()}
                 </p>

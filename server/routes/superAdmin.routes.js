@@ -68,7 +68,6 @@ router.get('/general-settings', checkAdminIsLogged, authenticationcontroller.ren
 router.post('/change-password', upload.none(), authenticationcontroller.changeDashboardPassword)
 router.put('/general-setting/:id', GN.fields([
     { name: 'logo', maxCount: 1 },
-    { name: 'banner_image', maxCount: 1 },
 ]), handlemulterError, authenticationcontroller.General_Settings)
 
 router.get('/*', (req, res) => res.render('404'))
