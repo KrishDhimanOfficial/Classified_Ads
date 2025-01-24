@@ -8,7 +8,8 @@ const Product = ({ id, title, category, image, slug, price, ad_status, sellerImg
 
     const updateClickCount = async () => {
         try {
-            await DataService.patch(`/update-ad-click/${id}`)
+            const token = sessionStorage.getItem('seller_token')
+            await DataService.patch(`/update-ad-click/${id}`, { token })
         } catch (error) {
             console.error('updateClickCount : ', error)
         }

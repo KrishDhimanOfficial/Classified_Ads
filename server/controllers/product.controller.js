@@ -683,14 +683,16 @@ const product_controller = {
     updateAdClick: async (req, res) => {
         const controller = new AbortController()
         try {
+            const { token } = req.body;
+            const seller = getUser(token)
+            
             const response = await productModel.findByIdAndUpdate(
                 { _id: req.params.id },
                 { $inc: { click_count: 1 } },
                 { signal: controller.signal }
             )
-            const checkIsNotSeller = await sellerModel.findById({ _id: response.sellerId }, { _id: 1 })
-
-            if (checkIsNotSeller) {
+            
+            if (seller?.id === response.sellerId.toString()) {
                 await productModel.findByIdAndUpdate(
                     { _id: req.params.id },
                     { $inc: { click_count: -1 } },
@@ -699,9 +701,9 @@ const product_controller = {
             } else {
                 await sellerModel.findByIdAndUpdate(
                     { _id: response.sellerId },
-                    { $inc: { wallet_amount: -0.20 } }
+                    { $inc: { wallet_amount: -0.40 } }
                 )
-            }
+            } 
 
         } catch (error) {
             console.log('updateAdClick : ' + error.message)
