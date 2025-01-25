@@ -72,6 +72,25 @@
                                                             placeholder="Enter Your Slug" class="form-control" required>
                                                     </div>
                                                     <div class="form-group">
+                                                        <label for="parent_category">Parent Category</label>
+                                                        <select id="parent_category" name="parent_categoryId"
+                                                            class="form-control select2bs4" style="width: 100%;">
+                                                            <option selected disabled>Select Category</option>
+                                                            <% parentCategories?.forEach(category=> { %>
+                                                                <option value="<%= category._id %>">
+                                                                    <%= category.title %>
+                                                                </option>
+                                                                <% }) %>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="parent_category">Sub Category</label>
+                                                        <select id="sub_category" name="sub_categoryId"
+                                                            class="form-control select2bs4" style="width: 100%;">
+                                                            <option selected disabled>Select Category</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group">
                                                         <label for="inputImage">Image</label>
                                                         <input type="file" name="image" id="inputImage" accept="image/*"
                                                             autocomplete="off" class="form-control" required>
@@ -132,6 +151,7 @@
     </div>
     <!-- ./wrapper -->
     <%- include('../partials/script') %>
+    <%- include('../partials/select2.script.ejs') %>
         <script> const EndAPI = 'product/brand';</script>
         <script async type="module" src="/assets/js/main.js"></script>
 </body>

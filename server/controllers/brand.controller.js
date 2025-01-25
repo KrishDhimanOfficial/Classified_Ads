@@ -1,19 +1,28 @@
 import config from '../config/config.js';
 import brandModel from '../models/brand.model.js'
-import productModel from '../models/product.model.js';
 import validations from '../services/validateData.js'
 import deleteImg from '../services/deleteImg.js'
+import parent_categoryModel from '../models/parent_category.model.js';
+import mongoose from 'mongoose';
 
 const brandController = {
+    renderAddBrand: async (req, res) => {
+        try {
+            const parentCategories = await parent_categoryModel.find({ status: true }, { _id: 1, title: 1 })
+            return res.render('brands/Addbrand', { parentCategories })
+        } catch (error) {
+            console.log('renderAddBrand : ' + error.message)
+        }
+    },
     createBrand: async (req, res) => {
         try {
-            const { title, slug, status } = req.body;
+            const { title, slug, status, parent_categoryId, sub_categoryId } = req.body;
             if (!title || !slug || !status) return res.json({ error: 'All Fields Are Required!' })
 
             const existingBrand = await brandModel.findOne({ title, slug })
             if (existingBrand) return res.json({ warning: 'Value Already Exists' })
 
-            const response = await brandModel.create({ title, slug, status,image: req.file?.filename })
+            const response = await brandModel.create({ title, slug, status, parent_categoryId, sub_categoryId, image: req.file?.filename })
             if (!response) return res.json({ error: 'Failed to create brand' })
 
             return res.json({ message: 'successfully created' })
@@ -58,10 +67,57 @@ const brandController = {
     },
     getSingleBrand: async (req, res) => {
         try {
-            const brand = await brandModel.findById({ _id: req.params.id })
+            const parentCategories = await parent_categoryModel.find({ status: true }, { _id: 1, title: 1 })
+            const response = await brandModel.aggregate([
+                {
+                    $match: {
+                        _id: new mongoose.Types.ObjectId(req.params.id),
+                        status: true
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'parent_categories',
+                        localField: 'parent_categoryId',
+                        foreignField: '_id',
+                        as: 'parent_category'
+                    }
+                },
+                {
+                    $unwind: '$parent_category',
+                },
+                {
+                    $lookup: {
+                        from: 'sub_categories',
+                        localField: 'sub_categoryId',
+                        foreignField: '_id',
+                        as: 'sub_category'
+                    }
+                },
+                {
+                    $unwind: '$sub_category',
+                },
+                {
+                    $match: {
+                        'sub_category.status': true,
+                        'parent_category.status': true
+                    }
+                },
+                {
+                    $project: {
+                        'sub_category.status': 0,
+                        'sub_category.slug': 0,
+                        'sub_category.parentId': 0,
+                        'parent_category.status': 0,
+                        'parent_category.slug': 0,
+                        'parent_category.image': 0
+                    }
+                },
+            ])
             return res.render('brands/updateBrand', {
+                parentCategories,
                 brand_img_path: config.brand_img_path,
-                brand
+                brand: response[0]
             })
         } catch (error) {
             console.log('getSingleBrand : ' + error.message)
@@ -69,12 +125,13 @@ const brandController = {
     },
     updateBrand: async (req, res) => {
         try {
-            const { title, slug, status } = req.body;
+            const { title, slug, status, parent_categoryId, sub_categoryId } = req.body;
             const response = await brandModel.findByIdAndUpdate(
                 { _id: req.params.id },
                 {
                     title, slug, status,
-                    image: req.file?.filename
+                    image: req.file?.filename,
+                    parent_categoryId, sub_categoryId
                 },
                 { runValidators: true }
             )

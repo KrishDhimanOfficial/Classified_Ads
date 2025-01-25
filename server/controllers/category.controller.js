@@ -232,6 +232,14 @@ const category_controllers = {
         } catch (error) {
             console.log('getPopularCategories : ' + error.message)
         }
+    },
+    getSubCategoryonbrand: async (req, res) => {
+        try {
+            const response = await sub_categoryModel.find({ parentId: req.params.id, status: true }, { image: 0, slug: 0, status: 0 })
+            return res.status(200).json(response)
+        } catch (error) {
+            console.log('getSubCategoryonbrand : ' + error.message)
+        }
     }
 }
 

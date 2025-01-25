@@ -20,7 +20,7 @@ router.route('/login')
 router.get('/logout', authenticationcontroller.handleSuperAdminLogout)
 
 //  Routes for product Brands
-router.get('/product/add-new-brand', checkAdminIsLogged, (req, res) => res.render('brands/Addbrand'))
+router.get('/product/add-new-brand', checkAdminIsLogged, brandController.renderAddBrand)
 router.get('/product/brands', checkAdminIsLogged, brandController.renderBrands)
 router.route('/product/brand/:id?')
     .post(brand.single('image'), handlemulterError, brandController.createBrand)
@@ -42,6 +42,7 @@ router.route('/product/category/:id?')
 
 
 // Routes for product Sub-Categories
+router.get('/sub-category/:id', checkAdminIsLogged, category_controllers.getSubCategoryonbrand)
 router.get('/sub/category', checkAdminIsLogged, category_controllers.renderSubCategory)
 router.get('/category/add-sub-category', checkAdminIsLogged, category_controllers.renderADDSubCategory)
 router.route('/product/sub-category/:id?')

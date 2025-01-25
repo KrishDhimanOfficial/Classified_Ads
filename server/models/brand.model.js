@@ -12,6 +12,14 @@ const brandSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.String,
         required: [true, 'Image Are Required!'],
     },
+    parent_categoryId: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: [true, 'Parent Category Are Required!'],
+    },
+    sub_categoryId: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: [true, 'Sub Category Are Required!'],
+    },
     slug: {
         type: mongoose.Schema.Types.String,
         required: [true, 'Slug Are Required!'],

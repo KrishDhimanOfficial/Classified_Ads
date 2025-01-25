@@ -8,6 +8,7 @@ export const submitbtn = document.querySelector('#submitbtn')
 export const resetbtn = document.querySelector('#reset')
 export const loginbtn = document.querySelector('#loginbtn')
 export const submitgeneralSetting = document.querySelector('#submitgeneralSetting')
+export const parent_category = document.querySelector('#parent_category')
 
 export const Notify = (data) => {
     if (data.message) toastr.success(data.message)

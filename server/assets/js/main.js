@@ -1,5 +1,5 @@
 import {
-    serverAPI, inputTitle, inputSlug, SubmitForm, inputImage, resetbtn, previewImage,
+    serverAPI, inputTitle, inputSlug, SubmitForm, inputImage, parent_category, resetbtn, previewImage,
     CreateSlug, sendDataToServer, displayPreviewImage, submitgeneralSetting
 } from './variable.js'
 
@@ -30,4 +30,15 @@ if (submitgeneralSetting) submitgeneralSetting.onsubmit = async (e) => {
     const formData = new FormData(e.target)
     const api = `${serverAPI}/${EndAPI}/${e.target.dataset.id}`;
     sendDataToServer(api, 'PUT', formData) // send data to server
+}
+
+if (parent_category) parent_category.onchange = async (e) => {
+    const response = await fetch(`${serverAPI}/sub-category/${e.target.value}`)
+    const data = await response.json()
+    console.log(data)
+    const optionsHtml = data.map(option => (
+        `<option value="${option._id}">${option.title}</option>`
+    )).join('')
+    document.querySelector('#sub_category').innerHTML = '';
+    document.querySelector('#sub_category').insertAdjacentHTML('beforeend', optionsHtml)
 }

@@ -76,9 +76,39 @@
                                                                     class="form-control">
                                                             </div>
                                                             <div class="form-group">
+                                                                <label for="parent_category">Parent Category</label>
+                                                                <select id="parent_category" name="parent_categoryId"
+                                                                    class="form-control select2bs4"
+                                                                    style="width: 100%;">
+                                                                    <option selected
+                                                                        value="<%= brand.parent_category._id %>">
+                                                                        <%= brand.parent_category.title %>
+                                                                    </option>
+                                                                    <% parentCategories?.forEach(category=> { %>
+                                                                        <% if (category._id.toString() !==brand.parent_category._id.toString()) { %>
+                                                                            <option value="<%= category._id %>">
+                                                                                <%= category.title %>
+                                                                            </option>
+                                                                        <% } %>
+                                                                    <% }) %>
+                                                                </select>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="parent_category">Sub Category</label>
+                                                                <select id="sub_category" name="sub_categoryId"
+                                                                    class="form-control select2bs4"
+                                                                    style="width: 100%;">
+                                                                    <option selected
+                                                                        value="<%= brand.sub_category._id %>">
+                                                                        <%= brand.sub_category.title %>
+                                                                    </option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="form-group">
                                                                 <label for="inputImage">Image</label>
-                                                                <input type="file" name="image" id="inputImage" accept="image/*"
-                                                                    autocomplete="off" class="form-control">
+                                                                <input type="file" name="image" id="inputImage"
+                                                                    accept="image/*" autocomplete="off"
+                                                                    class="form-control">
                                                             </div>
                                                             <div class="form-group">
                                                                 <label for="inputStatus">Status</label>
@@ -122,8 +152,8 @@
                                                 </div>
                                             </div>
                                             <div class="card-body d-flex justify-content-center">
-                                                <img id="previewImage" src="<%= brand_img_path %>/<%= brand.image %>" alt=""
-                                                    style="width: 100%; height: 300px; object-fit: contain;">
+                                                <img id="previewImage" src="<%= brand_img_path %>/<%= brand.image %>"
+                                                    alt="" style="width: 100%; height: 300px; object-fit: contain;">
                                             </div>
                                         </div>
                                     </div>
