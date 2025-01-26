@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { Input, BTN } from '../component'
 import Select from 'react-select'
 import DataService from '../../hooks/DataService'
@@ -10,11 +10,14 @@ const FilterSidebar = () => {
     const [pcategory, setpcategory] = useState([])
     const [subcategory, setsubcategory] = useState([])
     const [brands, setbrands] = useState([])
+    const parentRef = useRef()
+    const [parentIdChange, setparentIdChange] = useState(false)
 
     const { handleSubmit, control, register, formState: { errors } } = useForm()
 
 
     const fetchCategorie = useCallback(async () => {
+        setsubcategory([])
         const res = await DataService.get('/parent-category')
         const category = res.map(item => ({ value: item._id, label: item.title }))
         setpcategory(category)
@@ -26,8 +29,8 @@ const FilterSidebar = () => {
         setsubcategory(category)
     }, [])
 
-    const fetchBrand = useCallback(async () => {
-        const res = await DataService.get('/brands')
+    const fetchBrand = useCallback(async (id) => {
+        const res = await DataService.get(`/brands/${id}`)
         const brands = res.map(item => ({ value: item._id, label: item.title }))
         setbrands(brands)
     }, [])
@@ -45,8 +48,7 @@ const FilterSidebar = () => {
             console.error('filiters : ', error)
         }
     }, [])
-
-    useEffect(() => { fetchCategorie(), fetchBrand() }, [])
+    useEffect(() => { fetchCategorie() }, [])
     return (
         <div className='back-sidebar pl-30 md-pl-0 md-mt-60'>
             <div className="widget back-search">
@@ -123,6 +125,7 @@ const FilterSidebar = () => {
                                     onChange={(selectedoption) => {
                                         field.onChange(selectedoption)
                                         fetchsubCategorie(selectedoption.value)
+                                        fetchBrand(selectedoption.value)
                                     }}
                                 />
                             )}
@@ -139,6 +142,9 @@ const FilterSidebar = () => {
                                     isSearchable
                                     isRtl={false}
                                     options={subcategory}
+                                    onChange={(selectedoption) => {
+                                        fetchBrand(selectedoption.value)
+                                    }}
                                 />
                             )}
                         />

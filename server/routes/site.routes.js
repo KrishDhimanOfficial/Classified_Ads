@@ -23,7 +23,7 @@ router.get('/get/seller-profile/:seller_username', seller_Controller.getSeller)
 
 router.get('/parent-category', category_controller.getparentCategory)
 router.get('/sub-category/:parentId', category_controller.getsubCategory)
-router.get('/brands', brand_controller.getbrands)
+router.get('/brands/:id', brand_controller.getbrands)
 router.get('/popular-categories', category_controller.getPopularCategories)
 
 router.post('/products', product_controller.allListings)

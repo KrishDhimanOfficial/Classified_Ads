@@ -4,6 +4,7 @@ import validations from '../services/validateData.js'
 import deleteImg from '../services/deleteImg.js'
 import parent_categoryModel from '../models/parent_category.model.js';
 import mongoose from 'mongoose';
+const { ObjectId } = mongoose.Types;
 
 const brandController = {
     renderAddBrand: async (req, res) => {
@@ -169,7 +170,24 @@ const brandController = {
         }
     },
     getbrands: async (req, res) => {
-        const response = await brandModel.find({ status: true }, { image: 0, slug: 0, status: 0 })
+        const response = await brandModel.aggregate([
+            {
+                $match: {
+                    status: true,
+                    $or: [
+                        { parent_categoryId: new ObjectId(req.params.id) },
+                        { sub_categoryId: new ObjectId(req.params.id) }
+                    ]
+                }
+            },
+            {
+                $project:{
+                    image: 0,
+                    slug: 0,
+                    status: 0
+                }
+            }
+        ])
         return res.status(200).json(response)
     }
 }
