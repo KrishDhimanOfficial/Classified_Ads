@@ -11,6 +11,16 @@ const general_settingSchema = mongoose.Schema({
     desc: {
         type: mongoose.Schema.Types.String,
         max: [150, 'Description must be 150 characters!']
+    },
+    companyemail: {
+        type: mongoose.Schema.Types.String,
+        required: [true, 'Email is required!'],
+        unique: true,
+        match: [/^[a-z0-9]+@gmail\.com$/, 'Incorrect email!']
+    },
+    setFeaturedAdPrice: {
+        type: mongoose.Schema.Types.Number,
+        default: 0
     }
 })
 

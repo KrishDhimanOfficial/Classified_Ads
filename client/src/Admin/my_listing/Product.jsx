@@ -114,7 +114,9 @@ const Product = ({ id, path, status, title, price, ad_status, clicks, publishSta
                         <Dropdown.Item href="#" onClick={(e) => { e.preventDefault(), deleteListing() }}>
                             Delete
                         </Dropdown.Item>
-                        <Dropdown.Item href='#' onClick={(e) => { e.preventDefault(), promoteListing() }}>Promote</Dropdown.Item>
+                        <Dropdown.Item href='#' onClick={(e) => { e.preventDefault(), promoteListing() }}>
+                            {ad_status ? 'Unpromote' : 'Promote'}
+                        </Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>
             </div>

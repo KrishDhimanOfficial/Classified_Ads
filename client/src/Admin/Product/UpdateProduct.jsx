@@ -77,8 +77,8 @@ const UpdateProduct = () => {
         setsubcategory(category)
     }, [])
 
-    const fetchBrand = useCallback(async () => {
-        const res = await DataService.get('/brands')
+    const fetchBrand = useCallback(async (id) => {
+        const res = await DataService.get(`/brands/${id}`)
         const brands = res.map(item => ({ value: item._id, label: item.title }))
         setbrands(brands)
     }, [])
@@ -137,7 +137,7 @@ const UpdateProduct = () => {
             console.error('getlisting : ', error)
         }
     }
-    useEffect(() => { getlisting(), fetchCategorie(), fetchBrand() }, [])
+    useEffect(() => { getlisting(), fetchCategorie() }, [])
     return (
         <div className="back-login-page">
             <div className="login-right-form pt-0 px-0">
@@ -176,6 +176,7 @@ const UpdateProduct = () => {
                                                 onChange={(selectedoption) => {
                                                     field.onChange(selectedoption)
                                                     fetchsubCategorie(selectedoption.value)
+                                                    fetchBrand(selectedoption.value)
                                                 }}
                                                 styles={{
                                                     control: (style) => ({
@@ -204,7 +205,10 @@ const UpdateProduct = () => {
                                                     value: listing.sub_category?._id,
                                                     label: listing.sub_category?.title
                                                 }}
-                                                onChange={(selectedoption) => field.onChange(selectedoption)}
+                                                onChange={(selectedoption) => {
+                                                    field.onChange(selectedoption)
+                                                    fetchBrand(selectedoption.value)
+                                                }}
                                                 styles={{
                                                     control: (style) => ({
                                                         ...style,

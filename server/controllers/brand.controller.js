@@ -72,8 +72,7 @@ const brandController = {
             const response = await brandModel.aggregate([
                 {
                     $match: {
-                        _id: new mongoose.Types.ObjectId(req.params.id),
-                        status: true
+                        _id: new mongoose.Types.ObjectId(req.params.id)
                     }
                 },
                 {
@@ -139,7 +138,7 @@ const brandController = {
 
             if (req.file?.filename) await deleteImg(`brands_images/${response.image}`)
             if (!response) return res.json({ error: 'Failed to update brand' })
-            return res.json({ message: 'update successfully' })
+            return res.json({ navigate: 'product/brands' })
         } catch (error) {
             await deleteImg(`brands_images/${req.file?.filename}`)
             // Extract custom error messages
@@ -181,7 +180,7 @@ const brandController = {
                 }
             },
             {
-                $project:{
+                $project: {
                     image: 0,
                     slug: 0,
                     status: 0

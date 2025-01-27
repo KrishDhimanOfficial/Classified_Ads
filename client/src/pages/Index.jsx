@@ -68,8 +68,8 @@ const Index = () => {
                     <div className="back__course__area  pt-120 pb-90">
                         <div className="container">
                             <Sec_Heading
-                                title={'Favorite Ads'}
-                                subtitle={'Popular Ads To Browse'}
+                                title={"Check Out What's New"}
+                                subtitle={'Featured ads'}
                             />
                             <div className="row">
                                 {

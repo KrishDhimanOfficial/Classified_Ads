@@ -1,6 +1,6 @@
 import {
     serverAPI, inputTitle, inputSlug, SubmitForm, inputImage, parent_category, resetbtn, previewImage,
-    CreateSlug, sendDataToServer, displayPreviewImage, submitgeneralSetting
+    CreateSlug, sendDataToServer, displayPreviewImage, submitgeneralSetting, featuredAdSetting
 } from './variable.js'
 
 'use strict'
@@ -30,6 +30,7 @@ if (submitgeneralSetting) submitgeneralSetting.onsubmit = async (e) => {
     const formData = new FormData(e.target)
     const api = `${serverAPI}/${EndAPI}/${e.target.dataset.id}`;
     sendDataToServer(api, 'PUT', formData) // send data to server
+    e.target.reset()
 }
 
 if (parent_category) parent_category.onchange = async (e) => {

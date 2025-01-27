@@ -50,6 +50,10 @@ const sellerSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.Number,
         default: 0
     },
+    wishlist: {
+        type: [mongoose.Schema.Types.ObjectId],
+        default: []
+    },
     createdAt: {
         type: mongoose.Schema.Types.Date,
         default: new Date()

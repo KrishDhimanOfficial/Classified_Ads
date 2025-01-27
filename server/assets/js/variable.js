@@ -9,15 +9,13 @@ export const resetbtn = document.querySelector('#reset')
 export const loginbtn = document.querySelector('#loginbtn')
 export const submitgeneralSetting = document.querySelector('#submitgeneralSetting')
 export const parent_category = document.querySelector('#parent_category')
+export const featuredAdSetting = document.querySelector('#featuredAdSetting')
 
 export const Notify = (data) => {
     if (data.message) toastr.success(data.message)
     if (data.warning) toastr.warning(data.warning)
     if (data.error) toastr.error(data.error)
     if (data.errors) data.errors.forEach(error => toastr.error(error))
-
-    submitbtn.disabled = false;
-    submitbtn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Submit'
     return;
 }
 
@@ -35,7 +33,7 @@ export const displayPreviewImage = async (e) => {
     reader.readAsDataURL(file)
 }
 
-export const sendDataToServer = async (api, method, formData) => {
+export const sendDataToServer = async (api, method, formData, navigate) => {
     try {
         submitbtn.disabled = true;
         submitbtn.innerText = '...Submitting'
@@ -43,10 +41,14 @@ export const sendDataToServer = async (api, method, formData) => {
         const response = await fetch(api, { method, body: formData })
         const res = await response.json() // Receving Response from server
 
+        if (res.navigate && method === 'PUT') window.location.href = `${serverAPI}/${res.navigate}`;
         Notify(res) // Show the notifications
         if (res.message) return true
     } catch (error) {
         console.error(error)
+    } finally {
+        submitbtn.disabled = false;
+        submitbtn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Submit';
     }
 }
 

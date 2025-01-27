@@ -39,17 +39,23 @@
                         <section class="content">
                             <div class="container-fluid">
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                         <!-- change password -->
-                                        <div class="card card-primary">
+                                        <div class="card card-primary collapsed-card">
                                             <div class="card-header">
                                                 <h3 class="card-title">Change Password</h3>
+                                                <div class="card-tools">
+                                                    <button type="button" class="btn btn-tool"
+                                                        data-card-widget="collapse" title="Collapse">
+                                                        <i class="fas fa-plus"></i>
+                                                    </button>
+                                                </div>
                                             </div>
                                             <!-- /.card-header -->
                                             <!-- form start -->
-                                            <form action="/admin/change-password" method="post"
-                                                enctype="multipart/form-data">
-                                                <div class="card-body">
+                                            <div class="card-body" style="display: none;">
+                                                <form action="/admin/change-password" method="post"
+                                                    enctype="multipart/form-data">
                                                     <div class="form-group">
                                                         <label for="cpassword">Current Password</label>
                                                         <input type="password" class="form-control" id="cpassword"
@@ -79,33 +85,37 @@
                                                                     <%= success %>
                                                                 </div>
                                                                 <% } %>
-                                                </div>
-                                                <!-- /.card-body -->
-                                                <div class="card-footer">
-                                                    <button type="submit" class="btn btn-primary">Submit</button>
-                                                </div>
-                                            </form>
+                                                                    <button type="submit"
+                                                                        class="btn btn-primary">Submit</button>
+                                                </form>
+                                            </div>
+                                            <!-- /.card-body -->
                                         </div>
                                         <!-- /.card -->
                                         <!-- change password -->
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="card card-primary">
+                                        <div class="card card-primary collapsed-card">
                                             <div class="card-header">
                                                 <h3 class="card-title">Site Settings</h3>
+                                                <div class="card-tools">
+                                                    <button type="button" class="btn btn-tool"
+                                                        data-card-widget="collapse" title="Collapse">
+                                                        <i class="fas fa-plus"></i>
+                                                    </button>
+                                                </div>
                                             </div>
                                             <!-- /.card-header -->
                                             <!-- form start -->
-                                            <form id="submitgeneralSetting" data-id="<%= settings._id %>"
-                                                enctype="multipart/form-data">
-                                                <div class="card-body">
+                                            <div class="card-body" style="display: none;">
+                                                <form id="submitgeneralSetting" data-id="<%= settings._id %>"
+                                                    enctype="multipart/form-data">
                                                     <div class="form-group">
                                                         <label for="sname">Site Name</label>
                                                         <input type="text" class="form-control" id="sname" name="name"
                                                             placeholder="Enter Name" value="<%= settings.name %>">
                                                     </div>
                                                     <div>
-                                                        <img src="<%= logo_img %>/<%= settings.logo  %> " alt="" class="img-fluid" style="height: 150px;">
+                                                        <img src="<%= logo_img %>/<%= settings.logo  %> " alt=""
+                                                            class="img-fluid" style="height: 150px;">
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="logo">Logo</label>
@@ -113,20 +123,55 @@
                                                             id="logo" name="logo">
                                                     </div>
                                                     <div class="form-group">
+                                                        <label for="logo">Company Email</label>
+                                                        <input type="email" class="form-control"
+                                                            value="<%= settings.companyemail %>" id="logo"
+                                                            name="companyemail">
+                                                    </div>
+                                                    <div class="form-group">
                                                         <label for="desc">Description</label>
                                                         <textarea name="desc" id="desc" class="form-control"
                                                             style="height: 150px;"><%= settings.desc %> 
                                                         </textarea>
                                                     </div>
-                                                </div>
-                                                <!-- /.card-body -->
-                                                <div class="card-footer">
                                                     <button type="submit" id="submitbtn" class="btn btn-primary">
                                                         <i class="fa-solid fa-cloud-arrow-up"></i>
                                                         Submit
                                                     </button>
+                                                </form>
+                                            </div>
+                                            <!-- /.card-body -->
+                                        </div>
+                                        <!-- Set Featured Ad Price Per Click -->
+                                        <div class="card card-primary">
+                                            <div class="card-header">
+                                                <h3 class="card-title">Featured Ad Setting</h3>
+                                                <div class="card-tools">
+                                                    <button type="button" class="btn btn-tool"
+                                                        data-card-widget="collapse" title="Collapse">
+                                                        <i class="fas fa-minus"></i>
+                                                    </button>
                                                 </div>
-                                            </form>
+                                            </div>
+                                            <div class="card-body">
+                                                <form action='/admin/setFeaturedAdPrice/<%= settings._id %>'
+                                                    method="post">
+                                                    <div class="form-group w-25">
+                                                        <label for="price">Price (Per Click ON Featured Ad)</label>
+                                                        <input type="number" class="form-control" id="price"
+                                                            value="<%= settings.setFeaturedAdPrice %>" name="setFeaturedAdPrice">
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary">
+                                                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                                                        Submit
+                                                    </button>
+                                                    <% if (locals.error) { %>
+                                                        <div class="alert alert-danger" role="alert">
+                                                            <%= error %>
+                                                        </div>
+                                                        <% } %>
+                                                </form>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

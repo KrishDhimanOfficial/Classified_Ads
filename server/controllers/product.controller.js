@@ -401,6 +401,9 @@ const product_controller = {
                         sellerImage: {
                             $concat: [`${config.sellerImage}`, '/', '$seller.image']
                         },
+                        listing_img: {
+                            $concat: [`${config.product_img_path}`, '/', '$featured_img']
+                        },
                         sellerusername: '$seller.username'
                     }
                 },
@@ -479,6 +482,9 @@ const product_controller = {
                     $addFields: {
                         sellerImage: {
                             $concat: [`${config.sellerImage}`, '/', '$seller.image']
+                        },
+                        listing_img: {
+                            $concat: [`${config.product_img_path}`, '/', '$featured_img']
                         },
                         sellerusername: '$seller.username'
                     }
@@ -685,13 +691,13 @@ const product_controller = {
         try {
             const { token } = req.body;
             const seller = getUser(token)
-            
+
             const response = await productModel.findByIdAndUpdate(
                 { _id: req.params.id },
                 { $inc: { click_count: 1 } },
                 { signal: controller.signal }
             )
-            
+
             if (seller?.id === response.sellerId.toString()) {
                 await productModel.findByIdAndUpdate(
                     { _id: req.params.id },
@@ -703,7 +709,7 @@ const product_controller = {
                     { _id: response.sellerId },
                     { $inc: { wallet_amount: -0.40 } }
                 )
-            } 
+            }
 
         } catch (error) {
             console.log('updateAdClick : ' + error.message)

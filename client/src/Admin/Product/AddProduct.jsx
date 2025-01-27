@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { Add_Atrribute } from '../admin'
-import { Input,BTN, TextArea, Image } from '../../components/component'
+import { Input, BTN, TextArea, Image } from '../../components/component'
 import * as yup from 'yup'
 import { useForm, useFieldArray, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -75,8 +75,8 @@ const AddProduct = () => {
         setsubcategory(category)
     }, [])
 
-    const fetchBrand = useCallback(async () => {
-        const res = await DataService.get('/brands')
+    const fetchBrand = useCallback(async (id) => {
+        const res = await DataService.get(`/brands/${id}`)
         const brands = res.map(item => ({ value: item._id, label: item.title }))
         setbrands(brands)
     }, [])
@@ -98,7 +98,7 @@ const AddProduct = () => {
         if (res) Notify(res), setfeaturedImg([]), setproductImg([]), setSlug('')
     }
 
-    useEffect(() => { fetchCategorie(), fetchBrand() }, [])
+    useEffect(() => { fetchCategorie() }, [])
     return (
         <div className="back-login-page">
             <div className="login-right-form pt-0 px-0">
@@ -133,6 +133,7 @@ const AddProduct = () => {
                                                 onChange={(selectedoption) => {
                                                     field.onChange(selectedoption)
                                                     fetchsubCategorie(selectedoption.value)
+                                                    fetchBrand(selectedoption.value)
                                                 }}
                                                 styles={{
                                                     control: (style) => ({
@@ -157,7 +158,10 @@ const AddProduct = () => {
                                                 isSearchable
                                                 isRtl={false}
                                                 options={subcategory}
-                                                onChange={(selectedoption) => field.onChange(selectedoption)}
+                                                onChange={(selectedoption) => {
+                                                    field.onChange(selectedoption)
+                                                    fetchBrand(selectedoption.value)
+                                                }}
                                                 styles={{
                                                     control: (style) => ({
                                                         ...style,

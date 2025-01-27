@@ -27,7 +27,7 @@ const BrowseProducts = () => {
             setlisting({}), setloading(true)
             const res = await DataService.get(`/filters/listings${applyfilters}`)
             if (res.error) return seterror(res.error), setloading(false)
-            setloading(false), setlisting(res)
+            seterror(''), setloading(false), setlisting(res)
         } catch (error) {
             console.error('filiters : ', error)
         }
@@ -99,7 +99,7 @@ const BrowseProducts = () => {
                                                     title={listing.title}
                                                     price={listing.price}
                                                     slug={`/listing/${listing.slug}`}
-                                                    image={`${config.server_product_img_path}/${listing.featured_img}`}
+                                                    image={`${listing.listing_img}`}
                                                     category={listing.parentcategory.title}
                                                     ad_status={listing.ad_status}
                                                     sellerImg={listing.sellerImage}

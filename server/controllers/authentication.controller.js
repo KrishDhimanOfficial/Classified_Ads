@@ -155,13 +155,16 @@ const authenticationcontroller = {
     },
     General_Settings: async (req, res) => {
         try {
-            const { desc, name } = req.body;
+            const { desc, name, companyemail } = req.body;
+
             const existingRecored = await generalSettingModel.findOne({})
             const response = await generalSettingModel.findByIdAndUpdate(
                 { _id: req.params.id },
                 {
                     name: name.trim(),
                     desc: desc.trim(),
+                    setFeaturedAdPrice: setFeaturedAdPrice,
+                    companyemail: companyemail.trim(),
                     logo: req.files['logo']
                         ? req.files['logo'][0].filename
                         : existingRecored.logo
@@ -188,6 +191,20 @@ const authenticationcontroller = {
             return res.render('general-setting', { settings, logo_img: config.site_img_path })
         } catch (error) {
             console.log('renderGN : ' + error.message)
+        }
+    },
+    setFeaturedAdPrice: async (req, res) => {
+        try {
+            const { setFeaturedAdPrice } = req.body;
+            const response = await generalSettingModel.findByIdAndUpdate(
+                { _id: req.params.id },
+                { setFeaturedAdPrice },
+                { new: true, runValidators: true }
+            )
+            if (!response) return res.render('general-setting', { error: 'Unable to update!' })
+            return res.redirect('/admin/general-settings')
+        } catch (error) {
+            console.log('setFeaturedAdPrice : ' + error.message)
         }
     },
     getGNSettings: async (req, res) => {

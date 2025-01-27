@@ -10,8 +10,6 @@ const FilterSidebar = () => {
     const [pcategory, setpcategory] = useState([])
     const [subcategory, setsubcategory] = useState([])
     const [brands, setbrands] = useState([])
-    const parentRef = useRef()
-    const [parentIdChange, setparentIdChange] = useState(false)
 
     const { handleSubmit, control, register, formState: { errors } } = useForm()
 
@@ -142,9 +140,7 @@ const FilterSidebar = () => {
                                     isSearchable
                                     isRtl={false}
                                     options={subcategory}
-                                    onChange={(selectedoption) => {
-                                        fetchBrand(selectedoption.value)
-                                    }}
+                                    onChange={(selectedoption) => { fetchBrand(selectedoption.value) }}
                                 />
                             )}
                         />

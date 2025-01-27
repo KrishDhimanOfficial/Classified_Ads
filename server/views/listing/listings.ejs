@@ -49,14 +49,14 @@
                                                     <thead>
                                                         <tr>
                                                             <th>S.no</th>
-                                                            <th>Product</th>
+                                                            <th>Image</th>
                                                             <th>Title</th>
                                                             <th>Category</th>
                                                             <th>Price</th>
-                                                            <th>Username</th>
-                                                            <th>Created Date</th>
+                                                            <th>User</th>
+                                                            <th>Listed Date</th>
                                                             <th>Publishing Status</th>
-                                                            <th>Seller Listing Status</th>
+                                                            <th>Current Status</th>
                                                             <th>Actions</th>
                                                         </tr>
                                                     </thead>
@@ -98,10 +98,9 @@
                                                                     </label>
                                                                 </td>
                                                                 <td>
-                                                                    <button type="button"
-                                                                        class="btn btn-block <%=listing.status ? 'btn-outline-primary' : 'btn-outline-dark' %> btn-flat rounded-3">
+                                                                    <div class="alert p-1 text-center <%=listing.status ? "alert-success" : "alert-dark" %>" role="alert">
                                                                         <%=listing.status ? "Active" : "InActive" %>
-                                                                    </button>
+                                                                      </div>
                                                                 </td>
                                                                 <td>
                                                                     <div class="d-flex gap-3">

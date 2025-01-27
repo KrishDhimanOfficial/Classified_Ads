@@ -70,6 +70,7 @@ router.post('/change-password', upload.none(), authenticationcontroller.changeDa
 router.put('/general-setting/:id', GN.fields([
     { name: 'logo', maxCount: 1 },
 ]), handlemulterError, authenticationcontroller.General_Settings)
+router.post('/setFeaturedAdPrice/:id', authenticationcontroller.setFeaturedAdPrice)
 
 router.get('/*', (req, res) => res.render('404'))
 

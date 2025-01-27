@@ -82,7 +82,7 @@ const category_controllers = {
                 { runValidators: true })
             if (req.file?.filename) await deleteImg(`category_images/${response.image}`)
             if (!response) return res.json({ error: 'Failed to update brand' })
-            return res.json({ message: 'update successfully' })
+            return res.json({ navigate: 'product/category' })
         } catch (error) {
             await deleteImg(`category_images/${req.file?.filename}`)
             // Extract custom error messages
@@ -164,7 +164,7 @@ const category_controllers = {
                 { runValidators: true }
             )
             if (!response) return res.json({ error: 'Failed to update brand' })
-            return res.json({ message: 'update successfully' })
+            return res.json({ navigate: 'sub/category' })
         } catch (error) {
             // Extract custom error messages
             if (error.name === 'ValidationError') validations(res, error.errors)
