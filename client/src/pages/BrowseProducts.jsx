@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { FilterSidebar, Product, Placeholder } from '../components/component'
 import { Link, useLocation, useSearchParams } from 'react-router-dom'
-import config from '../../config/config'
 import DataService from '../hooks/DataService'
 
 const BrowseProducts = () => {

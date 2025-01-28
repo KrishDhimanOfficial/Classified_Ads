@@ -11,6 +11,7 @@ import Transactions from "./user_wallet/Transactions";
 import Product from "./my_listing/Product";
 import Listing_container from "./my_listing/Listing_container";
 import UpdateProduct from "./Product/UpdateProduct";
+import My_Wishlist from "./my_listing/My_Wishlist";
 
 export {
     Sidebar,
@@ -25,5 +26,6 @@ export {
     Transactions,
     Listing_container,
     Product,
+    My_Wishlist,
     UpdateProduct
 }

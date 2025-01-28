@@ -1,7 +1,7 @@
 const GetCookie = (navigate) => {
     const seller_token = sessionStorage.getItem('seller_token')
-    if(seller_token === 'undefined') navigate('/login')
-    if (!seller_token) navigate('/login')
+    if (seller_token === 'undefined') navigate ? navigate('/login') : null
+    if (!seller_token) navigate ? navigate('/login') : null
     return seller_token
 }
 

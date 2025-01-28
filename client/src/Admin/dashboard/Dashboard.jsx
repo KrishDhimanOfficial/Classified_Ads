@@ -18,6 +18,7 @@ const Dashboard = () => {
                 'Authorization': `Bearer ${GetCookie(navigate)}`
             }
         })
+        if (res.error) navigate('/login')
         setlisting(res[0])
     }
     useEffect(() => { fetchListings() }, [])

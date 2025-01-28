@@ -14,6 +14,7 @@ const Transactions = () => {
                 'Authorization': `Bearer ${GetCookie(navigate)}`,
             }
         })
+        if (res.error) navigate('/login')
         settransactions(res.collectionData)
         delete res.collectionData
         setpagination(res)

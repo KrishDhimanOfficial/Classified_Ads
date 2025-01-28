@@ -94,6 +94,7 @@ const AddProduct = () => {
                 'Authorization': `Bearer ${GetCookie(navigate)}`
             }
         })
+        if (res.error) navigate('/login')
         reset()
         if (res) Notify(res), setfeaturedImg([]), setproductImg([]), setSlug('')
     }

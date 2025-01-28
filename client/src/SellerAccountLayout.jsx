@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useCallback, useEffect } from 'react'
 import { Sidebar } from './Admin/admin'
 import { Footer, Navbar } from './components/component'
@@ -17,9 +17,13 @@ const SellerAccountLayout = () => {
     const dispatch = useDispatch()
 
     const getProfile = useCallback(async () => {
-        const res = await DataService.post('/seller/profile', { token: GetCookie(navigate) })
-        Notify(res)
-        dispatch(setProfile(res))
+        const res = await DataService.post('/seller/profile', { token: GetCookie(navigate) }, {
+            headers: {
+                Authorization: `Bearer ${GetCookie(navigate)}`
+            }
+        })
+        if (res.error) navigate('/login')
+        Notify(res), dispatch(setProfile(res))
     })
 
     useEffect(() => { getProfile() }, [])

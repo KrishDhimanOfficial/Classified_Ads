@@ -1,3 +1,4 @@
+import mongoose from "mongoose"
 import config from "../config/config.js"
 import adminModel from "../models/admin.model.js"
 import generalSettingModel from "../models/general-setting.model.js"
@@ -125,7 +126,7 @@ const authenticationcontroller = {
             const { token } = req.body;
             const seller = getUser(token)
 
-            const response = await sellerModel.findOne({ _id: seller.id, status: true })
+            const response = await sellerModel.findOne({ _id: new mongoose.Types.ObjectId(seller?.id), status: true })
             if (!response) return res.json({ error: 'Unauthorized!' })
             return res.json({ message: 'Authenticated!' })
         } catch (error) {

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { BTN, Image } from '../components/component'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import DataService from '../hooks/DataService'
+import { DataService, GetCookie } from '../hooks/hooks'
 import config from '../../config/config'
 import { Fade } from 'react-slideshow-image';
 import 'react-slideshow-image/dist/styles.css'
 import defaultUser from '../assets/images/user.svg'
+import { toast } from 'react-toastify'
 
 
 const SingleListing = () => {
@@ -23,6 +24,10 @@ const SingleListing = () => {
         } catch (error) {
             console.error('fetchSingleListing : ' + error)
         }
+    }
+    const showNumber = async () => {
+        const res = await DataService.post('/auth/seller', { token: sessionStorage.getItem('seller_token') })
+        res.message ? setshownumber(true) : toast.warning('Please Login First!')
     }
 
     useEffect(() => { fetchSingleListing() }, [])
@@ -115,7 +120,7 @@ const SingleListing = () => {
                                                 !showNUmber && (
                                                     <BTN
                                                         type={'button'}
-                                                        onClick={() => { setshownumber(true) }}
+                                                        onClick={() => { showNumber() }}
                                                         text={'Show Number'}
                                                         className={'btn btn-primary'}
                                                     />

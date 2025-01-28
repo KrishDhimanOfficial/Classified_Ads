@@ -21,9 +21,6 @@ const Seller_profile = ({ totalListing }) => {
             <div className="ms-3">
                 <h5 className="mb-0">
                     {profile.seller.name}
-                    {/* <span className="badge bg-success text-uppercase ms-3">
-                        Verified
-                    </span> */}
                     <span className="badge bg-purple text-uppercase">
                         Member
                     </span>

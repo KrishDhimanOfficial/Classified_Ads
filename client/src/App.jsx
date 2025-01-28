@@ -8,7 +8,7 @@ import {
 } from './pages/pages'
 import {
   Dashboard, UpdateProfile, AddProduct, Setting, User_wallet,
-  Listing_container, UpdateProduct
+  Listing_container, UpdateProduct, My_Wishlist
 } from './Admin/admin'
 
 
@@ -66,6 +66,10 @@ const routes = [
       {
         path: '/user/my-listing',
         element: <Listing_container />
+      },
+      {
+        path: '/user/my-wishlist',
+        element: <My_Wishlist />
       },
       {
         path: '/user/update/:listing_slug',

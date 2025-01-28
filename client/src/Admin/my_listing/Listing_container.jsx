@@ -17,6 +17,7 @@ const Listing_container = () => {
                 'Authorization': `Bearer ${GetCookie(navigate)}`
             }
         })
+        if (res.error) navigate('/login')
         setlisting(res)
     }, [])
     useEffect(() => { fetchLlisting() }, [])

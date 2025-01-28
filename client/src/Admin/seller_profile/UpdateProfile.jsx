@@ -23,7 +23,7 @@ const sellerPofileSchema = yup.object().shape({
 
 const UpdateProfile = () => {
     const navigate = useNavigate()
-    const [profileImg, setImg] = useState('')
+    const [profileImg, setImg] = useState('#')
     const profile = useSelector(state => state.seller)
     const { register, handleSubmit, setValue, formState: { errors, isSubmitting } } = useForm({
         resolver: yupResolver(sellerPofileSchema)
@@ -43,6 +43,7 @@ const UpdateProfile = () => {
                 'Authorization': `Bearer ${GetCookie(navigate)}`
             }
         })
+        if (res.error) navigate('/login')
         Notify(res)
     }
 

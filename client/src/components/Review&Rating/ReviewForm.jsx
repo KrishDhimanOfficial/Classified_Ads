@@ -6,6 +6,8 @@ import DataService from '../../hooks/DataService'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import Notify from '../../hooks/Notify'
+import GetCookie from '../../hooks/GetCookie'
+import { useNavigate } from 'react-router-dom'
 
 const defaultValues = { name: '', email: '', review: '' }
 const reviewSchema = yup.object().shape({
@@ -27,10 +29,14 @@ const ReviewForm = ({ id }) => {
 
     const submitReview = async (formData) => {
         try {
-            const token = sessionStorage.getItem('seller_token')
-            if (!token) toast.error('Please login to write a review')
-            const res = await DataService.post('/seller-reviews', { formData, rating, id })
-            Notify(res), reset()
+            const res = await DataService.post('/seller-reviews', { formData, rating, id }, {
+                headers: {
+                    'Authorization': `Bearer ${GetCookie()}`
+                }
+            })
+            if (res.error) toast.warning('Please Login First!')
+            else Notify(res)
+            reset()
         } catch (error) {
             console.error(error)
         }

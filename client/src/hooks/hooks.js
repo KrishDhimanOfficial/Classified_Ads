@@ -5,5 +5,5 @@ import DataService from "./DataService"
 export {
     Notify,
     GetCookie,
-    DataService
+    DataService,
 }

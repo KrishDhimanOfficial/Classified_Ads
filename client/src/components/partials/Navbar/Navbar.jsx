@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { DataService, GetCookie } from '../../../hooks/hooks'
 import { useSelector } from 'react-redux'
@@ -8,16 +8,23 @@ import config from '../../../../config/config'
 const Navbar = () => {
     const navigate = useNavigate()
     const settings = useSelector(state => state.setting)
+    const [wishListVisible, setWishListVisible] = useState(false)
 
     const handleLogin = async () => {
         try {
             const res = await DataService.post('/auth/seller', { token: GetCookie(navigate) })
+            if (res.error) navigate('/login')
             if (res.message) navigate('/user/add-product')
         } catch (error) {
             console.error('handleLogin : ' + error)
         }
     }
-    const clearCookie = () => { localStorage.clear() }
+    const clearCookie = () => { sessionStorage.clear() }
+    
+    useEffect(() => {
+        const token = sessionStorage.getItem('seller_token')
+        token ? setWishListVisible(true) : setWishListVisible(false)
+    }, [])
     return (
         <>
             <header id="back-header" className="back-header back-header-three header-profile">
@@ -49,6 +56,13 @@ const Navbar = () => {
                                         <li>
                                             <Link to="/browse-products">Listings</Link>
                                         </li>
+                                        {
+                                            wishListVisible && (
+                                                <li>
+                                                    <Link to="/user/my-wishlist">Favourties Ads</Link>
+                                                </li>
+                                            )
+                                        }
                                     </ul>
                                     <div className="searchbar-part">
                                         <div className="back-login">

@@ -716,6 +716,98 @@ const product_controller = {
             if (controller.signal.aborted) console.log('Request was cancelled')
             controller.abort()
         }
+    },
+    add_to_wishlist: async (req, res) => {
+        try {
+            const { id } = req.body;
+            const seller = getUser(req.headers['authorization'].split(' ')[1])
+            if (!seller) return res.json({ waring: 'Please Login First!' })
+
+            await sellerModel.findByIdAndUpdate(
+                { _id: new ObjectId(seller.id) },
+                { $addToSet: { wishlist: [new ObjectId(id)] } },
+                { new: true }
+            )
+        } catch (error) {
+            console.log('add_to_wishlist : ' + error.message)
+        }
+    },
+    getWishList: async (req, res) => {
+        try {
+            const seller = getUser(req.headers['authorization'].split(' ')[1])
+            const projection = [
+                {
+                    $match: {
+                        _id: new ObjectId(seller.id)
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'products',
+                        localField: 'wishlist',
+                        foreignField: '_id',
+                        as: 'listings'
+                    }
+                },
+                { $unwind: '$listings' },
+                { $replaceRoot: { newRoot: '$listings' } },
+                {
+                    $lookup: {
+                        from: 'parent_categories',
+                        localField: 'parentcategoryId',
+                        foreignField: '_id',
+                        as: 'category'
+                    }
+                },
+                { $unwind: '$category' },
+                {
+                    $lookup: {
+                        from: 'sellers',
+                        localField: 'sellerId',
+                        foreignField: '_id',
+                        as: 'seller'
+                    }
+                },
+                { $unwind: '$seller' },
+                {
+                    $addFields: {
+                        img: {
+                            $concat: [config.product_img_path, '/', '$featured_img']
+                        },
+                        seller_Img: {
+                            $concat: [config.sellerImage, '/', '$seller.image']
+                        }
+                    }
+                },
+                {
+                    $project: {
+                        title: 1, slug: 1, featured_img: 1, price: 1, ad_status: 1,
+                        'category.title': 1, 'seller.image': 1, 'seller.username': 1,
+                        img: 1, seller_Img: 1
+                    }
+                }
+            ]
+            const response = await handleAggregatePagination(sellerModel, projection, req.query)
+            setTimeout(() => {
+                return res.status(200).json(response)
+            }, 1000)
+        } catch (error) {
+            console.log('getWishList : ' + error.message)
+        }
+    },
+    removeWishlistItem: async (req, res) => {
+        try {
+            const seller = getUser(req.headers['authorization'].split(' ')[1])
+            const response = await sellerModel.findByIdAndUpdate(
+                { _id: new ObjectId(seller.id) },
+                { $pull: { wishlist: new ObjectId(req.params.id) } },
+                { new: true }
+            )
+            if (!response) return res.json({ error: 'Something went wrong!' })
+            return res.status(200).json({ message: 'Item removed from wishlist' })
+        } catch (error) {
+            console.log(' removeWishlistItem : ' + error.message)
+        }
     }
 }
 

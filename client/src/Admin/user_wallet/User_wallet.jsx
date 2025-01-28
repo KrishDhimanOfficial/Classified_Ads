@@ -1,18 +1,16 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { BTN, Input } from '../../components/component'
 import config from '../../../config/config';
 import { useSelector } from 'react-redux'
 import DataService from '../../hooks/DataService';
 import GetCookie from '../../hooks/GetCookie';
-import { useNavigate ,useLocation} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Notify from '../../hooks/Notify';
 import { toast } from 'react-toastify';
 import { Transactions } from '../admin'
 
 const User_wallet = () => {
     const navigate = useNavigate()
-    const location = useLocation()
-    
     const profile = useSelector(state => state.seller)
     const [amount, setamount] = useState(0)
 

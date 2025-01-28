@@ -110,6 +110,7 @@ const UpdateProduct = () => {
                     'Authorization': `Bearer ${GetCookie(navigate)}`
                 }
             })
+            if (res.error) navigate('/login')
             Notify(res)
         } catch (error) {
             console.error('updateListing : ', error)
@@ -123,6 +124,7 @@ const UpdateProduct = () => {
                     'Authorization': `Bearer ${GetCookie(navigate)}`
                 }
             })
+            if (res.error) navigate('/login')
             Notify(res), setlisting(res)
             setValue('title', res.title)
             setValue('condition', res.condition)

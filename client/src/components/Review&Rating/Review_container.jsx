@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import { Review_Rating } from '../component'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import DataService from '../../hooks/DataService';
+import GetCookie from '../../hooks/GetCookie';
 
 const Review_container = ({ id }) => {
     const [reviews, setReviews] = useState({})
 
-
     const fetchReviews = async (page) => {
         try {
-            const res = await DataService.get(`/seller-reviews/${id}?page=${page}`)
+            const res = await DataService.get(`/seller-reviews/${id}?page=${page}`, {
+                headers: {
+                    'Authorization': `Bearer ${GetCookie()}`
+                }
+            })
             setReviews(res)
         } catch (error) {
             console.error(error)
@@ -37,8 +41,7 @@ const Review_container = ({ id }) => {
                         reviews.prevpage && (
                             <li className="back-next">
                                 <Link to="#" onClick={(e) => {
-                                    e.preventDefault()
-                                    fetchReviews(reviews.page - 1)
+                                    e.preventDefault(), fetchReviews(reviews.page - 1)
                                 }}> Previous </Link>
                             </li>
                         )}
@@ -49,8 +52,7 @@ const Review_container = ({ id }) => {
                                     <Link to="#"
                                         className={reviews.page === i + 1 ? 'bg-primary text-white' : ''}
                                         onClick={(e) => {
-                                            e.preventDefault()
-                                            fetchReviews(i + 1)
+                                            e.preventDefault(), fetchReviews(i + 1)
                                         }}>{i + 1} </Link>
                                 </li>
                             ))
@@ -60,8 +62,7 @@ const Review_container = ({ id }) => {
                         reviews.nextpage && (
                             <li className="back-next p-0">
                                 <Link to="#" onClick={(e) => {
-                                    e.preventDefault()
-                                    fetchReviews(reviews.page + 1)
+                                    e.preventDefault(), fetchReviews(reviews.page + 1)
                                 }}> Next </Link>
                             </li>
                         )}
