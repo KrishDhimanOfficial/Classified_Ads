@@ -55,7 +55,7 @@
                                                             <th>Price</th>
                                                             <th>User</th>
                                                             <th>Listed Date</th>
-                                                            <th>Publishing Status</th>
+                                                            <!-- <th>Publishing Status</th> -->
                                                             <th>Current Status</th>
                                                             <th>Actions</th>
                                                         </tr>
@@ -70,7 +70,7 @@
                                                                 </td>
                                                                 <td>
                                                                     <img src="<%= listing.img_path %>" alt=""
-                                                                        style="width: 80px; height: 80px; object-fit: cover;"
+                                                                        style="width: 100%; height: 80px; object-fit: contain;"
                                                                         loading="lazy">
                                                                 </td>
                                                                 <td>
@@ -88,33 +88,36 @@
                                                                 <td>
                                                                     <%= listing.createdAt %>
                                                                 </td>
-                                                                <td>
+                                                                <!-- <td>
                                                                     <label class="switch">
                                                                         <input type="checkbox" class="status"
-                                                                            data-id="<%= listing._id %>"
-                                                                            <%=listing.publishing_status ? "checked"
+                                                                            data-id="<%# listing._id %>"
+                                                                            <%# listing.publishing_status ? "checked"
                                                                             : "" %>>
                                                                         <span class="slider"></span>
                                                                     </label>
-                                                                </td>
+                                                                </td> -->
                                                                 <td>
                                                                     <div class="alert p-1 text-center <%=listing.status ? "alert-success" : "alert-dark" %>" role="alert">
                                                                         <%=listing.status ? "Active" : "InActive" %>
-                                                                      </div>
+                                                                    </div>
                                                                 </td>
                                                                 <td>
                                                                     <div class="d-flex gap-3">
-                                                                        <a href="#" class="btn btn-primary">
-                                                                            <i class="fa-solid fa-pen-to-square"></i>
+                                                                        <button type="button" data-toggle="modal"
+                                                                            class="view btn btn-primary"
+                                                                            data-target="#modal-view-listing"
+                                                                            data-id="<%= listing._id %>">
+                                                                            <i class="fa-regular fa-eye"></i>
                                                                             view
-                                                                        </a>
-                                                                        <button type="button" data-id="<%=0 %>"
+                                                                        </button>
+                                                                        <!-- <button type="button" data-id="<%#0 %>"
                                                                             data-toggle="modal"
                                                                             data-target="#modal-danger"
                                                                             class="btn btn-danger openModal">
                                                                             <i class="fa-solid fa-trash-can"></i>
                                                                             Delete
-                                                                        </button>
+                                                                        </button> -->
                                                                     </div>
                                                                 </td>
                                                             </tr>
@@ -137,10 +140,11 @@
     </div>
     <!-- ./wrapper -->
     <%- include('../partials/danger-modal') %>
-        <%- include('../partials/script') %>
-            <%- include('../partials/datatables.script.ejs') %>
-                <script> const EndAPI = 'listing';</script>
-                <script async type="module" src="/assets/js/datatable.js"></script>
+        <%- include('../partials/view-modal') %>
+            <%- include('../partials/script') %>
+                <%- include('../partials/datatables.script.ejs') %>
+                    <script> const EndAPI = 'listing';</script>
+                    <script async type="module" src="/assets/js/datatable.js"></script>
 </body>
 
 </html>

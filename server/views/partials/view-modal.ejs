@@ -1,0 +1,52 @@
+<div class="modal fade" id="modal-view-listing">
+    <div class="modal-dialog  modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 id="listingname" class="modal-title"></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- <p>Are You Want to Delete ?</p> -->
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <h3>SellerInfo</h3>
+                            <ul class="list-group">
+                                <li class="list-group-item">Name : <span id="name" class="ms-2"></span></li>
+                                <li class="list-group-item">Username : <span id="username" class="ms-2"></span></li>
+                                <li class="list-group-item">Email : <span id="email" class="ms-2"></span></li>
+                                <li class="list-group-item">Phone : <span id="phone" class="ms-2"></span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <h3>ListingInfo</h3>
+                            <ul class="list-group">
+                                <li class="list-group-item">Image</li>
+                                <li class="list-group-item">
+                                    <img id="Image" class="object-fit-contain" style="width: 100%; height: 150px;">
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="published">Publish Status</label>
+                    <label class="switch ms-3">
+                        <input id="published" type="checkbox" class="status">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+            <!-- <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+                <button type="button" id="deleteobjbtn" class="btn btn-outline-light">
+                    Delete
+                </button>
+            </div> -->
+        </div>
+    </div>
+</div>

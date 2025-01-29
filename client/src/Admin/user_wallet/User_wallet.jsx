@@ -26,30 +26,30 @@ const User_wallet = () => {
     }
 
     const handlepayment = useCallback(() => {
-        () => {
-            try {
-                const options = {
-                    key: config.razorpay_key,
-                    amount: amount * 100,
-                    currency: 'USD',
-                    name: 'Classified Ads',
-                    description: 'Buy, Sell and Promote',
-                    handler: (response) => updateWallet(true),
-                    prefill: {
-                        name: `${profile.seller.name}`,
-                        email: `${profile.seller.email}`,
-                        contact: `${profile.seller.phone}`,
-                    },
-                    theme: { color: "#000" }
-                }
-                const razorpayInstance = new window.Razorpay(options)
-                razorpayInstance.open()
-                razorpayInstance.on('payment.failed', () => updateWallet(false))
-            } catch (error) {
-                console.error(error)
+        try {
+            console.log(amount);
+
+            const options = {
+                key: config.razorpay_key,
+                amount: amount * 100,
+                currency: 'USD',
+                name: 'Classified Ads',
+                description: 'Buy, Sell and Promote',
+                handler: (response) => updateWallet(true),
+                prefill: {
+                    name: `${profile.seller.name}`,
+                    email: `${profile.seller.email}`,
+                    contact: `${profile.seller.phone}`,
+                },
+                theme: { color: "#000" }
             }
+            const razorpayInstance = new window.Razorpay(options)
+            razorpayInstance.open()
+            razorpayInstance.on('payment.failed', () => updateWallet(false))
+        } catch (error) {
+            console.error(error)
         }
-    }, [])
+    }, [amount])
     return (
         <>
             <div className="profile-header d-flex align-items-center justify-content-between">

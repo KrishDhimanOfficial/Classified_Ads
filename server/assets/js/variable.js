@@ -42,6 +42,9 @@ export const sendDataToServer = async (api, method, formData, navigate) => {
         const res = await response.json() // Receving Response from server
 
         if (res.navigate && method === 'PUT') window.location.href = `${serverAPI}/${res.navigate}`;
+        if (res.navigator) { // That use For Location
+            window.location.href = `${serverAPI}/${res.navigator}`;
+        }
         Notify(res) // Show the notifications
         if (res.message) return true
     } catch (error) {

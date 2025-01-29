@@ -12,7 +12,11 @@ const Navbar = () => {
 
     const handleLogin = async () => {
         try {
-            const res = await DataService.post('/auth/seller', { token: GetCookie(navigate) })
+            const res = await DataService.post('/auth/seller', { token: GetCookie(navigate) }, {
+                headers: {
+                     'Authorization': `Bearer ${GetCookie(navigate)}`
+                }
+            })
             if (res.error) navigate('/login')
             if (res.message) navigate('/user/add-product')
         } catch (error) {
@@ -20,7 +24,7 @@ const Navbar = () => {
         }
     }
     const clearCookie = () => { sessionStorage.clear() }
-    
+
     useEffect(() => {
         const token = sessionStorage.getItem('seller_token')
         token ? setWishListVisible(true) : setWishListVisible(false)

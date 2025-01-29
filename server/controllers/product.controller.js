@@ -305,6 +305,71 @@ const product_controller = {
             console.log('renderSellersListingOnAdminPanel : ' + error.message)
         }
     },
+    getSingleListingOnAdminPanel: async (req, res) => {
+        try {
+            const response = await productModel.aggregate([
+                {
+                    $match: {
+                        _id: new ObjectId(req.params.id)
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'sellers',
+                        localField: 'sellerId',
+                        foreignField: '_id',
+                        as: 'sellerInfo'
+                    }
+                },
+                { $unwind: '$sellerInfo' },
+                {
+                    $lookup: {
+                        from: 'brands',
+                        localField: 'brandId',
+                        foreignField: '_id',
+                        as: 'brand'
+                    }
+                },
+                { $unwind: '$brand' },
+                {
+                    $lookup: {
+                        from: 'parent_categories',
+                        localField: 'parentcategoryId',
+                        foreignField: '_id',
+                        as: 'category'
+                    }
+                },
+                { $unwind: '$category' },
+                {
+                    $addFields: {
+                        featuredImg: {
+                            $concat: [config.product_img_path, '/', '$featured_img']
+                        }
+                    }
+                },
+                {
+                    $project: {
+                        title: 1,
+                        publishing_status: 1,
+                        condition: 1,
+                        featuredImg: 1,
+                        'brand.title': 1,
+                        'category.title': 1,
+                        'sellerInfo.name': 1,
+                        'sellerInfo.email': 1,
+                        'sellerInfo.phone': 1,
+                        'sellerInfo.username': 1,
+                    }
+                }
+            ])
+            if (response.length == 0) res.json({ error: "Not Found" })
+            console.log(response[0]);
+
+            return res.status(200).json({ response: response[0] })
+        } catch (error) {
+            console.log('getSingleListingOnAdminPanel : ' + error.message)
+        }
+    },
     handleupdatePusblishStatus: async (req, res) => {
         try {
             const { status } = req.body;

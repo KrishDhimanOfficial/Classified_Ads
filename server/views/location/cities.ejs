@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard</title>
+    <%- include('../partials/header') %>
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed">
+    <div class="wrapper">
+        <!-- Preloader -->
+        <%- include('../partials/Loader') %>
+
+            <!-- Navbar -->
+            <%- include('../partials/navbar') %>
+                <!-- /.navbar -->
+
+                <!-- Main Sidebar Container -->
+                <%- include('../partials/sidebar') %>
+
+                    <!-- Content Wrapper. Contains page content -->
+                    <div class="content-wrapper">
+                        <section class="content-header">
+                            <div class="container-fluid">
+                                <div class="row mb-2">
+                                    <div class="col-md-6">
+                                        <h1 class="mb-2">Cities</h1>
+                                        <ol class="breadcrumb float-sm-left">
+                                            <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
+                                            <li class="breadcrumb-item active">All Cities</li>
+                                        </ol>
+                                    </div>
+                                    <div class="col-md-6 align-content-center">
+                                        <button type="button" data-toggle="modal" data-target="#addlocationmodal"
+                                            class="btn btn-primary float-right">
+                                            ADD New
+                                        </button>
+                                    </div>
+                                </div>
+                                <!-- /.row -->
+                            </div>
+                            <!-- /.container-fluid -->
+                        </section>
+
+                        <section class="content">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <table style="overflow-x: scroll;" id="datatable"
+                                                    class="table table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>S.no</th>
+                                                            <th>Image</th>
+                                                            <th>Title</th>
+                                                            <th>Category</th>
+                                                            <th>Price</th>
+                                                            <th>User</th>
+                                                            <th>Listed Date</th>
+                                                            <th>Current Status</th>
+                                                            <th>Actions</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="table-grid">
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    <!-- /.content-wrapper -->
+                    <footer class="main-footer">
+                        <strong>Copyright &copy; 2014-2021</strong>
+                        All rights reserved.
+                    </footer>
+
+    </div>
+    <!-- ./wrapper -->
+    <%- include('../partials/danger-modal') %>
+        <%- include('../partials/view-modal') %>
+            <%- include('./addCity.modal.ejs') %>
+                <%- include('../partials/script') %>
+                    <%- include('../partials/datatables.script.ejs') %>
+                    <%- include('../partials/select2.script.ejs') %>
+                        <script> const EndAPI = 'location/city';</script>
+                        <script async type="module" src="/assets/js/datatable.js"></script>
+                        <script async type="module" src="/assets/js/main.js"></script>
+</body>
+
+</html>

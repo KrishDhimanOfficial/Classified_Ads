@@ -5,9 +5,11 @@ import DataService from '../../hooks/DataService'
 import GetCookie from '../../hooks/GetCookie'
 import Notify from '../../hooks/Notify'
 import Dropdown from 'react-bootstrap/Dropdown'
+import { useSelector } from 'react-redux'
 
 const Product = ({ id, path, status, title, price, ad_status, clicks, publishStatus, createdAt, slug, updatelisting }) => {
     const navigate = useNavigate()
+    const sellerInfo = useSelector(state => state.seller)
     const [checkedStatus, setCheckedInput] = useState(status)
 
     const deleteListing = async () => {
@@ -115,9 +117,13 @@ const Product = ({ id, path, status, title, price, ad_status, clicks, publishSta
                         <Dropdown.Item href="#" onClick={(e) => { e.preventDefault(), deleteListing() }}>
                             Delete
                         </Dropdown.Item>
-                        <Dropdown.Item href='#' onClick={(e) => { e.preventDefault(), promoteListing() }}>
-                            {ad_status ? 'Unpromote' : 'Promote'}
-                        </Dropdown.Item>
+                        {
+                            sellerInfo.seller?.wallet_amount > 100 && (
+                                <Dropdown.Item href='#' onClick={(e) => { e.preventDefault(), promoteListing() }}>
+                                    {ad_status ? 'Unpromote' : 'Promote'}
+                                </Dropdown.Item>
+                            )
+                        }
                     </Dropdown.Menu>
                 </Dropdown>
             </div>

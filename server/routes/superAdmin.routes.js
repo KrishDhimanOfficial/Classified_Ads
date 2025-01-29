@@ -7,6 +7,7 @@ import authenticationcontroller from '../controllers/authentication.controller.j
 import seller_controllers from '../controllers/seller.controller.js'
 import { checkAdminIsLogged, checkToken } from '../Middleware/CheckAdminAuthentication.js'
 import product_controller from '../controllers/product.controller.js'
+import locationControllers from '../controllers/location.controller.js'
 const router = express.Router()
 
 // Routes for Super Admin
@@ -40,6 +41,17 @@ router.route('/product/category/:id?')
     .patch(category_controllers.updateCategoryStatus)
     .delete(category_controllers.deleteCategory)
 
+// Routes for Location (State)
+router.get('/location/states', checkAdminIsLogged, locationControllers.renderStates)
+router.route('/location/state/:id?')
+    .post(upload.none(), handlemulterError, locationControllers.createState)
+    .put(upload.none(), locationControllers.updateState)
+    .patch(locationControllers.updateStateStatus)
+    .delete(locationControllers.deleteState)
+
+// Routes for Location (Cities)
+router.get('/location/cities', checkAdminIsLogged, locationControllers.renderCities)
+router.route('/location/city/:id?')
 
 // Routes for product Sub-Categories
 router.get('/sub-category/:id', checkAdminIsLogged, category_controllers.getSubCategoryonbrand)
@@ -55,7 +67,9 @@ router.route('/product/sub-category/:id?')
 // product listings
 router.get('/product/listings', checkAdminIsLogged, product_controller.renderSellersListingOnAdminPanel)
 router.get('/product/deactivated-listings', product_controller.renderAllDeActiveListingOnAdminPanel)
-router.patch('/listing/:id', product_controller.handleupdatePusblishStatus)
+router.route('/listing/:id?')
+    .get(product_controller.getSingleListingOnAdminPanel)
+    .patch(product_controller.handleupdatePusblishStatus)
 
 
 // Routes for Sellers

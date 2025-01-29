@@ -1,0 +1,30 @@
+<div class="modal fade" id="addlocationmodal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add State</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="submitFormData" autocomplete="off">
+                    <div class="form-group">
+                        <label for="name">City</label>
+                        <input type="text" name="name" class="form-control" id="name" placeholder="Enter City Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="state">State</label>
+                        <select id="state" name="stateId" class="select2bs4" style="width: 100%;">
+                            <option disabled selected>Select State</option>
+                        </select>
+                    </div>
+                    <button type="submit" id="submitbtn" class="btn btn-primary">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                        Submit
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
