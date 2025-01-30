@@ -1,8 +1,9 @@
-import { serverAPI, handleDeleteRequest, Notify } from './variable.js'
+import { serverAPI, handleDeleteRequest, SubmitForm, Notify } from './variable.js'
 
 const datatable = document.querySelector('#table-grid')
 const deletebtn = document.querySelector('#deleteobjbtn')
 const published = document.querySelector('#published')
+const loader = document.querySelector('#loader')
 
 
 datatable.onclick = (e) => {
@@ -12,6 +13,7 @@ datatable.onclick = (e) => {
     if (e.target.closest('.openModal')) openDangerModal(table_row, api)
     if (e.target.closest('.status')) updatetableDataStatus(e.target.checked, api)
     if (e.target.closest('.view')) openviewModal(api)
+    if (e.target.closest('.openlocationModal')) fetchLocationData(api, e.target.dataset.id)
 }
 
 const openDangerModal = (table_row, api) => {
@@ -59,4 +61,36 @@ const setData = (data) => {
 if (published) published.onclick = (e) => {
     const api = `${serverAPI}/${EndAPI}/${e.target.dataset.id}`;
     updatetableDataStatus(e.target.checked, api)
+}
+
+const fetchLocationData = async (api, id) => {
+    try {
+        SubmitForm.id = 'updateFormData';
+        loader.classList.remove('d-none')
+        SubmitForm.setAttribute('data-id', id)
+
+        const response = await fetch(api, { method: 'GET' })
+        const data = await response.json()
+
+        if (data.stateId) setCityData(data.name, data.state)
+        else setStateData(data.name)
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+document.body.onclick = () => loader.classList.add('d-none')
+
+const setStateData = (name) => {
+    document.querySelector('#location').value = name;
+    loader.classList.add('d-none')
+}
+
+const setCityData = (name, state) => {
+    const selectBox = document.querySelector('#stateId').children;
+    Array.from(selectBox).forEach(select => {
+        if (select.value === state._id) select.Selected = true;
+    })
+    document.querySelector('#location').value = name;
+    loader.classList.add('d-none')
 }

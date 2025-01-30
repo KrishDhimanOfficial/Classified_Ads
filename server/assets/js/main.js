@@ -20,6 +20,7 @@ if (SubmitForm) SubmitForm.onsubmit = async (e) => {
     const method = SubmitForm.id === 'submitFormData' ? 'POST' : 'PUT';
     const api = SubmitForm.id === 'submitFormData' ? `${serverAPI}/${EndAPI}` : `${serverAPI}/${EndAPI}/${e.target.dataset.id}`
     const formData = new FormData(e.target)
+console.log(method);
 
     const response = await sendDataToServer(api, method, formData) // send data to server
     if (response && SubmitForm.id === 'submitFormData') e.target.reset()

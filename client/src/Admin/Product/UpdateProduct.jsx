@@ -42,6 +42,8 @@ const UpdateProduct = () => {
     const [pcategory, setpcategory] = useState([])
     const [subcategory, setsubcategory] = useState([])
     const [brands, setbrands] = useState([])
+    const [states, setstates] = useState([])
+    const [cities, setcities] = useState([])
     // ALL States
 
     const { handleSubmit, control, register, watch, setValue, formState: {
@@ -83,6 +85,18 @@ const UpdateProduct = () => {
         setbrands(brands)
     }, [])
 
+    const fetchState = useCallback(async () => {
+        const res = await DataService.get(`/location/states`)
+        const states = res.map(item => ({ value: item._id, label: item.name }))
+        setstates(states)
+    }, [])
+
+    const fetchCities = useCallback(async (id) => {
+        const res = await DataService.get(`/location/cities/${id}`)
+        const cities = res.map(item => ({ value: item._id, label: item.name }))
+        setcities(cities)
+    }, [])
+
     const updateLisingImages = useCallback(async (images, image) => {
         try {
             const res = await DataService.patch('/product/update-listing-images', { images, image }, {
@@ -110,7 +124,6 @@ const UpdateProduct = () => {
                     'Authorization': `Bearer ${GetCookie(navigate)}`
                 }
             })
-            if (res.error) navigate('/login')
             Notify(res)
         } catch (error) {
             console.error('updateListing : ', error)
@@ -124,7 +137,6 @@ const UpdateProduct = () => {
                     'Authorization': `Bearer ${GetCookie(navigate)}`
                 }
             })
-            if (res.error) navigate('/login')
             Notify(res), setlisting(res)
             setValue('title', res.title)
             setValue('condition', res.condition)
@@ -134,7 +146,7 @@ const UpdateProduct = () => {
             setPriceInput(res.price)
             setnegotiable(res.negotiable)
             setfeaturedImg(`${config.server_product_img_path}/${res.featured_img}`)
-            setproductImg(res.images.map(img => `${config.server_product_img_path}/${img}`))
+            setproductImg(res.images?.map(img => `${config.server_product_img_path}/${img}`))
         } catch (error) {
             console.error('getlisting : ', error)
         }
@@ -171,10 +183,7 @@ const UpdateProduct = () => {
                                                 isSearchable
                                                 isRtl={false}
                                                 options={pcategory}
-                                                value={{
-                                                    value: listing.parent_category?._id,
-                                                    label: listing.parent_category?.title
-                                                }}
+                                                value={{ value: listing.parent_category?._id, label: listing.parent_category?.title }}
                                                 onChange={(selectedoption) => {
                                                     field.onChange(selectedoption)
                                                     fetchsubCategorie(selectedoption.value)
@@ -203,10 +212,7 @@ const UpdateProduct = () => {
                                                 isSearchable
                                                 isRtl={false}
                                                 options={subcategory}
-                                                value={{
-                                                    value: listing.sub_category?._id,
-                                                    label: listing.sub_category?.title
-                                                }}
+                                                value={{ value: listing.sub_category?._id, label: listing.sub_category?.title }}
                                                 onChange={(selectedoption) => {
                                                     field.onChange(selectedoption)
                                                     fetchBrand(selectedoption.value)
@@ -320,6 +326,66 @@ const UpdateProduct = () => {
                                 </div>
                             </div>
                             <div className='bg-light p-3 mb-3'>
+                                <div className='mb-3'>
+                                    <label className='mb-2'>Select State</label>
+                                    <Controller
+                                        name={'stateId'} // Name of the field
+                                        control={control}
+                                        render={({ field }) => (
+                                            <Select
+                                                {...field}
+                                                isClearable
+                                                isSearchable
+                                                isRtl={false}
+                                                value={{ value: listing.state?._id, label: listing.state?.name }}
+                                                options={states}
+                                                onFocus={() => fetchState()}
+                                                onChange={(selectedoption) => {
+                                                    localStorage.setItem('state', JSON.stringify(selectedoption))
+                                                    field.onChange(selectedoption)
+                                                    fetchCities(selectedoption.value)
+                                                }}
+                                                styles={{
+                                                    control: (style) => ({
+                                                        ...style,
+                                                        border: errors.stateId?.message ? '1px solid red' : ''
+                                                    })
+                                                }}
+                                            />
+                                        )}
+                                    />
+                                    <span className='fs-6 text-danger m-0 mt-2'>{errors.stateId?.message}</span>
+                                </div>
+                                <div>
+                                    <label className='mb-2'>Select city</label>
+                                    <Controller
+                                        name={'cityId'} // Name of the field
+                                        control={control}
+                                        render={({ field }) => (
+                                            <Select
+                                                {...field}
+                                                isClearable
+                                                isSearchable
+                                                isRtl={false}
+                                                value={{ value: listing.city?._id, label: listing.city?.name }}
+                                                options={cities}
+                                                onChange={(selectedoption) => {
+                                                    localStorage.setItem('city', JSON.stringify(selectedoption))
+                                                    field.onChange(selectedoption)
+                                                }}
+                                                styles={{
+                                                    control: (style) => ({
+                                                        ...style,
+                                                        border: errors.cityId?.message ? '1px solid red' : ''
+                                                    })
+                                                }}
+                                            />
+                                        )}
+                                    />
+                                    <span className='fs-6 text-danger m-0 mt-2'>{errors.cityId?.message}</span>
+                                </div>
+                            </div>
+                            <div className='bg-light p-3 mb-3'>
                                 <label className='mb-2'>Condtion</label>
                                 <div className="d-flex gap-3">
                                     <label id='used' className='w-25'>
@@ -370,7 +436,7 @@ const UpdateProduct = () => {
                             <label id='images' htmlFor='input-images' className="upload-container mb-3">
                                 <div className='d-flex flex-wrap justify-content-between gap-2 mb-3'>
                                     {
-                                        productImg.map((img, i) => (
+                                        productImg?.map((img, i) => (
                                             <div key={i}>
                                                 <BTN
                                                     type={'button'}

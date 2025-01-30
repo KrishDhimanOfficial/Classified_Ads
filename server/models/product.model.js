@@ -88,6 +88,16 @@ const productSchema = new mongoose.Schema({
         ],
         max: [10, 'Maxinum limit reached!']
     },
+    stateId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'state',
+        required: [true, 'Please Select Your State!']
+    },
+    cityId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'city',
+        required: [true, 'Please Select Your city!']
+    },
     created_At: {
         type: mongoose.Schema.Types.Date,
         default: new Date()

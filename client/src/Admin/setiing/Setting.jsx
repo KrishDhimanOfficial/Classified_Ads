@@ -1,6 +1,7 @@
 import React from 'react'
 import { BTN } from '../../components/component'
 import { Change_password } from '../admin'
+
 const Setting = () => {
     return (
         <div className="row my-4">

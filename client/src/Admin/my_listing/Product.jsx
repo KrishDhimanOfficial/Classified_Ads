@@ -19,7 +19,6 @@ const Product = ({ id, path, status, title, price, ad_status, clicks, publishSta
                     'Authorization': `Bearer ${GetCookie(navigate)}`
                 },
             })
-            if (res.error) navigate('/login')
             Notify(res)
         } catch (error) {
             console.error('deleteListing : ', error)

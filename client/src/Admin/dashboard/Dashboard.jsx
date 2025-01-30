@@ -6,6 +6,7 @@ import DataService from '../../hooks/DataService'
 import GetCookie from '../../hooks/GetCookie'
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+import Notify from '../../hooks/Notify'
 
 const Dashboard = () => {
     const profile = useSelector(state => state.seller)
@@ -18,7 +19,7 @@ const Dashboard = () => {
                 'Authorization': `Bearer ${GetCookie(navigate)}`
             }
         })
-        if (res.error) navigate('/login')
+        Notify(res)
         setlisting(res[0])
     }
     useEffect(() => { fetchListings() }, [])

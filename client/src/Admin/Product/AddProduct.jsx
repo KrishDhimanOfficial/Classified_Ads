@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback, useRef } from 'react'
 import { Add_Atrribute } from '../admin'
 import { Input, BTN, TextArea, Image } from '../../components/component'
 import * as yup from 'yup'
@@ -16,6 +16,8 @@ const productSchema = yup.object().shape({
     price: yup.number().required('price is required!'),
     brandId: yup.object().required('Required!'),
     parentcategoryId: yup.object().required('Required!'),
+    stateId: yup.object().required('Required!'),
+    cityId: yup.object().required('Required!'),
     subcategoryId: yup.object().required('Required!'),
     description: yup.string().trim().required('Description is required!')
         .max(300, 'Maximum 300 Characters are allowed!'),
@@ -40,6 +42,9 @@ const AddProduct = () => {
     const [pcategory, setpcategory] = useState([])
     const [subcategory, setsubcategory] = useState([])
     const [brands, setbrands] = useState([])
+    const [states, setstates] = useState([])
+    const [cities, setcities] = useState([])
+    const [location, setlocation] = useState({ state: { value: '', label: '' }, city: { value: '', label: '' } })
 
     const { handleSubmit, control, register, reset, watch, formState: {
         errors, isSubmitting, } } = useForm({ resolver: yupResolver(productSchema) })
@@ -81,6 +86,24 @@ const AddProduct = () => {
         setbrands(brands)
     }, [])
 
+    const setLocationData = () => {
+        const selectedState = JSON.parse(localStorage.getItem('state'))
+        const selectedCity = JSON.parse(localStorage.getItem('city'))
+        setlocation({ state: selectedState, city: selectedCity })
+    }
+
+    const fetchState = useCallback(async () => {
+        const res = await DataService.get(`/location/states`)
+        const states = res.map(item => ({ value: item._id, label: item.name }))
+        setstates(states)
+    }, [])
+
+    const fetchCities = useCallback(async (id) => {
+        const res = await DataService.get(`/location/cities/${id}`)
+        const cities = res.map(item => ({ value: item._id, label: item.name }))
+        setcities(cities)
+    }, [])
+
     const createProduct = async (data) => {
         const formData = new FormData()
         formData.append('featured_img', data.featured_img[0])
@@ -94,12 +117,11 @@ const AddProduct = () => {
                 'Authorization': `Bearer ${GetCookie(navigate)}`
             }
         })
-        if (res.error) navigate('/login')
-        reset()
-        if (res) Notify(res), setfeaturedImg([]), setproductImg([]), setSlug('')
+        reset(), Notify(res)
+        if (res) setfeaturedImg([]), setproductImg([]), setSlug('')
     }
 
-    useEffect(() => { fetchCategorie() }, [])
+    useEffect(() => { fetchCategorie(), setLocationData() }, [])
     return (
         <div className="back-login-page">
             <div className="login-right-form pt-0 px-0">
@@ -264,6 +286,66 @@ const AddProduct = () => {
                                         {...register('negotiable')}
                                     />
                                     <label>Negotiable</label>
+                                </div>
+                            </div>
+                            <div className='bg-light p-3 mb-3'>
+                                <div className='mb-3'>
+                                    <label className='mb-2'>Select State</label>
+                                    <Controller
+                                        name={'stateId'} // Name of the field
+                                        control={control}
+                                        render={({ field }) => (
+                                            <Select
+                                                {...field}
+                                                isClearable
+                                                isSearchable
+                                                isRtl={false}
+                                                value={{ value: location.state?.value, label: location.state?.label }}
+                                                options={states}
+                                                onFocus={() => fetchState()}
+                                                onChange={(selectedoption) => {
+                                                    localStorage.setItem('state', JSON.stringify(selectedoption))
+                                                    field.onChange(selectedoption)
+                                                    fetchCities(selectedoption.value)
+                                                }}
+                                                styles={{
+                                                    control: (style) => ({
+                                                        ...style,
+                                                        border: errors.stateId?.message ? '1px solid red' : ''
+                                                    })
+                                                }}
+                                            />
+                                        )}
+                                    />
+                                    <span className='fs-6 text-danger m-0 mt-2'>{errors.stateId?.message}</span>
+                                </div>
+                                <div>
+                                    <label className='mb-2'>Select city</label>
+                                    <Controller
+                                        name={'cityId'} // Name of the field
+                                        control={control}
+                                        render={({ field }) => (
+                                            <Select
+                                                {...field}
+                                                isClearable
+                                                isSearchable
+                                                isRtl={false}
+                                                value={{ value: location.city?.value, label: location.city?.label, }}
+                                                options={cities}
+                                                onChange={(selectedoption) => {
+                                                    localStorage.setItem('city', JSON.stringify(selectedoption))
+                                                    field.onChange(selectedoption)
+                                                }}
+                                                styles={{
+                                                    control: (style) => ({
+                                                        ...style,
+                                                        border: errors.cityId?.message ? '1px solid red' : ''
+                                                    })
+                                                }}
+                                            />
+                                        )}
+                                    />
+                                    <span className='fs-6 text-danger m-0 mt-2'>{errors.cityId?.message}</span>
                                 </div>
                             </div>
                             <div className='bg-light p-3 mb-3'>

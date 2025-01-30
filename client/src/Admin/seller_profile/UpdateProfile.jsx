@@ -43,7 +43,6 @@ const UpdateProfile = () => {
                 'Authorization': `Bearer ${GetCookie(navigate)}`
             }
         })
-        if (res.error) navigate('/login')
         Notify(res)
     }
 

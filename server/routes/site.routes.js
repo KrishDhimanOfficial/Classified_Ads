@@ -3,6 +3,7 @@ import { upload, sellerprofileImg, product } from '../Middleware/multer.middlewa
 import handlemulterError from '../Middleware/handleMulterError.js'
 import AuthenticateUser from '../Middleware/AuthicateUser.js'
 import authenticationcontroller from '../controllers/authentication.controller.js'
+import location_controller from '../controllers/location.controller.js'
 import seller_Controller from '../controllers/seller.controller.js'
 import product_controller from '../controllers/product.controller.js'
 import category_controller from '../controllers/category.controller.js'
@@ -29,7 +30,7 @@ router.get('/brands/:id', brand_controller.getbrands)
 router.get('/popular-categories', category_controller.getPopularCategories)
 
 router.post('/products', AuthenticateUser, product_controller.allListings)
-router.get('/product/:listing_slug', product_controller.getSingleListingtoUpdate)
+router.get('/product/:listing_slug',AuthenticateUser, product_controller.getSingleListingtoUpdate)
 router.patch('/product/update-listing-images', product_controller.updateListingImages)
 router.route('/product/:id?')
     .all(AuthenticateUser)
@@ -71,5 +72,9 @@ router.patch('/delete-wishlist-item/:id', AuthenticateUser, product_controller.r
 
 // Settings
 router.get('/settings', authenticationcontroller.getGNSettings)
+
+// Location
+router.get('/location/states', location_controller.getlocationState)
+router.get('/location/cities/:id', location_controller.getlocationCities)
 
 export default router

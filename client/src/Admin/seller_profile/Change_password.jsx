@@ -20,7 +20,6 @@ const Change_password = () => {
                     'Authorization': `Bearer ${GetCookie(navigate)}`
                 }
             })
-            if (res.error) navigate('/login')
             Notify(res)
         }
     }

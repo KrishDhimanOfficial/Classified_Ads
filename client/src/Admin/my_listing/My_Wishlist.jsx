@@ -23,7 +23,7 @@ const My_Wishlist = () => {
                     'Authorization': `Bearer ${GetCookie(navigate)}`
                 }
             })
-            if (res.error) navigate('/login')
+            Notify(res)
             setloading(false), setwishlist(res), dispatch(setWishListVisible(false))
         } catch (error) {
             setloading(false)

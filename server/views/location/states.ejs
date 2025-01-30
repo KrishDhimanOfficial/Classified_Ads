@@ -40,7 +40,7 @@
                                         </ol>
                                     </div>
                                     <div class="col-md-6 align-content-center">
-                                        <button type="button" data-toggle="modal" data-target="#addlocationmodal"
+                                        <button type="button" data-toggle="modal" data-target="#openlocationModal"
                                             class="btn btn-primary float-right">
                                             ADD New
                                         </button>
@@ -88,17 +88,22 @@
                                                                     </label>
                                                                 </td>
                                                                 <td>
-                                                                    <a href="/admin/location/state/<%= state._id %>"
-                                                                        class="btn btn-primary">
-                                                                        <i class="fa-solid fa-pen-to-square"></i>
-                                                                        Edit
-                                                                    </a>
                                                                     <button type="button" data-id="<%= state._id %>"
-                                                                        data-toggle="modal" data-target="#modal-danger"
-                                                                        class="btn btn-danger openModal">
-                                                                        <i class="fa-solid fa-trash-can"></i>
-                                                                        Delete
+                                                                        data-toggle="modal"
+                                                                        data-target="#openlocationModal"
+                                                                        class="btn btn-primary openlocationModal">
+                                                                        <i class="fa-solid fa-pen"></i>
+                                                                        Edit
                                                                     </button>
+                                                                    <% if (state.city.length===0) { %>
+                                                                        <button type="button" data-id="<%= state._id %>"
+                                                                            data-toggle="modal"
+                                                                            data-target="#modal-danger"
+                                                                            class="btn btn-danger openModal">
+                                                                            <i class="fa-solid fa-trash-can"></i>
+                                                                            Delete
+                                                                        </button>
+                                                                        <% } %>
                                                                 </td>
                                                             </tr>
                                                             <% }) %>
@@ -120,7 +125,7 @@
     </div>
     <!-- ./wrapper -->
     <%- include('../partials/danger-modal') %>
-        <%- include('./addState.modal.ejs') %>
+        <%- include('./state.modal.ejs') %>
             <%- include('../partials/script') %>
                 <%- include('../partials/datatables.script.ejs') %>
                     <script> const EndAPI = 'location/state';</script>

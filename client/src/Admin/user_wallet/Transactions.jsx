@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import {Notify} from '../../hooks/hooks'
 import { DataService, GetCookie } from '../../hooks/hooks'
 import { Link, useNavigate } from 'react-router-dom'
 
@@ -14,7 +15,7 @@ const Transactions = () => {
                 'Authorization': `Bearer ${GetCookie(navigate)}`,
             }
         })
-        if (res.error) navigate('/login')
+         Notify(res)
         settransactions(res.collectionData)
         delete res.collectionData
         setpagination(res)

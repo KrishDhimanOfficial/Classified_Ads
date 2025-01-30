@@ -9,7 +9,7 @@ const AuthenticateUser = async (req, res, next) => {
         const seller = getUser(token)
         const response = await sellerModel.findOne({ _id: new mongoose.Types.ObjectId(seller?.id), status: true })
 
-        if (!response) return res.json({ error: 'Unauthorized!' })
+        if (!response) return res.json({ middlewareError: 'Unauthorized!' })
         next()
     } catch (error) {
         console.log('AuthenticateUser : ', error.message)

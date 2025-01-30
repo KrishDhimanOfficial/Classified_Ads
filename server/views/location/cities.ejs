@@ -6,6 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Dashboard</title>
     <%- include('../partials/header') %>
+        <style>
+            .select2-container {
+                z-index: 999999;
+            }
+        </style>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -33,7 +38,7 @@
                                         </ol>
                                     </div>
                                     <div class="col-md-6 align-content-center">
-                                        <button type="button" data-toggle="modal" data-target="#addlocationmodal"
+                                        <button type="button" data-toggle="modal" data-target="#openlocationModal"
                                             class="btn btn-primary float-right">
                                             ADD New
                                         </button>
@@ -55,17 +60,49 @@
                                                     <thead>
                                                         <tr>
                                                             <th>S.no</th>
-                                                            <th>Image</th>
-                                                            <th>Title</th>
-                                                            <th>Category</th>
-                                                            <th>Price</th>
-                                                            <th>User</th>
-                                                            <th>Listed Date</th>
-                                                            <th>Current Status</th>
+                                                            <th>City</th>
+                                                            <th>State</th>
+                                                            <th>Status</th>
                                                             <th>Actions</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody id="table-grid">
+                                                        <% cities?.forEach((city,i)=> { %>
+                                                            <tr class="table-row">
+                                                                <td>
+                                                                    <%= i+1 %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= city.name %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= city.state.name %>
+                                                                </td>
+                                                                <td>
+                                                                    <label class="switch">
+                                                                        <input type="checkbox" class="status"
+                                                                            data-id="<%= city._id %>" <%=city.status
+                                                                            ? "checked" : "" %>>
+                                                                        <span class="slider"></span>
+                                                                    </label>
+                                                                </td>
+                                                                <td>
+                                                                    <button type="button" data-id="<%= city._id %>"
+                                                                        data-toggle="modal"
+                                                                        data-target="#openlocationModal"
+                                                                        class="btn btn-primary openlocationModal">
+                                                                        <i class="fa-solid fa-pen"></i>
+                                                                        Edit
+                                                                    </button>
+                                                                    <button type="button" data-id="<%= city._id %>"
+                                                                        data-toggle="modal" data-target="#modal-danger"
+                                                                        class="btn btn-danger openModal">
+                                                                        <i class="fa-solid fa-trash-can"></i>
+                                                                        Delete
+                                                                    </button>
+                                                                </td>
+                                                            </tr>
+                                                            <% }) %>
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -85,13 +122,13 @@
     <!-- ./wrapper -->
     <%- include('../partials/danger-modal') %>
         <%- include('../partials/view-modal') %>
-            <%- include('./addCity.modal.ejs') %>
+            <%- include('./city.modal.ejs') %>
                 <%- include('../partials/script') %>
                     <%- include('../partials/datatables.script.ejs') %>
-                    <%- include('../partials/select2.script.ejs') %>
-                        <script> const EndAPI = 'location/city';</script>
-                        <script async type="module" src="/assets/js/datatable.js"></script>
-                        <script async type="module" src="/assets/js/main.js"></script>
+                        <%- include('../partials/select2.script.ejs') %>
+                            <script> const EndAPI = 'location/city';</script>
+                            <script async type="module" src="/assets/js/datatable.js"></script>
+                            <script async type="module" src="/assets/js/main.js"></script>
 </body>
 
 </html>

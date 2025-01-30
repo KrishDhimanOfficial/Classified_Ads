@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import DataService from '../../hooks/DataService'
 import { useNavigate } from 'react-router-dom'
 import GetCookie from '../../hooks/GetCookie'
+import { Notify } from '../../hooks/hooks'
 import config from '../../../config/config'
 
 const Product = lazy(() => import('../my_listing/Product'))
@@ -17,8 +18,7 @@ const Listing_container = () => {
                 'Authorization': `Bearer ${GetCookie(navigate)}`
             }
         })
-        if (res.error) navigate('/login')
-        setlisting(res)
+        Notify(res), setlisting(res)
     }, [])
     useEffect(() => { fetchLlisting() }, [])
     return (

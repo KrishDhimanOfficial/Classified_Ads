@@ -171,6 +171,34 @@ const product_controller = {
                     }
                 }, { $unwind: '$sub_category' },
                 {
+                    $lookup: {
+                        from: 'states',
+                        localField: 'stateId',
+                        foreignField: '_id',
+                        as: 'state'
+                    }
+                },
+                {
+                    $unwind: {
+                        path: '$state',
+                        preserveNullAndEmptyArrays: true
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'cities',
+                        localField: 'cityId',
+                        foreignField: '_id',
+                        as: 'city'
+                    }
+                },
+                {
+                    $unwind: {
+                        path: '$city',
+                        preserveNullAndEmptyArrays: true
+                    }
+                },
+                {
                     $project: {
                         ad_status: 0,
                         created_At: 0,
@@ -192,6 +220,8 @@ const product_controller = {
                     }
                 }
             ])
+            console.log(response);
+
             if (response.length === 0) return res.json({ error: 'Not Found!' })
             return res.json(response[0])
         } catch (error) {
@@ -204,7 +234,7 @@ const product_controller = {
 
             const { slug, status } = req.body;
             const { title, description, parentcategoryId, subcategoryId, brandId,
-                price, negotiable, condition, attributes } = JSON.parse(req.body.data)
+                price, negotiable, condition, attributes, stateId, cityId } = JSON.parse(req.body.data)
 
             const seller = getUser(req.headers['authorization'].split(' ')[1])
 
@@ -223,6 +253,12 @@ const product_controller = {
                     brandId: brandId
                         ? new Object(brandId.value)
                         : existingRecored.brandId,
+                    stateId: stateId
+                        ? new Object(stateId.value)
+                        : existingRecored.stateId,
+                    cityId: cityId
+                        ? new Object(cityId.value)
+                        : existingRecored.cityId,
                     featured_img: req.files['featured_img']
                         ? req.files['featured_img'][0].filename
                         : existingRecored.featured_img,
