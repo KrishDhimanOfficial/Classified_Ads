@@ -11,7 +11,7 @@ import locationControllers from '../controllers/location.controller.js'
 const router = express.Router()
 
 // Routes for Super Admin
-router.get('/dashboard', checkAdminIsLogged, (req, res) => res.render('index'))
+router.get('/dashboard', checkAdminIsLogged, authenticationcontroller.RenderIndexPage)
 
 // Routes for SuperAdmin Authentication
 router.route('/login')
@@ -91,6 +91,9 @@ router.put('/general-setting/:id', GN.fields([
     { name: 'logo', maxCount: 1 },
 ]), handlemulterError, authenticationcontroller.General_Settings)
 router.post('/setFeaturedAdPrice/:id', authenticationcontroller.setFeaturedAdPrice)
+
+// Transactions
+router.get('/transactions', checkAdminIsLogged, authenticationcontroller.renderAllTransactions)
 
 router.get('/*', (req, res) => res.render('404'))
 

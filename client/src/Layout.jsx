@@ -13,7 +13,8 @@ const Layout = () => {
         const res = await DataService.get('/settings')
         dispatch(setsetting(res))
     }
-    useEffect(() => { fetchDetails() }, [])
+
+    useEffect(() => {  fetchDetails() }, [])
     return (
         <>
             <ToastContainer />

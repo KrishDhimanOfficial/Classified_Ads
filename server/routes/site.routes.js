@@ -30,7 +30,7 @@ router.get('/brands/:id', brand_controller.getbrands)
 router.get('/popular-categories', category_controller.getPopularCategories)
 
 router.post('/products', AuthenticateUser, product_controller.allListings)
-router.get('/product/:listing_slug',AuthenticateUser, product_controller.getSingleListingtoUpdate)
+router.get('/product/:listing_slug', AuthenticateUser, product_controller.getSingleListingtoUpdate)
 router.patch('/product/update-listing-images', product_controller.updateListingImages)
 router.route('/product/:id?')
     .all(AuthenticateUser)
@@ -76,5 +76,8 @@ router.get('/settings', authenticationcontroller.getGNSettings)
 // Location
 router.get('/location/states', location_controller.getlocationState)
 router.get('/location/cities/:id', location_controller.getlocationCities)
+
+router.patch('/follow/seller', AuthenticateUser, seller_Controller.startFollowing)
+router.patch('/unfollow/seller', AuthenticateUser, seller_Controller.startUnFollowing)
 
 export default router

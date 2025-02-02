@@ -50,6 +50,14 @@ const sellerSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.Number,
         default: 0
     },
+    followings: {
+        type: [mongoose.Schema.Types.ObjectId],
+        default: []
+    },
+    followers: {
+        type: [mongoose.Schema.Types.ObjectId],
+        default: []
+    },
     wishlist: {
         type: [mongoose.Schema.Types.ObjectId],
         default: []

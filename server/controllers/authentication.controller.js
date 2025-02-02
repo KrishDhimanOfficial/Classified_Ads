@@ -3,10 +3,12 @@ import config from "../config/config.js"
 import adminModel from "../models/admin.model.js"
 import generalSettingModel from "../models/general-setting.model.js"
 import sellerModel from "../models/seller.model.js"
+import productModel from "../models/product.model.js"
 import { setUser, getUser } from '../services/createToken.js'
 import deleteImage from "../services/deleteImg.js"
 import validations from "../services/validateData.js"
 import bcrypt from 'bcrypt'
+import transaction_historyModel from "../models/transaction_history.model.js"
 
 const authenticationcontroller = {
     handleSuperAdminLogin: async (req, res) => {
@@ -214,6 +216,66 @@ const authenticationcontroller = {
             return res.status(200).json(response)
         } catch (error) {
             console.log('getGNSettings : ' + error.message)
+        }
+    },
+    renderAllTransactions: async (req, res) => {
+        try {
+            const transactions = await transaction_historyModel.aggregate([
+                {
+                    $lookup: {
+                        from: 'sellers',
+                        localField: 'sellerId',
+                        foreignField: '_id',
+                        as: 'seller'
+                    }
+                },
+                { $unwind: '$seller' },
+                {
+                    $project: {
+                        amount: 1,
+                        status: 1,
+                        'seller.name': 1,
+                        formatedDate: {
+                            $dateToString: {
+                                format: "%d-%m-%Y",
+                                date: "$date"
+                            }
+                        }
+                    }
+                }
+            ])
+            return res.render('transactions', { transactions })
+        } catch (error) {
+            console.log('renderAllTransactions : ' + error.message)
+        }
+    },
+    RenderIndexPage: async (req, res) => {
+        try {
+            const response = await transaction_historyModel.aggregate([
+                {
+                    $group: {
+                        _id: null,
+                        totalAmount: { $sum: "$amount" }
+                    }
+                }
+            ])
+            const listings = await productModel.aggregate([
+                {
+                    $group: {
+                        _id: '$publishing_status',
+                        documents: {
+                            $push: { _id: "$_id" },
+                        }
+                    }
+                }
+            ])
+            return res.render('index', {
+                totalAmount: response[0].totalAmount,
+                activeLising: listings[0]._id ? listings[0].documents.length : 0,
+                deactiveLising: listings[0]._id ? 0 : listings[0].documents.length
+            })
+        } catch (error) {
+            console.log('RenderIndexPage : ' + error.message)
         }
     }
 }

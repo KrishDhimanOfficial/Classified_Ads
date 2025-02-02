@@ -44,6 +44,7 @@ const UpdateProduct = () => {
     const [brands, setbrands] = useState([])
     const [states, setstates] = useState([])
     const [cities, setcities] = useState([])
+    const [location, setlocation] = useState({ state: { value: '', label: '' }, city: { value: '', label: '' } })
     // ALL States
 
     const { handleSubmit, control, register, watch, setValue, formState: {
@@ -151,7 +152,7 @@ const UpdateProduct = () => {
             console.error('getlisting : ', error)
         }
     }
-    useEffect(() => { getlisting(), fetchCategorie() }, [])
+    useEffect(() => { getlisting(), fetchCategorie(), fetchState() }, [])
     return (
         <div className="back-login-page">
             <div className="login-right-form pt-0 px-0">
@@ -337,10 +338,13 @@ const UpdateProduct = () => {
                                                 isClearable
                                                 isSearchable
                                                 isRtl={false}
-                                                value={{ value: listing.state?._id, label: listing.state?.name }}
+                                                value={{
+                                                    value: location.state.value ? location.state.value : listing.state?._id,
+                                                    label: location.state.label ? location.state.label : listing.state?.name
+                                                }}
                                                 options={states}
-                                                onFocus={() => fetchState()}
                                                 onChange={(selectedoption) => {
+                                                    setlocation(prev => ({ ...prev, state: selectedoption }))
                                                     localStorage.setItem('state', JSON.stringify(selectedoption))
                                                     field.onChange(selectedoption)
                                                     fetchCities(selectedoption.value)
@@ -367,9 +371,17 @@ const UpdateProduct = () => {
                                                 isClearable
                                                 isSearchable
                                                 isRtl={false}
-                                                value={{ value: listing.city?._id, label: listing.city?.name }}
+                                                value={{
+                                                    value: location.city.value ? location.city.value : listing.city?._id,
+                                                    label: location.city.label ? location.city.label : listing.city?.name
+                                                }}
                                                 options={cities}
+                                                onFocus={() => {
+                                                    const state = JSON.parse(localStorage.getItem('state'))
+                                                    fetchCities(state.value)
+                                                }}
                                                 onChange={(selectedoption) => {
+                                                    setlocation(prev => ({ ...prev, city: selectedoption }))
                                                     localStorage.setItem('city', JSON.stringify(selectedoption))
                                                     field.onChange(selectedoption)
                                                 }}

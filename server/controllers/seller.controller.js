@@ -7,6 +7,7 @@ import handleAggregatePagination from '../services/handlepagination.js'
 import mongoose from "mongoose"
 import config from "../config/config.js"
 import reviewRatingModel from "../models/review&rating.model.js"
+const ObjectId = mongoose.Types.ObjectId;
 
 const seller_controllers = {
     renderAllSellers: async (req, res) => {
@@ -124,6 +125,7 @@ const seller_controllers = {
     },
     getSeller: async (req, res) => {
         try {
+            const seller = getUser(req.headers['authorization'].split(' ')[1])
             const projection = [
                 {
                     $match: { username: req.params.seller_username }
@@ -169,13 +171,17 @@ const seller_controllers = {
                         sellerImage: {
                             $concat: [`${config.sellerImage}`, '/', '$seller.image']
                         },
-                        sellerusername: '$seller.username'
+                        sellerusername: '$seller.username',
+                        'seller.followersCount': { $size: '$seller.followers' },
+                        'seller.followingsCount': { $size: '$seller.followings' },
+                        'seller.followerId': seller.id
                     }
                 },
                 {
                     $project: {
                         'parentcategory.image': 0, 'parentcategory.slug': 0, 'parentcategory.status': 0,
-                        sellerId: 0, 'seller.wallet_amount': 0, 'seller.password': 0, publishing_status: 0,
+                        sellerId: 0, 'seller.wallet_amount': 0, 'seller.password': 0,
+                        publishing_status: 0, 'seller.followings': 0,
                         status: 0, ad_status: 0, click_count: 0, condition: 0,
                         description: 0, brandId: 0, parentcategoryId: 0,
                         subcategoryId: 0, images: 0, negotiable: 0, features: 0
@@ -240,6 +246,63 @@ const seller_controllers = {
             if (response.collectionData.length > 0) return res.json(response)
         } catch (error) {
             console.log('getSellerReviews : ' + error.message)
+        }
+    },
+    startFollowing: async (req, res) => {
+        try {
+            const { followingId } = req.body;
+            const seller = getUser(req.headers['authorization'].split(' ')[1])
+            const response = await sellerModel.findByIdAndUpdate(
+                { _id: seller.id },
+                {
+                    $addToSet: {
+                        followings: [new ObjectId(followingId)]
+                    }
+                },
+                { new: true }
+            )
+            if (!response) return res.json({ error: 'Someting went wrong!' })
+            const updateFollowers = await sellerModel.findByIdAndUpdate(
+                { _id: followingId },
+                {
+                    $addToSet: {
+                        followers: [new ObjectId(seller.id)]
+                    }
+                },
+                { new: true }
+            )
+            return res.json({ message: 'Added to follwing!' })
+        } catch (error) {
+            console.log('startFollowing : ' + error.message)
+        }
+    },
+    startUnFollowing: async (req, res) => {
+        try {
+            const { followingId } = req.body;
+
+            const seller = getUser(req.headers['authorization'].split(' ')[1])
+            const response = await sellerModel.findByIdAndUpdate(
+                { _id: seller.id },
+                {
+                    $pull: {
+                        followings: new ObjectId(followingId)
+                    }
+                },
+                { new: true }
+            )
+            if (!response) return res.json({ error: 'Someting went wrong!' })
+            const UnFollowfromFollowers = await sellerModel.findByIdAndUpdate(
+                { _id: followingId },
+                {
+                    $pull: {
+                        followers: new ObjectId(seller.id)
+                    }
+                },
+                { new: true }
+            )
+            return res.json({ message: 'unfollow!' })
+        } catch (error) {
+            console.log('startUnFollowing : ' + error.message)
         }
     }
 }

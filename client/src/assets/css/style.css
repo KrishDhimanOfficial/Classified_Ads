@@ -9535,3 +9535,8 @@ ul {
   margin-inline: 20px;
   padding-left: 8px;
 }
+
+.border-danger {
+  border-radius: 5%;
+  border: 1px solid red;
+}

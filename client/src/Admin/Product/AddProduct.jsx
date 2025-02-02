@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useRef } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { Add_Atrribute } from '../admin'
 import { Input, BTN, TextArea, Image } from '../../components/component'
 import * as yup from 'yup'
@@ -16,8 +16,8 @@ const productSchema = yup.object().shape({
     price: yup.number().required('price is required!'),
     brandId: yup.object().required('Required!'),
     parentcategoryId: yup.object().required('Required!'),
-    stateId: yup.object().required('Required!'),
-    cityId: yup.object().required('Required!'),
+    stateId: yup.string().required('Required!'),
+    cityId: yup.string().required('Required!'),
     subcategoryId: yup.object().required('Required!'),
     description: yup.string().trim().required('Description is required!')
         .max(300, 'Maximum 300 Characters are allowed!'),
@@ -46,7 +46,7 @@ const AddProduct = () => {
     const [cities, setcities] = useState([])
     const [location, setlocation] = useState({ state: { value: '', label: '' }, city: { value: '', label: '' } })
 
-    const { handleSubmit, control, register, reset, watch, formState: {
+    const { handleSubmit, control, setValue, register, reset, watch, formState: {
         errors, isSubmitting, } } = useForm({ resolver: yupResolver(productSchema) })
 
     const attributeLength = watch('attributes')
@@ -56,6 +56,7 @@ const AddProduct = () => {
         const file = e.target.files;
         setproductImg(Array.from(file).slice(0, 4).map(img => URL.createObjectURL(img)))
     }
+
     const displayFImgs = (e) => {
         const file = e.target.files[0]
         setfeaturedImg(URL.createObjectURL(file))
@@ -121,7 +122,7 @@ const AddProduct = () => {
         if (res) setfeaturedImg([]), setproductImg([]), setSlug('')
     }
 
-    useEffect(() => { fetchCategorie(), setLocationData() }, [])
+    useEffect(() => { fetchCategorie(), fetchState(), setLocationData(), setLocationData() }, [])
     return (
         <div className="back-login-page">
             <div className="login-right-form pt-0 px-0">
@@ -302,8 +303,8 @@ const AddProduct = () => {
                                                 isRtl={false}
                                                 value={{ value: location.state?.value, label: location.state?.label }}
                                                 options={states}
-                                                onFocus={() => fetchState()}
                                                 onChange={(selectedoption) => {
+                                                    setlocation(prev => ({ ...prev, state: selectedoption }))
                                                     localStorage.setItem('state', JSON.stringify(selectedoption))
                                                     field.onChange(selectedoption)
                                                     fetchCities(selectedoption.value)
@@ -332,7 +333,12 @@ const AddProduct = () => {
                                                 isRtl={false}
                                                 value={{ value: location.city?.value, label: location.city?.label, }}
                                                 options={cities}
+                                                onFocus={() => {
+                                                    const state = JSON.parse(localStorage.getItem('state'))
+                                                    fetchCities(state.value)
+                                                }}
                                                 onChange={(selectedoption) => {
+                                                    setlocation(prev => ({ ...prev, city: selectedoption }))
                                                     localStorage.setItem('city', JSON.stringify(selectedoption))
                                                     field.onChange(selectedoption)
                                                 }}

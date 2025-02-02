@@ -10,8 +10,15 @@ const FilterSidebar = () => {
     const [pcategory, setpcategory] = useState([])
     const [subcategory, setsubcategory] = useState([])
     const [brands, setbrands] = useState([])
+    const [states, setstates] = useState([])
+    const [cities, setcities] = useState([])
+    const [location, setlocation] = useState({
+        Filterstate: { value: '', label: '' },
+        Filtercity: { value: '', label: '' },
+    })
 
-    const { handleSubmit, control, register, formState: { errors } } = useForm()
+
+    const { handleSubmit, setValue, control, register } = useForm()
 
 
     const fetchCategorie = useCallback(async () => {
@@ -33,10 +40,36 @@ const FilterSidebar = () => {
         setbrands(brands)
     }, [])
 
+    const fetchState = useCallback(async () => {
+        const res = await DataService.get(`/location/states`)
+        const states = res.map(item => ({ value: item._id, label: item.name }))
+        setstates(states)
+    }, [])
+
+    const fetchCities = useCallback(async (id) => {
+        const res = await DataService.get(`/location/cities/${id}`)
+        const cities = res.map(item => ({ value: item._id, label: item.name }))
+        setcities(cities)
+    }, [])
+
+    const getlocation = () => {
+        const Filtercity = JSON.parse(localStorage.getItem('filtercity'))
+        const Filterstate = JSON.parse(localStorage.getItem('filterstate'))
+
+        setlocation({ Filtercity, Filterstate })
+        setValue('stateId', location.Filterstate.value)
+        setValue('cityId', location.Filtercity.value)
+
+        navigate(`/browse-products?stateId=${Filterstate.value}&cityId=${Filtercity.value}`)
+    }
+
     const getfilterData = useCallback(async (formData) => {
         try {
+            console.log(location);
+
             let filters = '?'
             Object.entries(formData).forEach(([key, value]) => {
+                console.log([key, value])
                 if (typeof value === 'object' && value) filters += `${key}=${value.value}&`;
                 if (typeof value !== 'object' && value) filters += `${key}=${value}&`;
             })
@@ -46,7 +79,8 @@ const FilterSidebar = () => {
             console.error('filiters : ', error)
         }
     }, [])
-    useEffect(() => { fetchCategorie() }, [])
+
+    useEffect(() => { fetchCategorie(), fetchState(), getlocation() }, [])
     return (
         <div className='back-sidebar pl-30 md-pl-0 md-mt-60'>
             <div className="widget back-search">
@@ -55,6 +89,57 @@ const FilterSidebar = () => {
                 </form>
             </div>
             <form onSubmit={handleSubmit(getfilterData)} autoComplete='off'>
+                <div className="widget back-category px-4">
+                    <h3 className="widget-title">Select Location</h3>
+                    <div className='mb-3'>
+                        <Controller
+                            name={'stateId'} // Name of the field
+                            control={control}
+                            render={({ field }) => (
+                                <Select
+                                    {...field}
+                                    isClearable
+                                    isSearchable
+                                    isRtl={false}
+                                    options={states}
+                                    value={{
+                                        value: location.Filterstate?.value,
+                                        label: location.Filterstate?.label,
+                                    }}
+                                    onChange={(selectedoption) => {
+                                        localStorage.setItem('filterstate', JSON.stringify(selectedoption))
+                                        setlocation(prev => ({ ...prev, Filterstate: selectedoption }))
+                                        fetchCities(selectedoption.value)
+                                    }}
+                                />
+                            )}
+                        />
+                    </div>
+                    <div className='mb-3'>
+                        <Controller
+                            name={'cityId'} // Name of the field
+                            control={control}
+                            render={({ field }) => (
+                                <Select
+                                    {...field}
+                                    isClearable
+                                    isSearchable
+                                    isRtl={false}
+                                    options={cities}
+                                    value={{
+                                        value: location.Filtercity?.value,
+                                        label: location.Filtercity?.label,
+                                    }}
+                                    onChange={(selectedoption) => {
+
+                                        localStorage.setItem('filtercity', JSON.stringify(selectedoption))
+                                        setlocation(prev => ({ ...prev, Filtercity: selectedoption }))
+                                    }}
+                                />
+                            )}
+                        />
+                    </div>
+                </div>
                 <div className="widget back-category  px-4">
                     <h3 className="widget-title">Condition</h3>
                     <ul className="recent-category">

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard</title>
+    <%- include('./partials/header') %>
+        <style>
+            .hide-input {
+                border: 0;
+                background: none;
+                outline: none;
+            }
+
+            .status-cancel {
+                color: #ff4d4f;
+                background-color: #fff1f0;
+                padding: 2px 8px;
+                border-radius: 4px;
+            }
+
+            .status-completed {
+                color: #52c41a;
+                background-color: #f6ffed;
+                padding: 2px 8px;
+                border-radius: 4px;
+            }
+        </style>
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed">
+    <div class="wrapper">
+        <!-- Preloader -->
+        <%- include('./partials/Loader') %>
+
+            <!-- Navbar -->
+            <%- include('./partials/navbar') %>
+                <!-- /.navbar -->
+
+                <!-- Main Sidebar Container -->
+                <%- include('./partials/sidebar') %>
+
+                    <!-- Content Wrapper. Contains page content -->
+                    <div class="content-wrapper">
+                        <section class="content-header">
+                            <div class="container-fluid">
+                                <div class="row mb-2">
+                                    <div class="col-md-6">
+                                        <h1 class="mb-2">States</h1>
+                                        <ol class="breadcrumb float-sm-left">
+                                            <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
+                                            <li class="breadcrumb-item active">All States</li>
+                                        </ol>
+                                    </div>
+                                </div>
+                                <!-- /.row -->
+                            </div>
+                            <!-- /.container-fluid -->
+                        </section>
+
+                        <section class="content">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <table style="overflow-x: scroll;" id="datatable"
+                                                    class="table table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>S.no</th>
+                                                            <th>Transaction ID</th>
+                                                            <th>Username</th>
+                                                            <th>Payment Status</th>
+                                                            <th>Amount (In INR)</th>
+                                                            <th>Date</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="table-grid">
+                                                        <% transactions?.forEach((transaction,i)=> { %>
+                                                            <tr>
+                                                                <td>
+                                                                    <%= i+1 %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= transaction._id %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= transaction.seller.name %>
+                                                                </td>
+                                                                <td>
+                                                                    <span class='<%= transaction.status
+                                                                        ? ' status-completed' : 'status-cancel' %> px-3
+                                                                        py-1' >
+                                                                        <%= transaction.status ? 'Completed' : 'Cancel'
+                                                                            %>
+                                                                    </span>
+                                                                </td>
+                                                                <td>
+                                                                    <%= transaction.amount %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= transaction.formatedDate %>
+                                                                </td>
+                                                            </tr>
+                                                            <% }) %>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    <!-- /.content-wrapper -->
+                    <footer class="main-footer">
+                        <strong>Copyright &copy; 2014-2021</strong>
+                        All rights reserved.
+                    </footer>
+
+    </div>
+    <!-- ./wrapper -->
+    <%- include('./partials/script') %>
+        <%- include('./partials/datatables.script.ejs') %>
+            <script> const EndAPI = 'location/state';</script>
+            <script async type="module" src="/assets/js/datatable.js"></script>
+</body>
+
+</html>

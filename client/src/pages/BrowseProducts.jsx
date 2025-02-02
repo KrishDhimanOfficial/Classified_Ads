@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { FilterSidebar, Product, Placeholder } from '../components/component'
-import { Link, useLocation, useSearchParams } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import DataService from '../hooks/DataService'
 
 const BrowseProducts = () => {
+    const navigate = useNavigate()
     const location = useLocation()
     const [urlQueryParams, seturlQueryParams] = useSearchParams()
     const [listing, setlisting] = useState({})
@@ -13,9 +14,9 @@ const BrowseProducts = () => {
 
     const browseListing = async () => {
         try {
-            setloading(true)
-            const res = await DataService.get('/browse-listing')
-            setloading(false), setlisting(res)
+            const Filtercity = JSON.parse(localStorage.getItem('filtercity'))
+            const Filterstate = JSON.parse(localStorage.getItem('filterstate'))
+            navigate(`/browse-products?stateId=${Filterstate.value}&cityId=${Filtercity.value}`)
         } catch (error) {
             console.error('browseListing : ' + error)
         }
@@ -39,6 +40,7 @@ const BrowseProducts = () => {
                 ? `/filters/listings${applyfilters}&page=${page}`
                 : `/browse-listing?page=${page}`;
             const res = await DataService.get(api)
+
             if (res.error) return seterror(res.error), setloading(false)
             setloading(false), setlisting(res)
         } catch (error) {
@@ -102,6 +104,7 @@ const BrowseProducts = () => {
                                                     category={listing.parentcategory.title}
                                                     ad_status={listing.ad_status}
                                                     sellerImg={listing.sellerImage}
+                                                    location={listing.location}
                                                     sellerUsername={listing.sellerusername}
                                                 />
                                             </div>

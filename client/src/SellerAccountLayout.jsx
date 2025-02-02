@@ -1,4 +1,3 @@
-import React, { useState } from 'react'
 import { useCallback, useEffect } from 'react'
 import { Sidebar } from './Admin/admin'
 import { Footer, Navbar } from './components/component'
@@ -10,6 +9,7 @@ import DataService from './hooks/DataService'
 import GetCookie from './hooks/GetCookie'
 import Notify from './hooks/Notify'
 import { setProfile } from '../controller/seller.store'
+import { setsetting } from '../controller/GNS.store'
 
 
 const SellerAccountLayout = () => {
@@ -22,11 +22,15 @@ const SellerAccountLayout = () => {
                 Authorization: `Bearer ${GetCookie(navigate)}`
             }
         })
-        if (res.error) navigate('/login')
         Notify(res), dispatch(setProfile(res))
     })
 
-    useEffect(() => { getProfile() }, [])
+    const fetchDetails = async () => {
+        const res = await DataService.get('/settings')
+        dispatch(setsetting(res))
+    }
+
+    useEffect(() => { getProfile(), fetchDetails() }, [])
     return (
         <>
             <Toaster />

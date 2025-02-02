@@ -9,7 +9,7 @@ import { useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
 
 const Product = ({ id, title, category, image, slug, wishlist, price,
-    ad_status, sellerImg, sellerUsername }) => {
+    ad_status, sellerImg, sellerUsername, location }) => {
 
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -95,7 +95,8 @@ const Product = ({ id, title, category, image, slug, wishlist, price,
                     </div>
 
                     <div className="back__user">
-                        ${price}
+                        <i className="fa-solid fa-indian-rupee-sign"></i>
+                        {price}
                         <Link to={`/user/${sellerUsername}`}>
                             <Image
                                 src={sellerImg || defaultUser}
@@ -104,6 +105,16 @@ const Product = ({ id, title, category, image, slug, wishlist, price,
                             />
                         </Link>
                     </div>
+                </div>
+                <div className="course__card-icon d-flex align-items-center">
+                    {
+                        location && (
+                            <div className="course__card-icon--1">
+                                <i className="fa-solid fa-location-dot"></i>
+                                <span className='fs-6'>{location}</span>
+                            </div>
+                        )
+                    }
                 </div>
                 {
                     wishlist && (<div className="course__card-icon--2">

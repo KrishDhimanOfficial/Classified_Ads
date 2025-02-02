@@ -13,7 +13,7 @@ const Sidebar = () => {
                 My Listings
             </NavLink>
             <NavLink className={`nav-link ${({ isActive }) => isActive ? 'active' : ''}`} to="/user/my-wishlist">
-                <i className="fas fa-th-list me-3"></i>
+                <i className="fa-solid fa-star me-3"></i>
                 My WishList
             </NavLink>
             <NavLink className={`nav-link ${({ isActive }) => isActive ? 'active' : ''}`} to="/user/my-wallet">

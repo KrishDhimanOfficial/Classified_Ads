@@ -3,6 +3,7 @@ import { Product } from '../component'
 import { Link, useParams } from 'react-router-dom'
 import config from '../../../config/config'
 import DataService from '../../hooks/DataService'
+import GetCookie from '../../hooks/GetCookie'
 
 
 const SellerProfileListings = () => {
@@ -11,7 +12,11 @@ const SellerProfileListings = () => {
 
     const sellerDetails = useCallback(async (page) => {
         try {
-            const res = await DataService.get(`/get/seller-profile/${seller_username}?page=${page}`)
+            const res = await DataService.get(`/get/seller-profile/${seller_username}?page=${page}`, {
+                headers: {
+                    'Authorization': `Bearer ${GetCookie()}`
+                }
+            })
             if (res.error) navigate('not-found')
             setsellerlistingInfo(res)
         } catch (error) {

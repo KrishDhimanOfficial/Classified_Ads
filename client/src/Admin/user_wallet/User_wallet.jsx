@@ -1,19 +1,18 @@
 import React, { useCallback, useState } from 'react'
 import { BTN, Input } from '../../components/component'
-import config from '../../../config/config';
+import config from '../../../config/config'
 import { useSelector } from 'react-redux'
-import DataService from '../../hooks/DataService';
-import GetCookie from '../../hooks/GetCookie';
-import { useNavigate } from 'react-router-dom';
-import Notify from '../../hooks/Notify';
-import { toast } from 'react-toastify';
+import DataService from '../../hooks/DataService'
+import GetCookie from '../../hooks/GetCookie'
+import { useNavigate } from 'react-router-dom'
+import Notify from '../../hooks/Notify'
+import { toast } from 'react-toastify'
 import { Transactions } from '../admin'
 
 const User_wallet = () => {
     const navigate = useNavigate()
     const profile = useSelector(state => state.seller)
     const [amount, setamount] = useState(0)
-
 
     const updateWallet = async (status) => {
         const res = await DataService.put('/update/seller-wallet', { amount, status },
@@ -27,12 +26,10 @@ const User_wallet = () => {
 
     const handlepayment = useCallback(() => {
         try {
-            console.log(amount);
-
             const options = {
                 key: config.razorpay_key,
                 amount: amount * 100,
-                currency: 'USD',
+                currency: 'INR',
                 name: 'Classified Ads',
                 description: 'Buy, Sell and Promote',
                 handler: (response) => updateWallet(true),
@@ -55,7 +52,9 @@ const User_wallet = () => {
             <div className="profile-header d-flex align-items-center justify-content-between">
                 <div className='d-flex flex-column'>
                     <h6 className='text-grey fw-bold fs-5 mb-0'>Available Balance</h6>
-                    <span className='text-primary fw-bolder fs-6'>${profile.seller.wallet_amount}</span>
+                    <span className='text-primary fw-bolder fs-6'>
+                        <i class="fa-solid fa-indian-rupee-sign"></i>
+                        {profile.seller.wallet_amount}</span>
                 </div>
                 <div className='d-flex gap-2 justify-content-end'>
                     <Input

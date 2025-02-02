@@ -17,4 +17,4 @@ class BTN extends Component {
   }
 }
 
-export default BTN
+export default React.memo(BTN)

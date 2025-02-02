@@ -62,7 +62,8 @@ const Product = ({ id, path, status, title, price, ad_status, clicks, publishSta
                     {title}
                 </h5>
                 <h6 className="text-primary mb-3 text-start">
-                    ${price}
+                    <i class="fa-solid fa-indian-rupee-sign"></i>
+                    {price}
                 </h6>
                 <div className="d-flex align-items-center mb-3">
                     <i className="fas fa-clock me-2">

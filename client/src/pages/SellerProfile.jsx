@@ -1,9 +1,11 @@
-import React, { lazy, useEffect, useState } from 'react'
-import { Image, SellerProfileListings, Review_container, ReviewForm } from '../components/component'
+import React, { useEffect, useState } from 'react'
+import { Image, SellerProfileListings, Review_container, ReviewForm, BTN } from '../components/component'
 import DataService from '../hooks/DataService'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import config from '../../config/config'
 import defaultUser from '../assets/images/user.svg'
+import { toast } from 'react-toastify'
+import { GetCookie } from '../hooks/hooks'
 
 
 const SellerProfile = () => {
@@ -11,12 +13,16 @@ const SellerProfile = () => {
     const { seller_username } = useParams()
     const [listingLength, setLength] = useState(0)
     const [sellerInfo, setsellerInfo] = useState({})
-
+    const [follwing, setfollowing] = useState(false)
     const date = new Date(sellerInfo.createdAt)
 
     const sellerDetails = async () => {
         try {
-            const res = await DataService.get(`/get/seller-profile/${seller_username}`)
+            const res = await DataService.get(`/get/seller-profile/${seller_username}`, {
+                headers: {
+                    Authorization: `Bearer ${GetCookie()}`
+                }
+            })
             if (res.error) navigate('/not-found')
             setLength(res.totalDocs)
             setsellerInfo(res.collectionData[0].seller)
@@ -25,7 +31,40 @@ const SellerProfile = () => {
         }
     }
 
-    useEffect(() => { sellerDetails() }, [])
+    const createFollowing = async () => {
+        try {
+            const token = sessionStorage.getItem('seller_token')
+            if (!token) toast.warning('please login first!')
+            await DataService.patch(`/follow/seller`, { followingId: sellerInfo._id, }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            setfollowing(prev => !prev)
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    const createUnFollowing = async () => {
+        try {
+            const token = sessionStorage.getItem('seller_token')
+            if (!token) toast.warning('please login first!')
+            const res = await DataService.patch(`/unfollow/seller`, { followingId: sellerInfo._id, }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            if (res.message) sellerInfo.followers.length = 0, setfollowing(false)
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    useEffect(() => {
+        sellerDetails()
+        sellerInfo.followers?.includes(sellerInfo.followerId) ? setfollowing(true) : setfollowing(false)
+    }, [follwing, sellerInfo.followers?.length])
     return (
         <>
             <title>{`seller - ${seller_username}`}</title>
@@ -67,10 +106,35 @@ const SellerProfile = () => {
                                     </ul>
                                     <ul className='d-flex gap-3'>
                                         <li>
+                                            <span className='fw-bold'>Followers : </span>
+                                            <span className='fs-bold'> {sellerInfo.followersCount} </span>
+                                        </li>
+                                        <li>
+                                            <span className='fw-bold'>Following : </span>
+                                            <span className='fs-bold'> {sellerInfo.followingsCount} </span>
+                                        </li>
+                                    </ul>
+                                    <ul className='d-flex gap-3'>
+                                        <li>
                                             <span className='fw-bold'>Email : </span>  <em>{sellerInfo.email}</em>
                                         </li>
                                         <li>
                                             <span className='fw-bold'>Phone : </span>  <em>{sellerInfo.phone}</em>
+                                        </li>
+                                    </ul>
+                                    <ul className='d-flex gap-3 mt-3'>
+                                        <li>
+                                            <BTN
+                                                type={'button'}
+                                                text={follwing || sellerInfo.followers?.includes(sellerInfo.followerId)
+                                                    ? 'Following'
+                                                    : 'Follow'}
+                                                onClick={() => sellerInfo.followers?.includes(sellerInfo.followerId)
+                                                    ? createUnFollowing()// That's follow the seller
+                                                    : createFollowing() // That's Unfollow the seller
+                                                }
+                                                className={'back-btn'}
+                                            />
                                         </li>
                                     </ul>
                                     <div className="course-single-tab">
@@ -114,4 +178,4 @@ const SellerProfile = () => {
     )
 }
 
-export default SellerProfile
+export default React.memo(SellerProfile)

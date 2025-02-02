@@ -498,6 +498,24 @@ const product_controller = {
                     $match: { 'seller.status': true }
                 },
                 {
+                    $lookup: {
+                        from: 'states',
+                        localField: 'stateId',
+                        foreignField: '_id',
+                        as: 'state'
+                    }
+                },
+                { $unwind: '$state' },
+                {
+                    $lookup: {
+                        from: 'cities',
+                        localField: 'cityId',
+                        foreignField: '_id',
+                        as: 'city'
+                    }
+                },
+                { $unwind: '$city' },
+                {
                     $addFields: {
                         sellerImage: {
                             $concat: [`${config.sellerImage}`, '/', '$seller.image']
@@ -508,9 +526,11 @@ const product_controller = {
                         sellerusername: '$seller.username'
                     }
                 },
-                { $sort: { created_At: -1 } },
+                { $sort: { ad_status: -1 } },
                 {
                     $project: {
+                        'state.status': 0,
+                        'city.status': 0,
                         'parentcategory.image': 0,
                         'parentcategory.slug': 0,
                         seller: 0,
@@ -540,13 +560,19 @@ const product_controller = {
     },
     handleFilteringListing: async (req, res) => {
         try {
-            const { brandId, condition, parentcategoryId, subcategoryId, featured, listed } = req.query;
+            const { brandId, condition, stateId, cityId, parentcategoryId, subcategoryId, featured, listed } = req.query;
             const query = []
 
             if (condition) query.push({ condition: condition })
             if (brandId) query.push({ brandId: new ObjectId(brandId) })
             if (parentcategoryId) query.push({ parentcategoryId: new ObjectId(parentcategoryId) })
             if (subcategoryId) query.push({ subcategoryId: new ObjectId(subcategoryId) })
+            if (stateId && cityId) {
+                query.push({ $and: [{ stateId: new ObjectId(stateId) }, { cityId: new ObjectId(cityId) }] })
+            } else {
+                if (stateId) query.push({ stateId: new ObjectId(stateId) })
+                if (cityId) query.push({ cityId: new ObjectId(cityId) })
+            }
             if (featured && listed) {
                 query.push({ $or: [{ ad_status: true }, { ad_status: false }] })
             } else {
@@ -578,7 +604,24 @@ const product_controller = {
                 { $unwind: '$seller' },
                 {
                     $match: { 'seller.status': true }
+                }, {
+                    $lookup: {
+                        from: 'states',
+                        localField: 'stateId',
+                        foreignField: '_id',
+                        as: 'state'
+                    }
                 },
+                { $unwind: '$state' },
+                {
+                    $lookup: {
+                        from: 'cities',
+                        localField: 'cityId',
+                        foreignField: '_id',
+                        as: 'city'
+                    }
+                },
+                { $unwind: '$city' },
                 {
                     $addFields: {
                         sellerImage: {
@@ -587,12 +630,17 @@ const product_controller = {
                         listing_img: {
                             $concat: [`${config.product_img_path}`, '/', '$featured_img']
                         },
+                        location: {
+                            $concat: ['$city.name', ', ', '$state.name'],
+                        },
                         sellerusername: '$seller.username'
                     }
                 },
                 { $sort: { created_At: -1 } },
                 {
                     $project: {
+                        state: 0,
+                        city: 0,
                         'parentcategory.image': 0,
                         'parentcategory.slug': 0,
                         seller: 0,
