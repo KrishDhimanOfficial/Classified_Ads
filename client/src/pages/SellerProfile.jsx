@@ -14,6 +14,7 @@ const SellerProfile = () => {
     const [listingLength, setLength] = useState(0)
     const [sellerInfo, setsellerInfo] = useState({})
     const [follwing, setfollowing] = useState(false)
+    const [ShowFollowBtn, setShowFollowBtn] = useState(false)
     const date = new Date(sellerInfo.createdAt)
 
     const sellerDetails = async () => {
@@ -29,6 +30,17 @@ const SellerProfile = () => {
         } catch (error) {
             console.error('sellerDetails : ' + error)
         }
+    }
+
+    const getSellerIdToNotShowFollowBtn = async () => {
+        const token = sessionStorage.getItem('seller_token')
+        if (!token) console.log('Token Not Found')
+        const res = await DataService.get('/check-seller', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+        setShowFollowBtn(sellerInfo._id !== res.id)
     }
 
     const createFollowing = async () => {
@@ -61,6 +73,7 @@ const SellerProfile = () => {
         }
     }
 
+    useEffect(() => { getSellerIdToNotShowFollowBtn() }, [])
     useEffect(() => {
         sellerDetails()
         sellerInfo.followers?.includes(sellerInfo.followerId) ? setfollowing(true) : setfollowing(false)
@@ -123,19 +136,23 @@ const SellerProfile = () => {
                                         </li>
                                     </ul>
                                     <ul className='d-flex gap-3 mt-3'>
-                                        <li>
-                                            <BTN
-                                                type={'button'}
-                                                text={follwing || sellerInfo.followers?.includes(sellerInfo.followerId)
-                                                    ? 'Following'
-                                                    : 'Follow'}
-                                                onClick={() => sellerInfo.followers?.includes(sellerInfo.followerId)
-                                                    ? createUnFollowing()// That's follow the seller
-                                                    : createFollowing() // That's Unfollow the seller
-                                                }
-                                                className={'back-btn'}
-                                            />
-                                        </li>
+                                        {
+                                            ShowFollowBtn && (
+                                                <li>
+                                                    <BTN
+                                                        type={'button'}
+                                                        text={follwing || sellerInfo.followers?.includes(sellerInfo.followerId)
+                                                            ? 'Following'
+                                                            : 'Follow'}
+                                                        onClick={() => sellerInfo.followers?.includes(sellerInfo.followerId)
+                                                            ? createUnFollowing()// That's follow the seller
+                                                            : createFollowing() // That's Unfollow the seller
+                                                        }
+                                                        className={'back-btn'}
+                                                    />
+                                                </li>
+                                            )
+                                        }
                                     </ul>
                                     <div className="course-single-tab">
                                         <ul className="nav nav-tabs" id="back-tab" role="tablist">

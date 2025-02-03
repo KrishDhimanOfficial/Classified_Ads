@@ -22,7 +22,7 @@ router.route('/seller/profile/:id?')
     .put(sellerprofileImg.single('image'), seller_Controller.updateProfile)
 router.put('/update/seller-wallet', seller_Controller.updateWallet)
 router.post('/seller/payment-transactions', AuthenticateUser, seller_Controller.getpaymentTransactions)
-router.get('/get/seller-profile/:seller_username', seller_Controller.getSeller)
+router.get('/get/seller-profile/:seller_username', AuthenticateUser, seller_Controller.getSeller)
 
 router.get('/parent-category', category_controller.getparentCategory)
 router.get('/sub-category/:parentId', category_controller.getsubCategory)
@@ -77,6 +77,8 @@ router.get('/settings', authenticationcontroller.getGNSettings)
 router.get('/location/states', location_controller.getlocationState)
 router.get('/location/cities/:id', location_controller.getlocationCities)
 
+// Follow & Following
+router.get('/check-seller', seller_Controller.getSellerIdToNotShowFollowBtn)
 router.patch('/follow/seller', AuthenticateUser, seller_Controller.startFollowing)
 router.patch('/unfollow/seller', AuthenticateUser, seller_Controller.startUnFollowing)
 

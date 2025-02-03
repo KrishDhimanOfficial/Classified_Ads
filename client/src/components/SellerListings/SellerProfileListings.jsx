@@ -39,6 +39,7 @@ const SellerProfileListings = () => {
                             category={listing.parentcategory.title}
                             ad_status={listing.ad_status}
                             sellerImg={listing.sellerImage}
+                            isfavourite={listing.isWishlistItem}
                             sellerUsername={listing.sellerusername}
                         />
                     </div>

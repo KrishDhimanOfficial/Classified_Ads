@@ -168,6 +168,12 @@ const seller_controllers = {
                 { $unwind: '$seller' },
                 {
                     $addFields: {
+                        isWhislistItem: {
+                            $filter: {
+                                input: '$seller.wishlist',
+                                cond: { $eq: ['$$this', '$_id'] }
+                            }
+                        },
                         sellerImage: {
                             $concat: [`${config.sellerImage}`, '/', '$seller.image']
                         },
@@ -210,7 +216,7 @@ const seller_controllers = {
                 const total = totalRating.reduce((acc, curr) => acc + curr.rating, 0)
                 await sellerModel.findByIdAndUpdate({ _id: id }, { avg_rating: total / totalRating.length })
             }
-            return res.json({ message: 'Review written under Approval!' })
+            return res.json({ message: 'Review written!' })
         } catch (error) {
             // Extract custom error messages                        
             if (error.name === 'ValidationError') validations(res, error.errors)
@@ -255,9 +261,7 @@ const seller_controllers = {
             const response = await sellerModel.findByIdAndUpdate(
                 { _id: seller.id },
                 {
-                    $addToSet: {
-                        followings: [new ObjectId(followingId)]
-                    }
+                    $addToSet: { followings: [new ObjectId(followingId)] }
                 },
                 { new: true }
             )
@@ -265,9 +269,7 @@ const seller_controllers = {
             const updateFollowers = await sellerModel.findByIdAndUpdate(
                 { _id: followingId },
                 {
-                    $addToSet: {
-                        followers: [new ObjectId(seller.id)]
-                    }
+                    $addToSet: { followers: [new ObjectId(seller.id)] }
                 },
                 { new: true }
             )
@@ -283,26 +285,30 @@ const seller_controllers = {
             const seller = getUser(req.headers['authorization'].split(' ')[1])
             const response = await sellerModel.findByIdAndUpdate(
                 { _id: seller.id },
-                {
-                    $pull: {
-                        followings: new ObjectId(followingId)
-                    }
+                { // remove from following
+                    $pull: { followings: new ObjectId(followingId) }
                 },
                 { new: true }
             )
             if (!response) return res.json({ error: 'Someting went wrong!' })
             const UnFollowfromFollowers = await sellerModel.findByIdAndUpdate(
                 { _id: followingId },
-                {
-                    $pull: {
-                        followers: new ObjectId(seller.id)
-                    }
+                {// remove from followers
+                    $pull: { followers: new ObjectId(seller.id) }
                 },
                 { new: true }
             )
             return res.json({ message: 'unfollow!' })
         } catch (error) {
             console.log('startUnFollowing : ' + error.message)
+        }
+    },
+    getSellerIdToNotShowFollowBtn: async (req, res) => {
+        try {
+            const seller = getUser(req.headers['authorization'].split(' ')[1])
+            return res.status(200).json(seller)
+        } catch (error) {
+            console.log(error.message)
         }
     }
 }

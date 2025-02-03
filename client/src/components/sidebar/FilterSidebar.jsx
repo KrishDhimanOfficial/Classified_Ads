@@ -6,6 +6,7 @@ import { useForm, Controller } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 
 const FilterSidebar = () => {
+    const cityRef = useRef()
     const navigate = useNavigate()
     const [pcategory, setpcategory] = useState([])
     const [subcategory, setsubcategory] = useState([])
@@ -13,13 +14,11 @@ const FilterSidebar = () => {
     const [states, setstates] = useState([])
     const [cities, setcities] = useState([])
     const [location, setlocation] = useState({
-        Filterstate: { value: '', label: '' },
-        Filtercity: { value: '', label: '' },
+        Filterstate: { value: '', label: 'Select A State' },
+        Filtercity: { value: '', label: 'Select A City' },
     })
 
-
     const { handleSubmit, setValue, control, register } = useForm()
-
 
     const fetchCategorie = useCallback(async () => {
         setsubcategory([])
@@ -55,21 +54,32 @@ const FilterSidebar = () => {
     const getlocation = () => {
         const Filtercity = JSON.parse(localStorage.getItem('filtercity'))
         const Filterstate = JSON.parse(localStorage.getItem('filterstate'))
+        let filters = '?';
 
-        setlocation({ Filtercity, Filterstate })
-        setValue('stateId', location.Filterstate.value)
-        setValue('cityId', location.Filtercity.value)
-
-        navigate(`/browse-products?stateId=${Filterstate.value}&cityId=${Filtercity.value}`)
+        if (Filterstate) {
+            filters += `stateId=${Filterstate.value}&`;
+            setlocation(prev => ({ ...prev, Filterstate }))
+            setValue('stateId', location.Filterstate.value)
+            if (filters.endsWith('&')) filters = filters.slice(0, -1)
+            navigate(`/browse-products${filters}`)
+        }
+        if (Filtercity) {
+            filters += `cityId=${Filtercity.value}&`;
+            setlocation(prev => ({ ...prev, Filtercity }))
+            setValue('cityId', location.Filtercity.value)
+            if (filters.endsWith('&')) filters = filters.slice(0, -1)
+            navigate(`/browse-products${filters}`)
+        }
+        if (Filterstate && Filtercity) {
+            if (filters.endsWith('&')) filters = filters.slice(0, -1)
+            navigate(`/browse-products${filters}`)
+        }
     }
 
     const getfilterData = useCallback(async (formData) => {
         try {
-            console.log(location);
-
             let filters = '?'
             Object.entries(formData).forEach(([key, value]) => {
-                console.log([key, value])
                 if (typeof value === 'object' && value) filters += `${key}=${value.value}&`;
                 if (typeof value !== 'object' && value) filters += `${key}=${value}&`;
             })
@@ -107,8 +117,9 @@ const FilterSidebar = () => {
                                         label: location.Filterstate?.label,
                                     }}
                                     onChange={(selectedoption) => {
+                                        cityRef.current.value = { value: '', label: '' };
                                         localStorage.setItem('filterstate', JSON.stringify(selectedoption))
-                                        setlocation(prev => ({ ...prev, Filterstate: selectedoption }))
+                                        setlocation({ Filterstate: selectedoption })
                                         fetchCities(selectedoption.value)
                                     }}
                                 />
@@ -122,6 +133,7 @@ const FilterSidebar = () => {
                             render={({ field }) => (
                                 <Select
                                     {...field}
+                                    ref={cityRef}
                                     isClearable
                                     isSearchable
                                     isRtl={false}
@@ -131,7 +143,6 @@ const FilterSidebar = () => {
                                         label: location.Filtercity?.label,
                                     }}
                                     onChange={(selectedoption) => {
-
                                         localStorage.setItem('filtercity', JSON.stringify(selectedoption))
                                         setlocation(prev => ({ ...prev, Filtercity: selectedoption }))
                                     }}

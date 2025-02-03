@@ -8,7 +8,7 @@ import { setWishListVisible } from '../../../controller/seller.store'
 import { useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
 
-const Product = ({ id, title, category, image, slug, wishlist, price,
+const Product = ({ id, title, category, image, slug, price, isfavourite, isonWishList,
     ad_status, sellerImg, sellerUsername, location }) => {
 
     const navigate = useNavigate()
@@ -69,7 +69,7 @@ const Product = ({ id, title, category, image, slug, wishlist, price,
                 <div className="d-flex justify-content-between">
                     <span className="back-category cate-1"> {category} </span>
                     <div className="course__card-icon--2">
-                        <i className={`${wishlist || fillheart ? 'fa-solid' : 'fa-regular'} fa-heart`}
+                        <i className={`${fillheart || isfavourite ? 'fa-solid' : 'fa-regular'} fa-heart`}
                             onClick={() => { addtoWishlist() }}
                             style={{ cursor: 'pointer' }}>
                         </i>
@@ -117,17 +117,19 @@ const Product = ({ id, title, category, image, slug, wishlist, price,
                     }
                 </div>
                 {
-                    wishlist && (<div className="course__card-icon--2">
-                        <BTN
-                            type={'button'}
-                            onClick={(e) => removeWishlist(e)}
-                            className={'btn btn-sm btn-danger'}
-                            icon={loading ? <span className="spinner-grow spinner-grow-sm" aria-hidden="true"></span> : ''}
-                            text={loading ? 'Loading...' : 'Remove'}
-                            style={{ padding: '0.2rem 0.5rem' }}
-                            disabled={loading}
-                        />
-                    </div>)
+                    isonWishList && (
+                        <div className="course__card-icon--2">
+                            <BTN
+                                type={'button'}
+                                onClick={(e) => removeWishlist(e)}
+                                className={'btn btn-sm btn-danger'}
+                                icon={loading ? <span className="spinner-grow spinner-grow-sm" aria-hidden="true"></span> : ''}
+                                text={loading ? 'Loading...' : 'Remove'}
+                                style={{ padding: '0.2rem 0.5rem' }}
+                                disabled={loading}
+                            />
+                        </div>
+                    )
                 }
             </div>
         </div>

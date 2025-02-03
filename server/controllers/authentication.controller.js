@@ -269,10 +269,12 @@ const authenticationcontroller = {
                     }
                 }
             ])
+            const sellers = await sellerModel.find({}, { _id: 1 })
             return res.render('index', {
                 totalAmount: response[0].totalAmount,
                 activeLising: listings[0]._id ? listings[0].documents.length : 0,
-                deactiveLising: listings[0]._id ? 0 : listings[0].documents.length
+                deactiveLising: listings[0]._id ? 0 : listings[0].documents.length,
+                sellers: sellers.length
             })
         } catch (error) {
             console.log('RenderIndexPage : ' + error.message)

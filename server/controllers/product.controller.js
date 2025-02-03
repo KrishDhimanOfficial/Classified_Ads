@@ -517,6 +517,18 @@ const product_controller = {
                 { $unwind: '$city' },
                 {
                     $addFields: {
+                        isWishlistItem: {
+                            $cond: {
+                                if: {
+                                    $filter: {
+                                        input: '$seller.wishlist',
+                                        cond: { $eq: ['$$this', '$_id'] }
+                                    }
+                                },
+                                then: true,
+                                else: false,
+                            }
+                        },
                         sellerImage: {
                             $concat: [`${config.sellerImage}`, '/', '$seller.image']
                         },
@@ -551,22 +563,24 @@ const product_controller = {
             ]
             const response = await handleAggregatePagination(productModel, projection, req.query)
             if (response.collectionData.length === 0) return res.json({ error: 'No Results' })
-            if (response.collectionData.length > 0) {
-                setTimeout(() => res.status(200).json(response), 1500)
-            }
+            setTimeout(() => res.status(200).json(response), 1500)
+
         } catch (error) {
             console.log('browseListings : ' + error.message)
         }
     },
     handleFilteringListing: async (req, res) => {
         try {
-            const { brandId, condition, stateId, cityId, parentcategoryId, subcategoryId, featured, listed } = req.query;
+            const { brandId, condition, search, stateId, cityId, parentcategoryId, subcategoryId, featured, listed } = req.query;
             const query = []
+            // console.log(req.body)
+
 
             if (condition) query.push({ condition: condition })
             if (brandId) query.push({ brandId: new ObjectId(brandId) })
             if (parentcategoryId) query.push({ parentcategoryId: new ObjectId(parentcategoryId) })
             if (subcategoryId) query.push({ subcategoryId: new ObjectId(subcategoryId) })
+            if (search) query.push({ title: new RegExp(search) })
             if (stateId && cityId) {
                 query.push({ $and: [{ stateId: new ObjectId(stateId) }, { cityId: new ObjectId(cityId) }] })
             } else {
@@ -602,9 +616,8 @@ const product_controller = {
                     }
                 },
                 { $unwind: '$seller' },
+                { $match: { 'seller.status': true, status: true, publishing_status: true } },
                 {
-                    $match: { 'seller.status': true }
-                }, {
                     $lookup: {
                         from: 'states',
                         localField: 'stateId',
@@ -624,6 +637,18 @@ const product_controller = {
                 { $unwind: '$city' },
                 {
                     $addFields: {
+                        isWishlistItem: {
+                            $cond: {
+                                if: {
+                                    $filter: {
+                                        input: '$seller.wishlist',
+                                        cond: { $eq: ['$$this', '$_id'] }
+                                    }
+                                },
+                                then: true,
+                                else: false,
+                            }
+                        },
                         sellerImage: {
                             $concat: [`${config.sellerImage}`, '/', '$seller.image']
                         },
@@ -639,26 +664,17 @@ const product_controller = {
                 { $sort: { created_At: -1 } },
                 {
                     $project: {
-                        state: 0,
-                        city: 0,
-                        'parentcategory.image': 0,
-                        'parentcategory.slug': 0,
-                        seller: 0,
-                        images: 0,
-                        sellerId: 0,
-                        click_count: 0,
-                        description: 0,
-                        negotiable: 0,
-                        features: 0,
-                        created_At: 0,
+                        'parentcategory.image': 0, 'parentcategory.slug': 0,
+                        state: 0, city: 0, seller: 0, images: 0, sellerId: 0,
+                        click_count: 0, description: 0, negotiable: 0,
+                        features: 0, created_At: 0,
                     }
-                },
-                {
-                    $match: { status: true, publishing_status: true }
                 },
             ]
             const response = await handleAggregatePagination(productModel, projection, req.query)
-            if (response.collectionData.length === 0) return res.json({ error: 'No Results' })
+            console.log(response.collectionData);
+
+            if (response.collectionData.length === 0 || !response) return res.json({ error: 'No Results' })
             setTimeout(() => res.status(200).json(response), 1500)
         } catch (error) {
             console.log('handleFilteringListing : ' + error.message)

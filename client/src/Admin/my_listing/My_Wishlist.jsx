@@ -1,12 +1,10 @@
-import React, { lazy, Suspense, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import DataService from '../../hooks/DataService'
-import GetCookie from '../../hooks/GetCookie'
+import { GetCookie, Notify } from '../../hooks/hooks'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { Placeholder } from '../../components/component'
+import { Placeholder, Product } from '../../components/component'
 import { setWishListVisible } from '../../../controller/seller.store'
-
-const Product = lazy(() => import('../../components/product/Product'))
 
 const My_Wishlist = () => {
     const navigate = useNavigate()
@@ -58,10 +56,11 @@ const My_Wishlist = () => {
                                     price={listing.price}
                                     slug={`/listing/${listing.slug}`}
                                     image={`${listing.img}`}
-                                    wishlist={true}
                                     category={listing.category.title}
                                     ad_status={listing.ad_status}
                                     sellerImg={listing.seller_Img}
+                                    isonWishList={true}
+                                    isfavourite={true}
                                     sellerUsername={listing.seller.username}
                                 />
                             </div>

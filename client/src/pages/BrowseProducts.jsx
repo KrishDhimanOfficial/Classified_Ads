@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { FilterSidebar, Product, Placeholder } from '../components/component'
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
-import DataService from '../hooks/DataService'
+import { DataService, GetCookie } from '../hooks/hooks'
 
 const BrowseProducts = () => {
     const navigate = useNavigate()
@@ -11,14 +11,24 @@ const BrowseProducts = () => {
     const [isloading, setloading] = useState(false)
     const [error, seterror] = useState('')
     const [applyfilters, setFilters] = useState('')
+console.log(listing);
 
     const browseListing = async () => {
         try {
-            const Filtercity = JSON.parse(localStorage.getItem('filtercity'))
-            const Filterstate = JSON.parse(localStorage.getItem('filterstate'))
-            navigate(`/browse-products?stateId=${Filterstate.value}&cityId=${Filtercity.value}`)
+            setlisting({}), setloading(true)
+            const res = await DataService.get(`/browse-listing`)
+            if (res.error) seterror(res.error), setloading(false)
+            seterror(''), setlisting(res), setloading(false)
+
+            // let filters = '?'
+            // const Filtercity = JSON.parse(localStorage.getItem('filtercity'))
+            // const Filterstate = JSON.parse(localStorage.getItem('filterstate'))
+            // if (Filtercity) filters += `city=${Filtercity.value}&`;
+            // if (Filterstate) filters += `state=${Filterstate.value}&`;
+            // if (filters.endsWith('&')) filters = filters.slice(0, -1)
+            // navigate(`/browse-products${filters}`)
         } catch (error) {
-            console.error('browseListing : ' + error)
+            console.error(error)
         }
     }
 
@@ -27,7 +37,7 @@ const BrowseProducts = () => {
             setlisting({}), setloading(true)
             const res = await DataService.get(`/filters/listings${applyfilters}`)
             if (res.error) return seterror(res.error), setloading(false)
-            seterror(''), setloading(false), setlisting(res)
+            seterror(''), setlisting(res), setloading(false)
         } catch (error) {
             console.error('filiters : ', error)
         }
@@ -42,7 +52,7 @@ const BrowseProducts = () => {
             const res = await DataService.get(api)
 
             if (res.error) return seterror(res.error), setloading(false)
-            setloading(false), setlisting(res)
+            seterror(''), setlisting(res), setloading(false)
         } catch (error) {
             console.error('fetchLlistingwithPagination : ' + error)
         }
@@ -105,6 +115,7 @@ const BrowseProducts = () => {
                                                     ad_status={listing.ad_status}
                                                     sellerImg={listing.sellerImage}
                                                     location={listing.location}
+                                                    isfavourite={listing.isWishlistItem}
                                                     sellerUsername={listing.sellerusername}
                                                 />
                                             </div>
