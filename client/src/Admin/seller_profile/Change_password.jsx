@@ -28,7 +28,7 @@ const Change_password = () => {
         <div className="back-login-page">
             <div className="login-right-form pt-0">
                 <form onSubmit={handleSubmit(changePassword)} autoComplete='off' encType="multipart/form-data">
-                    <div className="d-flex gap-3 w-100">
+                    <div className="d-flex flex-md-row flex-column gap-3 w-100">
                         <p className='w-100'>
                             <label>Current password</label>
                             <Input
@@ -51,7 +51,7 @@ const Change_password = () => {
                             />
                         </p>
                     </div>
-                    <div className={'w-50 float-end'}>
+                    <div className={'w-md-50 float-md-end'}>
                         <BTN
                             disabled={isSubmitting}
                             type={"submit"}

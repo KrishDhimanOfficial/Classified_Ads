@@ -127,8 +127,8 @@ const authenticationcontroller = {
         try {
             const { token } = req.body;
             const seller = getUser(token)
-
-            const response = await sellerModel.findOne({ _id: new mongoose.Types.ObjectId(seller?.id), status: true })
+            const response = await sellerModel.findOne({ _id: seller.id, status: true })
+            
             if (!response) return res.json({ error: 'Unauthorized!' })
             return res.json({ message: 'Authenticated!' })
         } catch (error) {

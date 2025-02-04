@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Sidebar } from './Admin/admin'
 import { Footer, Navbar } from './components/component'
 import { Outlet, useNavigate } from 'react-router-dom'
@@ -10,9 +10,11 @@ import GetCookie from './hooks/GetCookie'
 import Notify from './hooks/Notify'
 import { setProfile } from '../controller/seller.store'
 import { setsetting } from '../controller/GNS.store'
+import config from '../config/config'
 
 
 const SellerAccountLayout = () => {
+    const [logo, setlogo] = useState(null)
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
@@ -27,10 +29,17 @@ const SellerAccountLayout = () => {
 
     const fetchDetails = async () => {
         const res = await DataService.get('/settings')
+        setlogo(`${config.site_img_path}/${res.logo}`)
         dispatch(setsetting(res))
     }
 
-    useEffect(() => { getProfile(), fetchDetails() }, [])
+    const setfavicon = async () => {
+        const link = document.createElement('link')
+        link.rel = 'icon', link.type = 'image/x-icon', link.href = logo
+        document.head.appendChild(link)
+    }
+
+    useEffect(() => { getProfile(), fetchDetails(), setfavicon() }, [])
     return (
         <>
             <Toaster />
@@ -39,7 +48,7 @@ const SellerAccountLayout = () => {
             <Navbar />
             <div className="container pt-120 pb-90">
                 <div className="row g-3">
-                    <div className="col-md-3">
+                    <div className="col-md-3 d-md-block d-none">
                         <div className="sidebar">
                             <Sidebar />
                         </div>

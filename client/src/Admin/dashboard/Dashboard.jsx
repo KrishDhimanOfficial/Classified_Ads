@@ -30,10 +30,10 @@ const Dashboard = () => {
                     <Seller_profile totalListing={listing?.totalActive + listing?.totalDeActive} />
                 </div>
             </div>
-            <div className="row">
+            <div className="row mx-2">
                 <div className="col-12">
-                    <div className="profile-stats">
-                        <div className="stat stat-orange">
+                    <div className="row gap-3 profile-stats">
+                        <div className="col-md-3 m-0 stat stat-orange">
                             <h4>
                                 {listing?.totalActive + listing?.totalDeActive || 0}
                             </h4>
@@ -41,7 +41,7 @@ const Dashboard = () => {
                                 All Listing
                             </p>
                         </div>
-                        <div className="stat stat-green">
+                        <div className="col-md-3 m-0 stat stat-green">
                             <h4>
                                 {listing?.totalActive || 0}
                             </h4>
@@ -49,7 +49,7 @@ const Dashboard = () => {
                                 Active Listing
                             </p>
                         </div>
-                        <div className="stat stat-red">
+                        <div className="col-md-3 m-0 stat stat-red">
                             <h4>
                                 {listing?.totalDeActive || 0}
                             </h4>
@@ -57,7 +57,7 @@ const Dashboard = () => {
                                 Deactive Listing
                             </p>
                         </div>
-                        <div className="stat stat-blue">
+                        <div className="col-md-3 m-0 stat stat-blue">
                             <h4>
                                 0
                             </h4>
@@ -70,7 +70,7 @@ const Dashboard = () => {
             </div>
             <div className="row my-4">
                 <div className="col-12">
-                    <div className="card w-100">
+                    <div className="card w-100 m-0">
                         <div className="card-body">
                             <h5 className="card-title">
                                 All Reviews

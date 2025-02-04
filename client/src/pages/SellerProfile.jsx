@@ -40,7 +40,7 @@ const SellerProfile = () => {
                 Authorization: `Bearer ${token}`
             }
         })
-        setShowFollowBtn(sellerInfo._id !== res.id)
+        if (sellerInfo._id && res.id) setShowFollowBtn(sellerInfo._id !== res.id)
     }
 
     const createFollowing = async () => {
@@ -73,9 +73,8 @@ const SellerProfile = () => {
         }
     }
 
-    useEffect(() => { getSellerIdToNotShowFollowBtn() }, [])
+    useEffect(() => { sellerDetails(), getSellerIdToNotShowFollowBtn() }, [])
     useEffect(() => {
-        sellerDetails()
         sellerInfo.followers?.includes(sellerInfo.followerId) ? setfollowing(true) : setfollowing(false)
     }, [follwing, sellerInfo.followers?.length])
     return (
@@ -145,8 +144,8 @@ const SellerProfile = () => {
                                                             ? 'Following'
                                                             : 'Follow'}
                                                         onClick={() => sellerInfo.followers?.includes(sellerInfo.followerId)
-                                                            ? createUnFollowing()// That's follow the seller
-                                                            : createFollowing() // That's Unfollow the seller
+                                                            ? createUnFollowing()// That's Unfollow the seller
+                                                            : createFollowing() // That's follow the seller
                                                         }
                                                         className={'back-btn'}
                                                     />

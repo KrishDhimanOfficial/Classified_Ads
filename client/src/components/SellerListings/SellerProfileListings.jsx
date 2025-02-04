@@ -4,11 +4,14 @@ import { Link, useParams } from 'react-router-dom'
 import config from '../../../config/config'
 import DataService from '../../hooks/DataService'
 import GetCookie from '../../hooks/GetCookie'
+import { useSelector } from 'react-redux'
 
 
 const SellerProfileListings = () => {
+    const sellerInfo = useSelector(state => state.seller)
     const { seller_username } = useParams()
     const [sellerlisting, setsellerlistingInfo] = useState({})
+
 
     const sellerDetails = useCallback(async (page) => {
         try {
@@ -39,7 +42,7 @@ const SellerProfileListings = () => {
                             category={listing.parentcategory.title}
                             ad_status={listing.ad_status}
                             sellerImg={listing.sellerImage}
-                            isfavourite={listing.isWishlistItem}
+                            isfavourite={sellerInfo.seller?.wishlist?.includes(listing._id)}
                             sellerUsername={listing.sellerusername}
                         />
                     </div>

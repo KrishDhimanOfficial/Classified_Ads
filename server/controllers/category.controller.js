@@ -1,12 +1,11 @@
 import parent_categoryModel from '../models/parent_category.model.js'
 import sub_categoryModel from '../models/sub_category.model.js';
-import brandModel from '../models/brand.model.js'
 import validations from '../services/validateData.js'
 import deleteImg from '../services/deleteImg.js';
 import config from '../config/config.js';
 import mongoose from 'mongoose';
+const ObjectId = mongoose.Types.ObjectId;
 
-const ObjectId = mongoose.Types.ObjectId
 const category_controllers = {
     createParentCategory: async (req, res) => {
         try {
@@ -47,9 +46,7 @@ const category_controllers = {
                         'subcategories._id': 0
                     }
                 },
-                {
-                    $sort: { title: -1 }
-                }
+                { $sort: { title: -1 } }
             ])
             return res.render('categories/parentCategories', {
                 category_img_path: config.category_img_path,
@@ -208,6 +205,7 @@ const category_controllers = {
     getPopularCategories: async (req, res) => {
         try {
             const response = await parent_categoryModel.aggregate([
+                { $match: { status: true } },
                 {
                     $lookup: {
                         from: 'products',
@@ -224,9 +222,9 @@ const category_controllers = {
                         }
                     }
                 },
-                {
-                    $limit: 4
-                },
+                { $limit: 4 },
+                { $sort: { maximum: -1 } },
+                { $project: { slug: 0, status: 0, products: 0, image: 0 } }
             ])
             return res.status(200).json(response)
         } catch (error) {

@@ -9540,3 +9540,7 @@ ul {
   border-radius: 5%;
   border: 1px solid red;
 }
+
+.dropdown-toggle::after {
+  display: none;
+}

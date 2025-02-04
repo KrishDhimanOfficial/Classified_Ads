@@ -13,10 +13,8 @@ const FilterSidebar = () => {
     const [brands, setbrands] = useState([])
     const [states, setstates] = useState([])
     const [cities, setcities] = useState([])
-    const [location, setlocation] = useState({
-        Filterstate: { value: '', label: 'Select A State' },
-        Filtercity: { value: '', label: 'Select A City' },
-    })
+    const [selectedState, setSelectedState] = useState(null)
+    const [selectedCity, setSelectedCity] = useState(null)
 
     const { handleSubmit, setValue, control, register } = useForm()
 
@@ -58,15 +56,13 @@ const FilterSidebar = () => {
 
         if (Filterstate) {
             filters += `stateId=${Filterstate.value}&`;
-            setlocation(prev => ({ ...prev, Filterstate }))
-            setValue('stateId', location.Filterstate.value)
+            setSelectedState(Filterstate), setValue('stateId', Filterstate.value)
             if (filters.endsWith('&')) filters = filters.slice(0, -1)
             navigate(`/browse-products${filters}`)
         }
         if (Filtercity) {
             filters += `cityId=${Filtercity.value}&`;
-            setlocation(prev => ({ ...prev, Filtercity }))
-            setValue('cityId', location.Filtercity.value)
+            setSelectedCity(Filtercity), setValue('cityId', Filtercity.value)
             if (filters.endsWith('&')) filters = filters.slice(0, -1)
             navigate(`/browse-products${filters}`)
         }
@@ -79,9 +75,12 @@ const FilterSidebar = () => {
     const getfilterData = useCallback(async (formData) => {
         try {
             let filters = '?'
+            if (!formData.stateId) localStorage.setItem('filterstate', JSON.stringify(''))
+            if (!formData.cityId) localStorage.setItem('filtercity', JSON.stringify(''))
+
             Object.entries(formData).forEach(([key, value]) => {
-                if (typeof value === 'object' && value) filters += `${key}=${value.value}&`;
-                if (typeof value !== 'object' && value) filters += `${key}=${value}&`;
+                if (typeof value === 'object' && value) filters += `${key}=${value.value.trim()}&`;
+                if (typeof value !== 'object' && value) filters += `${key}=${value.trim()}&`;
             })
             if (filters.endsWith('&')) filters = filters.slice(0, -1)
             navigate(`/browse-products${filters}`)
@@ -89,6 +88,20 @@ const FilterSidebar = () => {
             console.error('filiters : ', error)
         }
     }, [])
+
+    const handleStateIdChange = (selectedoption) => {
+        setSelectedState(selectedoption), setSelectedCity(null)
+        fetchCities(selectedoption.value)
+        setValue('stateId', selectedoption.value)
+        localStorage.setItem('filtercity', JSON.stringify(''))
+        localStorage.setItem('filterstate', JSON.stringify(selectedoption))
+    }
+
+    const handleCityIdChange = (selectedoption) => {
+        setValue('cityId', selectedoption.value)
+        setSelectedCity(selectedoption)
+        localStorage.setItem('filtercity', JSON.stringify(selectedoption))
+    }
 
     useEffect(() => { fetchCategorie(), fetchState(), getlocation() }, [])
     return (
@@ -100,10 +113,19 @@ const FilterSidebar = () => {
             </div>
             <form onSubmit={handleSubmit(getfilterData)} autoComplete='off'>
                 <div className="widget back-category px-4">
+                    <h3 className="widget-title">Search</h3>
+                    <Input
+                        {...register('search')}
+                        type={'text'}
+                        className='px-2 py-3'
+                        placeholder={'Search for An Item'}
+                    />
+                </div>
+                <div className="widget back-category px-4">
                     <h3 className="widget-title">Select Location</h3>
                     <div className='mb-3'>
                         <Controller
-                            name={'stateId'} // Name of the field
+                            name='stateId' // Name of the field
                             control={control}
                             render={({ field }) => (
                                 <Select
@@ -112,40 +134,26 @@ const FilterSidebar = () => {
                                     isSearchable
                                     isRtl={false}
                                     options={states}
-                                    value={{
-                                        value: location.Filterstate?.value,
-                                        label: location.Filterstate?.label,
-                                    }}
-                                    onChange={(selectedoption) => {
-                                        cityRef.current.value = { value: '', label: '' };
-                                        localStorage.setItem('filterstate', JSON.stringify(selectedoption))
-                                        setlocation({ Filterstate: selectedoption })
-                                        fetchCities(selectedoption.value)
-                                    }}
+                                    value={selectedState}
+                                    onChange={(selectedoption) => handleStateIdChange(selectedoption)}
                                 />
                             )}
                         />
                     </div>
                     <div className='mb-3'>
                         <Controller
-                            name={'cityId'} // Name of the field
+                            name='cityId' // Name of the field
                             control={control}
                             render={({ field }) => (
                                 <Select
                                     {...field}
-                                    ref={cityRef}
                                     isClearable
                                     isSearchable
                                     isRtl={false}
                                     options={cities}
-                                    value={{
-                                        value: location.Filtercity?.value,
-                                        label: location.Filtercity?.label,
-                                    }}
-                                    onChange={(selectedoption) => {
-                                        localStorage.setItem('filtercity', JSON.stringify(selectedoption))
-                                        setlocation(prev => ({ ...prev, Filtercity: selectedoption }))
-                                    }}
+                                    value={selectedCity}
+                                    onFocus={() => fetchCities(selectedState.value)}
+                                    onChange={(selectedoption) => handleCityIdChange(selectedoption)}
                                 />
                             )}
                         />

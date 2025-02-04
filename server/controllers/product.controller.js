@@ -517,25 +517,16 @@ const product_controller = {
                 { $unwind: '$city' },
                 {
                     $addFields: {
-                        isWishlistItem: {
-                            $cond: {
-                                if: {
-                                    $filter: {
-                                        input: '$seller.wishlist',
-                                        cond: { $eq: ['$$this', '$_id'] }
-                                    }
-                                },
-                                then: true,
-                                else: false,
-                            }
-                        },
                         sellerImage: {
                             $concat: [`${config.sellerImage}`, '/', '$seller.image']
                         },
                         listing_img: {
                             $concat: [`${config.product_img_path}`, '/', '$featured_img']
                         },
-                        sellerusername: '$seller.username'
+                        location: {
+                            $concat: ['$city.name', ', ', '$state.name'],
+                        },
+                        sellerusername: '$seller.username',
                     }
                 },
                 { $sort: { ad_status: -1 } },
@@ -574,8 +565,6 @@ const product_controller = {
             const { brandId, condition, search, stateId, cityId, parentcategoryId, subcategoryId, featured, listed } = req.query;
             const query = []
             // console.log(req.body)
-
-
             if (condition) query.push({ condition: condition })
             if (brandId) query.push({ brandId: new ObjectId(brandId) })
             if (parentcategoryId) query.push({ parentcategoryId: new ObjectId(parentcategoryId) })
@@ -637,18 +626,6 @@ const product_controller = {
                 { $unwind: '$city' },
                 {
                     $addFields: {
-                        isWishlistItem: {
-                            $cond: {
-                                if: {
-                                    $filter: {
-                                        input: '$seller.wishlist',
-                                        cond: { $eq: ['$$this', '$_id'] }
-                                    }
-                                },
-                                then: true,
-                                else: false,
-                            }
-                        },
                         sellerImage: {
                             $concat: [`${config.sellerImage}`, '/', '$seller.image']
                         },
@@ -661,7 +638,7 @@ const product_controller = {
                         sellerusername: '$seller.username'
                     }
                 },
-                { $sort: { created_At: -1 } },
+                { $sort: { ad_status: -1 } },
                 {
                     $project: {
                         'parentcategory.image': 0, 'parentcategory.slug': 0,
@@ -672,9 +649,9 @@ const product_controller = {
                 },
             ]
             const response = await handleAggregatePagination(productModel, projection, req.query)
-            console.log(response.collectionData);
-
-            if (response.collectionData.length === 0 || !response) return res.json({ error: 'No Results' })
+            // console.log(response.collectionData);
+            if (response.collectionData.length === 0) return res.json({ error: 'No Results' })
+            if (!response) return res.json({ error: 'No Results' })
             setTimeout(() => res.status(200).json(response), 1500)
         } catch (error) {
             console.log('handleFilteringListing : ' + error.message)

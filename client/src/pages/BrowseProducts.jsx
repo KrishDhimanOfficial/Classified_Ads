@@ -1,32 +1,25 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { FilterSidebar, Product, Placeholder } from '../components/component'
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
-import { DataService, GetCookie } from '../hooks/hooks'
+import { DataService } from '../hooks/hooks'
+import { useSelector } from 'react-redux'
 
 const BrowseProducts = () => {
     const navigate = useNavigate()
+    const sellerInfo = useSelector(state => state.seller)
     const location = useLocation()
     const [urlQueryParams, seturlQueryParams] = useSearchParams()
     const [listing, setlisting] = useState({})
     const [isloading, setloading] = useState(false)
     const [error, seterror] = useState('')
     const [applyfilters, setFilters] = useState('')
-console.log(listing);
 
     const browseListing = async () => {
         try {
-            setlisting({}), setloading(true)
+            seterror(''), setlisting({}), setloading(true)
             const res = await DataService.get(`/browse-listing`)
             if (res.error) seterror(res.error), setloading(false)
             seterror(''), setlisting(res), setloading(false)
-
-            // let filters = '?'
-            // const Filtercity = JSON.parse(localStorage.getItem('filtercity'))
-            // const Filterstate = JSON.parse(localStorage.getItem('filterstate'))
-            // if (Filtercity) filters += `city=${Filtercity.value}&`;
-            // if (Filterstate) filters += `state=${Filterstate.value}&`;
-            // if (filters.endsWith('&')) filters = filters.slice(0, -1)
-            // navigate(`/browse-products${filters}`)
         } catch (error) {
             console.error(error)
         }
@@ -34,7 +27,7 @@ console.log(listing);
 
     const getfilterData = useCallback(async () => {
         try {
-            setlisting({}), setloading(true)
+            seterror(''), setlisting({}), setloading(true)
             const res = await DataService.get(`/filters/listings${applyfilters}`)
             if (res.error) return seterror(res.error), setloading(false)
             seterror(''), setlisting(res), setloading(false)
@@ -45,7 +38,7 @@ console.log(listing);
 
     const filterLlistingwithPagination = useCallback(async (page) => {
         try {
-            setlisting({}), setloading(true)
+            seterror(''), setlisting({}), setloading(true)
             const api = location.search
                 ? `/filters/listings${applyfilters}&page=${page}`
                 : `/browse-listing?page=${page}`;
@@ -76,7 +69,7 @@ console.log(listing);
                 <div className="back-wrapper-inner">
                     <div className="container pt-120 pb-120">
                         <div className="row">
-                            <div className="col-md-3">
+                            <div className="col-md-3 d-md-block d-none">
                                 <FilterSidebar />
                             </div>
                             <div className="col-md-9 back__course__area" style={{ backgroundColor: '#fff' }}>
@@ -115,7 +108,7 @@ console.log(listing);
                                                     ad_status={listing.ad_status}
                                                     sellerImg={listing.sellerImage}
                                                     location={listing.location}
-                                                    isfavourite={listing.isWishlistItem}
+                                                    isfavourite={sellerInfo.seller?.wishlist?.includes(listing._id)}
                                                     sellerUsername={listing.sellerusername}
                                                 />
                                             </div>
@@ -136,8 +129,7 @@ console.log(listing);
                                             listing?.totalDocs > listing?.limit && (
                                                 Array.from({ length: listing.totalPages })?.map((_, i) => (
                                                     <li key={i}>
-                                                        <Link to="#"
-                                                            className={listing.page === i + 1 ? 'bg-primary text-white' : ''}
+                                                        <Link to="#" className={listing.page === i + 1 ? 'bg-primary text-white' : ''}
                                                             onClick={(e) => {
                                                                 e.preventDefault()
                                                                 filterLlistingwithPagination(i + 1)

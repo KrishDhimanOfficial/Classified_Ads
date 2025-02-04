@@ -4,17 +4,20 @@ import { DataService, GetCookie } from '../../../hooks/hooks'
 import { useSelector } from 'react-redux'
 import { BTN, Image } from '../../component'
 import config from '../../../../config/config'
+import Dropdown from 'react-bootstrap/Dropdown'
 
 const Navbar = () => {
     const navigate = useNavigate()
     const settings = useSelector(state => state.setting)
+    const seller = useSelector(state => state.seller)
+    const [islogin, setlogin] = useState(false)
     const [wishListVisible, setWishListVisible] = useState(false)
 
     const handleLogin = async () => {
         try {
             const res = await DataService.post('/auth/seller', { token: GetCookie(navigate) }, {
                 headers: {
-                     'Authorization': `Bearer ${GetCookie(navigate)}`
+                    'Authorization': `Bearer ${GetCookie(navigate)}`
                 }
             })
             if (res.error) navigate('/login')
@@ -26,6 +29,7 @@ const Navbar = () => {
     const clearCookie = () => { sessionStorage.clear() }
 
     useEffect(() => {
+        if (seller) setlogin(true)
         const token = sessionStorage.getItem('seller_token')
         token ? setWishListVisible(true) : setWishListVisible(false)
     }, [])
@@ -46,14 +50,34 @@ const Navbar = () => {
                                             />
                                         </Link>
                                     </div>
-                                    <button type="button" id="menu-btn">
-                                        <span className="icon-bar"></span>
-                                        <span className="icon-bar"></span>
-                                        <span className="icon-bar"></span>
-                                    </button>
+                                    <Dropdown className='d-block d-md-none'>
+                                        <Dropdown.Toggle variant="primary" id="menu-btn">
+                                            <span className="icon-bar"></span>
+                                            <span className="icon-bar"></span>
+                                            <span className="icon-bar"></span>
+                                        </Dropdown.Toggle>
+
+                                        <Dropdown.Menu>
+                                            <Dropdown.Item href="/">Home</Dropdown.Item>
+                                            <Dropdown.Item href="/browse-products">Listings</Dropdown.Item>
+                                            {
+                                                islogin && (
+                                                    <>
+                                                        <Dropdown.Item href="/user/dashboard">Dashboard</Dropdown.Item>
+                                                        <Dropdown.Item href="/user/my-wishlist">Favourties</Dropdown.Item>
+                                                        <Dropdown.Item href="/user/my-listing">My Listing</Dropdown.Item>
+                                                        <Dropdown.Item href="/user/my-wallet">Wallet</Dropdown.Item>
+                                                        <Dropdown.Item href="/user/profile">Profile</Dropdown.Item>
+                                                        <Dropdown.Item href="/user/settings">settings</Dropdown.Item>
+                                                    </>
+                                                )
+                                            }
+                                            <Dropdown.Item href="/login"> {islogin ? 'Logout' : 'Login'} </Dropdown.Item>
+                                        </Dropdown.Menu>
+                                    </Dropdown>
                                 </div>
                                 <div className="back-inner-menus">
-                                    <ul id="backmenu" className="back-menus back-sub-shadow">
+                                    <ul id="backmenu" className="back-menus back-sub-shadow d-lg-block d-none">
                                         <li className="mega-inner">
                                             <Link to='/'>Home</Link>
                                         </li>
@@ -95,4 +119,4 @@ const Navbar = () => {
     )
 }
 
-export default Navbar
+export default React.memo(Navbar)

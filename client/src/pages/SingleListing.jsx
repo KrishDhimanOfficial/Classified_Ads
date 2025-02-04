@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { BTN, Image } from '../components/component'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { DataService, GetCookie } from '../hooks/hooks'
+import { DataService } from '../hooks/hooks'
 import config from '../../config/config'
 import { Fade } from 'react-slideshow-image';
 import 'react-slideshow-image/dist/styles.css'
@@ -26,7 +26,11 @@ const SingleListing = () => {
         }
     }
     const showNumber = async () => {
-        const res = await DataService.post('/auth/seller', { token: sessionStorage.getItem('seller_token') })
+        const res = await DataService.post('/auth/seller', { token: sessionStorage.getItem('seller_token') }, {
+            headers: {
+                'Authorization': `Bearer ${sessionStorage.getItem('seller_token')}`
+            }
+        })
         res.message ? setshownumber(true) : toast.warning('Please Login First!')
     }
 
@@ -134,7 +138,10 @@ const SingleListing = () => {
                                         <div className="widget back-post related__courses">
                                             <h3 className="widget-title">Price</h3>
                                             <div className="d-flex align-items-center gap-3">
-                                                <h5 className='mb-0'>$ {listing.price}</h5>
+                                                <h5 className='mb-0'>
+                                                    <i className="fa-solid fa-indian-rupee-sign me-1"></i>
+                                                    {listing.price}
+                                                </h5>
                                                 {
                                                     listing.negotiable && (
                                                         <span className='status me-3 text-uppercase'>Negotiable</span>

@@ -10,6 +10,8 @@ const Banner = () => {
     const navigate = useNavigate()
     const [states, setstates] = useState([])
     const [cities, setcities] = useState([])
+    const [selectedState, setSelectedState] = useState(null)
+    const [selectedCity, setSelectedCity] = useState(null)
 
 
     const { handleSubmit, control, register } = useForm()
@@ -26,6 +28,12 @@ const Banner = () => {
         setcities(cities)
     }, [])
 
+    // Reset City when State changes
+    const handleStateChange = (selectedOption) => {
+        setSelectedState(selectedOption)
+        setSelectedCity(null) // Reset City to empty
+    }
+
     const filterData = (formdata) => {
         let filiters = '?'
         if (formdata.search) filiters += `search=${formdata.search}`
@@ -38,7 +46,7 @@ const Banner = () => {
         navigate(`/browse-products${filiters}`)
     }
 
-    useEffect(() => { fetchState(), fetchState() }, [])
+    useEffect(() => { fetchState() }, [])
     return (
         <div className="home-banner-part">
             <div className="banner-img">
@@ -47,7 +55,7 @@ const Banner = () => {
             <div className="container">
                 <div className="banner-content start-50 translate-middle">
                     <div className="back-sec-title">
-                        <h1 className="banner-title text-white text-center">What are you looking for?</h1>
+                        <h1 className="banner-title text-center">What are you looking for?</h1>
                         {
                             /* <p className="banner-desc text-white text-center">
                             A simple way to connect buyers and sellers, promote services, or announce opportunities.
@@ -73,7 +81,10 @@ const Banner = () => {
                                                 isSearchable
                                                 isRtl={false}
                                                 options={states}
+                                                value={selectedState}
                                                 onChange={(selectedoption) => {
+                                                    handleStateChange(selectedoption)
+                                                    localStorage.setItem('filtercity', JSON.stringify(''))
                                                     localStorage.setItem('filterstate', JSON.stringify(selectedoption))
                                                     field.onChange(selectedoption)
                                                     fetchCities(selectedoption.value)
@@ -91,8 +102,10 @@ const Banner = () => {
                                                 {...field}
                                                 isSearchable
                                                 isRtl={false}
-                                                options={cities}
+                                                value={selectedCity}
+                                                options={selectedState ? cities : []}
                                                 onChange={(selectedoption) => {
+                                                    setSelectedCity(selectedoption)
                                                     field.onChange(selectedoption)
                                                     localStorage.setItem('filtercity', JSON.stringify(selectedoption))
                                                 }}
