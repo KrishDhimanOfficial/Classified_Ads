@@ -12,9 +12,9 @@ import config from '../config/config'
 const Layout = () => {
     const [logo, setlogo] = useState(null)
     const dispatch = useDispatch()
+    
     const fetchDetails = async () => {
         const res = await DataService.get('/settings')
-        console.log(res);
         setlogo(`${config.site_img_path}/${res.logo}`)
         dispatch(setsetting(res))
     }

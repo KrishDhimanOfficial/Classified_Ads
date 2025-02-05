@@ -21,7 +21,7 @@ const SellerProfileListings = () => {
                 }
             })
             if (res.error) navigate('not-found')
-            setsellerlistingInfo(res)
+            setsellerlistingInfo(res.response)
         } catch (error) {
             console.error('sellerDetails : ' + error)
         }

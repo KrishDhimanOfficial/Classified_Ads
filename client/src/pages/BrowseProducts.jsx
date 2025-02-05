@@ -47,7 +47,7 @@ const BrowseProducts = () => {
             if (res.error) return seterror(res.error), setloading(false)
             seterror(''), setlisting(res), setloading(false)
         } catch (error) {
-            console.error('fetchLlistingwithPagination : ' + error)
+            console.error(error)
         }
     }, [location.key, applyfilters])
 
@@ -73,7 +73,7 @@ const BrowseProducts = () => {
                                 <FilterSidebar />
                             </div>
                             <div className="col-md-9 back__course__area" style={{ backgroundColor: '#fff' }}>
-                                <div className="row  mb-50" style={{ background: '#EFF1F5' }}>
+                                <div className="row mb-50" style={{ background: '#EFF1F5' }}>
                                     <h2 className='m-0 py-3 text-center fs-2' style={{ color: '#757575' }}>Results</h2>
                                 </div>
                                 <div className="row">

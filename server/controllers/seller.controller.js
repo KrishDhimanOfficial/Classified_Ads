@@ -196,7 +196,7 @@ const seller_controllers = {
             ]
             const response = await handleAggregatePagination(sellerModel, projection, req.query)
             if (response.collectionData.length === 0) return res.json({ error: 'not found' })
-            return res.status(200).json(response)
+            return res.status(200).json({ response, sellerId: seller.id })
         } catch (error) {
             console.log('getSeller : ' + error.message)
         }
@@ -309,6 +309,65 @@ const seller_controllers = {
             return res.status(200).json(seller)
         } catch (error) {
             console.log(error.message)
+        }
+    },
+    getUserAudience: async (req, res) => {
+        try {
+            const seller = getUser(req.headers['authorization'].split(' ')[1])
+            const response = await sellerModel.aggregate([
+                {
+                    $match: { _id: new ObjectId(seller.id) }
+                },
+                {
+                    $lookup: {
+                        from: 'sellers',
+                        localField: 'followers',
+                        foreignField: '_id',
+                        as: 'followers'
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'sellers',
+                        localField: 'followings',
+                        foreignField: '_id',
+                        as: 'followings'
+                    }
+                },
+                {
+                    $project: {
+                        followers: {
+                            $map: {
+                                input: '$followers',
+                                as: 'follower',
+                                in: {
+                                    name: '$$follower.name',
+                                    username: '$$follower.username',
+                                    image: {
+                                        $concat: [config.sellerImage, '/', '$$follower.image']
+                                    }
+                                }
+                            }
+                        },
+                        followings: {
+                            $map: {
+                                input: '$followings',
+                                as: 'following',
+                                in: {
+                                    name: '$$following.name',
+                                    username: '$$following.username',
+                                    image: {
+                                        $concat: [config.sellerImage, '/', '$$following.image']
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            ])
+            return res.status(200).json(response[0])
+        } catch (error) {
+            console.log('getUserAudience : ' + error.message)
         }
     }
 }

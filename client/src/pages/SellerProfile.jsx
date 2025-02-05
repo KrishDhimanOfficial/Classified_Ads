@@ -24,23 +24,14 @@ const SellerProfile = () => {
                     Authorization: `Bearer ${GetCookie()}`
                 }
             })
+
             if (res.error) navigate('/not-found')
-            setLength(res.totalDocs)
-            setsellerInfo(res.collectionData[0].seller)
+            setShowFollowBtn(res.response.collectionData[0].seller._id !== res.sellerId)
+            setLength(res.response.totalDocs)
+            setsellerInfo(res.response.collectionData[0].seller)
         } catch (error) {
             console.error('sellerDetails : ' + error)
         }
-    }
-
-    const getSellerIdToNotShowFollowBtn = async () => {
-        const token = sessionStorage.getItem('seller_token')
-        if (!token) console.log('Token Not Found')
-        const res = await DataService.get('/check-seller', {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-        if (sellerInfo._id && res.id) setShowFollowBtn(sellerInfo._id !== res.id)
     }
 
     const createFollowing = async () => {
@@ -73,10 +64,10 @@ const SellerProfile = () => {
         }
     }
 
-    useEffect(() => { sellerDetails(), getSellerIdToNotShowFollowBtn() }, [])
     useEffect(() => {
         sellerInfo.followers?.includes(sellerInfo.followerId) ? setfollowing(true) : setfollowing(false)
-    }, [follwing, sellerInfo.followers?.length])
+    }, [sellerInfo.followers?.length])
+    useEffect(() => { sellerDetails() }, [sellerInfo.followers?.length])
     return (
         <>
             <title>{`seller - ${seller_username}`}</title>

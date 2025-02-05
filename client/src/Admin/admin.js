@@ -12,6 +12,8 @@ import Product from "./my_listing/Product";
 import Listing_container from "./my_listing/Listing_container";
 import UpdateProduct from "./Product/UpdateProduct";
 import My_Wishlist from "./my_listing/My_Wishlist";
+import Audience from "./audience/Audience";
+import UserProfile from "./audience/UserProfile";
 
 export {
     Sidebar,
@@ -27,5 +29,7 @@ export {
     Listing_container,
     Product,
     My_Wishlist,
-    UpdateProduct
+    UpdateProduct,
+    Audience,
+    UserProfile
 }

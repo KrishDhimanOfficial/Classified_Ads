@@ -78,6 +78,7 @@ router.get('/location/states', location_controller.getlocationState)
 router.get('/location/cities/:id', location_controller.getlocationCities)
 
 // Follow & Following
+router.get('/user/following-followers', AuthenticateUser, seller_Controller.getUserAudience)
 router.get('/check-seller', seller_Controller.getSellerIdToNotShowFollowBtn)
 router.patch('/follow/seller', AuthenticateUser, seller_Controller.startFollowing)
 router.patch('/unfollow/seller', AuthenticateUser, seller_Controller.startUnFollowing)

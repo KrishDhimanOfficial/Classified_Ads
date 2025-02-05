@@ -1,18 +1,19 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Input, BTN } from '../component'
 import Select from 'react-select'
 import DataService from '../../hooks/DataService'
 import { useForm, Controller } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
+import Form from 'react-bootstrap/Form'
 
 const FilterSidebar = () => {
-    const cityRef = useRef()
     const navigate = useNavigate()
     const [pcategory, setpcategory] = useState([])
     const [subcategory, setsubcategory] = useState([])
     const [brands, setbrands] = useState([])
     const [states, setstates] = useState([])
     const [cities, setcities] = useState([])
+    const [range, setRange] = useState(0)
     const [selectedState, setSelectedState] = useState(null)
     const [selectedCity, setSelectedCity] = useState(null)
 

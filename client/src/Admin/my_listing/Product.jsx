@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { Image, Input } from '../../components/component'
 import { useNavigate } from 'react-router-dom'
 import DataService from '../../hooks/DataService'
@@ -56,7 +56,8 @@ const Product = ({ id, path, status, title, price, ad_status, clicks, publishSta
             <Image
                 src={path}
                 className='object-fit-cover'
-                style={{ width: '150px', height: '150px' }} />
+                style={{ width: '150px', height: '150px' }}
+            />
             <div className="ms-md-4 ms-3">
                 <h5 className="mb-2 text-start">
                     {title}

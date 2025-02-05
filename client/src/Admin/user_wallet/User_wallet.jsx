@@ -53,7 +53,7 @@ const User_wallet = () => {
                 <div className='d-flex flex-column'>
                     <h6 className='text-grey fw-bold fs-5 mb-0'>Available Balance</h6>
                     <span className='text-primary fw-bolder fs-6'>
-                        <i class="fa-solid fa-indian-rupee-sign"></i>
+                        <i className="fa-solid fa-indian-rupee-sign"></i>
                         {profile.seller.wallet_amount}</span>
                 </div>
                 <div className='d-flex gap-2 justify-content-end'>
