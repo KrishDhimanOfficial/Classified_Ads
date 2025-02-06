@@ -125,7 +125,10 @@ const seller_controllers = {
     },
     getSeller: async (req, res) => {
         try {
-            const seller = getUser(req.headers['authorization'].split(' ')[1])
+            const seller = req.headers['authorization'].split(' ')[1]
+                ? getUser(req.headers['authorization'].split(' ')[1])
+                : null
+
             const projection = [
                 {
                     $match: { username: req.params.seller_username }
@@ -140,12 +143,7 @@ const seller_controllers = {
                 },
                 { $unwind: '$products' },
                 { $replaceRoot: { newRoot: '$products' } },
-                {
-                    $match: {
-                        status: true,
-                        publishing_status: true,
-                    }
-                },
+                { $match: { status: true, publishing_status: true } },
                 {
                     $lookup: {
                         from: 'parent_categories',
@@ -180,7 +178,7 @@ const seller_controllers = {
                         sellerusername: '$seller.username',
                         'seller.followersCount': { $size: '$seller.followers' },
                         'seller.followingsCount': { $size: '$seller.followings' },
-                        'seller.followerId': seller.id
+                        'seller.followerId': seller ? seller.id : null
                     }
                 },
                 {
@@ -188,7 +186,7 @@ const seller_controllers = {
                         'parentcategory.image': 0, 'parentcategory.slug': 0, 'parentcategory.status': 0,
                         sellerId: 0, 'seller.wallet_amount': 0, 'seller.password': 0,
                         publishing_status: 0, 'seller.followings': 0,
-                        status: 0, ad_status: 0, click_count: 0, condition: 0,
+                        status: 0, click_count: 0, condition: 0,
                         description: 0, brandId: 0, parentcategoryId: 0,
                         subcategoryId: 0, images: 0, negotiable: 0, features: 0
                     }
@@ -196,7 +194,7 @@ const seller_controllers = {
             ]
             const response = await handleAggregatePagination(sellerModel, projection, req.query)
             if (response.collectionData.length === 0) return res.json({ error: 'not found' })
-            return res.status(200).json({ response, sellerId: seller.id })
+            if (!seller || seller) return res.status(200).json({ response, sellerId: seller ? seller.id : null })
         } catch (error) {
             console.log('getSeller : ' + error.message)
         }

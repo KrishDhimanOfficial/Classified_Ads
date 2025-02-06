@@ -113,6 +113,14 @@ const FilterSidebar = () => {
                 </form>
             </div>
             <form onSubmit={handleSubmit(getfilterData)} autoComplete='off'>
+                <div className="widget back-category d-flex justify-content-center">
+                    <BTN
+                        type={'submit'}
+                        text={'Apply Filters'}
+                        style={{ position: 'relative' }}
+                        className={'btn btn-primary bg-primary rounded-3'}
+                    />
+                </div>
                 <div className="widget back-category px-4">
                     <h3 className="widget-title">Search</h3>
                     <Input
@@ -265,14 +273,6 @@ const FilterSidebar = () => {
                                 options={brands}
                             />
                         )}
-                    />
-                </div>
-                <div className="widget back-category d-flex justify-content-center">
-                    <BTN
-                        type={'submit'}
-                        text={'Apply Filters'}
-                        style={{ position: 'relative' }}
-                        className={'btn btn-primary bg-primary rounded-3'}
                     />
                 </div>
             </form>

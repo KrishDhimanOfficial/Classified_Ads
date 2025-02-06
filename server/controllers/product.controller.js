@@ -5,6 +5,7 @@ import sellerModel from "../models/seller.model.js";
 import mongoose from "mongoose";
 import handleAggregatePagination from "../services/handlepagination.js";
 import config from "../config/config.js";
+import generalSettingModel from "../models/general-setting.model.js";
 const ObjectId = mongoose.Types.ObjectId;
 
 const product_controller = {
@@ -833,7 +834,8 @@ const product_controller = {
         try {
             const { token } = req.body;
             const seller = getUser(token)
-
+            const GNS = await generalSettingModel.findOne({}, { setFeaturedAdPrice: 1 })
+            
             const response = await productModel.findByIdAndUpdate(
                 { _id: req.params.id },
                 { $inc: { click_count: 1 } },
@@ -849,7 +851,7 @@ const product_controller = {
             } else {
                 await sellerModel.findByIdAndUpdate(
                     { _id: response.sellerId },
-                    { $inc: { wallet_amount: -0.40 } }
+                    { $inc: { wallet_amount: -GNS.setFeaturedAdPrice } }
                 )
             }
 

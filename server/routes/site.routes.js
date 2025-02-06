@@ -22,7 +22,7 @@ router.route('/seller/profile/:id?')
     .put(sellerprofileImg.single('image'), seller_Controller.updateProfile)
 router.put('/update/seller-wallet', seller_Controller.updateWallet)
 router.post('/seller/payment-transactions', AuthenticateUser, seller_Controller.getpaymentTransactions)
-router.get('/get/seller-profile/:seller_username', AuthenticateUser, seller_Controller.getSeller)
+router.get('/get/seller-profile/:seller_username', seller_Controller.getSeller)
 
 router.get('/parent-category', category_controller.getparentCategory)
 router.get('/sub-category/:parentId', category_controller.getsubCategory)

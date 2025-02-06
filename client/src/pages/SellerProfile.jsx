@@ -36,7 +36,7 @@ const SellerProfile = () => {
 
     const createFollowing = async () => {
         try {
-            const token = sessionStorage.getItem('seller_token')
+            const token = localStorage.getItem('seller_token')
             if (!token) toast.warning('please login first!')
             await DataService.patch(`/follow/seller`, { followingId: sellerInfo._id, }, {
                 headers: {
@@ -51,7 +51,7 @@ const SellerProfile = () => {
 
     const createUnFollowing = async () => {
         try {
-            const token = sessionStorage.getItem('seller_token')
+            const token = localStorage.getItem('seller_token')
             if (!token) toast.warning('please login first!')
             const res = await DataService.patch(`/unfollow/seller`, { followingId: sellerInfo._id, }, {
                 headers: {

@@ -7,18 +7,19 @@ import { GetCookie } from '../../hooks/hooks'
 import { setWishListVisible } from '../../../controller/seller.store'
 import { useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip'
 
-const Product = ({ id, title, category, image, slug, price, isfavourite, isonWishList,
+const Product = ({ id, title, category, image, slug, price, isfavourite,
     ad_status, sellerImg, sellerUsername, location }) => {
 
     const navigate = useNavigate()
     const dispatch = useDispatch()
-    const [fillheart, setfillheart] = useState(false)
-    const [loading, setloading] = useState(false)
+    const [fillheart, setfillheart] = useState(isfavourite)
 
     const updateClickCount = async () => {
         try {
-            const token = sessionStorage.getItem('seller_token')
+            const token = localStorage.getItem('seller_token')
             await DataService.patch(`/update-ad-click/${id}`, { token })
         } catch (error) {
             console.error('updateClickCount : ', error)
@@ -28,7 +29,7 @@ const Product = ({ id, title, category, image, slug, price, isfavourite, isonWis
     const addtoWishlist = async () => {
         try {
             setfillheart(true)
-            const token = sessionStorage.getItem('seller_token')
+            const token = localStorage.getItem('seller_token')
             const res = await DataService.patch('/add-to-wishlist', { id }, {
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -39,25 +40,24 @@ const Product = ({ id, title, category, image, slug, price, isfavourite, isonWis
             console.log(error)
         }
     }
-    const removeWishlist = async (e) => {
+    const removeWishlist = async () => {
         try {
-            setloading(true)
-            const token = sessionStorage.getItem('seller_token')
+            setfillheart(false)
+            const token = localStorage.getItem('seller_token')
             const res = await DataService.patch(`/delete-wishlist-item/${id}`, { token }, {
                 headers: {
                     Authorization: `Bearer ${GetCookie(navigate)}`
                 }
             })
-            if (res.message) setloading(false), dispatch(setWishListVisible(true))
+            if (res.message) dispatch(setWishListVisible(true))
         } catch (error) {
-            setloading(false)
             console.error('removeWishlist : ' + error)
         }
     }
     return (
         <div className="course__item mb-30">
             <div className="course__thumb d-flex justify-content-center">
-                <Link to={slug} onClick={() => ad_status ? updateClickCount() : null} >
+                <Link to={slug} target='_blank' onClick={() => ad_status ? updateClickCount() : null} >
                     <Image
                         src={image}
                         alt="image"
@@ -69,15 +69,26 @@ const Product = ({ id, title, category, image, slug, price, isfavourite, isonWis
                 <div className="d-flex justify-content-between">
                     <span className="back-category cate-1"> {category} </span>
                     <div className="course__card-icon--2">
-                        <i className={`${fillheart || isfavourite ? 'fa-solid' : 'fa-regular'} fa-heart`}
-                            onClick={() => { addtoWishlist() }}
-                            style={{ cursor: 'pointer' }}>
-                        </i>
+                        <OverlayTrigger
+                            key='right'
+                            placement='top'
+                            overlay={
+                                <Tooltip id='tooltip-top'>
+                                    <strong>{fillheart ? 'Remove From WishList' : 'Add To WishList'}</strong>.
+                                </Tooltip>
+                            }
+                        >
+                            <i className={`${fillheart ? 'fa-solid' : 'fa-regular'} fa-heart`}
+                                onClick={() => { fillheart ? removeWishlist() : addtoWishlist() }}
+                                style={{ cursor: 'pointer' }}>
+                            </i>
+                        </OverlayTrigger>
                     </div>
                 </div>
                 <h3 className="back-course-title mb-2">
                     <Link
                         to={slug}
+                        target='_blank'
                         onClick={() => ad_status ? updateClickCount() : null}>
                         {title}
                     </Link>
@@ -97,7 +108,7 @@ const Product = ({ id, title, category, image, slug, price, isfavourite, isonWis
                     <div className="back__user">
                         <i className="fa-solid fa-indian-rupee-sign"></i>
                         {price}
-                        <Link to={`/user/${sellerUsername}`}>
+                        <Link to={`/user/${sellerUsername}`} target='_blank'>
                             <Image
                                 src={sellerImg || defaultUser}
                                 style={{ width: '40px', height: '40px' }}
@@ -116,21 +127,6 @@ const Product = ({ id, title, category, image, slug, price, isfavourite, isonWis
                         )
                     }
                 </div>
-                {
-                    isonWishList && (
-                        <div className="course__card-icon--2">
-                            <BTN
-                                type={'button'}
-                                onClick={(e) => removeWishlist(e)}
-                                className={'btn btn-sm btn-danger'}
-                                icon={loading ? <span className="spinner-grow spinner-grow-sm" aria-hidden="true"></span> : ''}
-                                text={loading ? 'Loading...' : 'Remove'}
-                                style={{ padding: '0.2rem 0.5rem' }}
-                                disabled={loading}
-                            />
-                        </div>
-                    )
-                }
             </div>
         </div>
     )

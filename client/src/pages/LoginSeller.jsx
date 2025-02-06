@@ -27,10 +27,7 @@ const LoginSeller = () => {
         try {
             const res = await DataService.post('/login/seller', fromData)
             Notify(res)
-            sessionStorage.setItem('seller_token', res.seller_token)
-            // const date = new Date()
-            // const expDate = date.setTime(date.getTime() + (24 * 60 * 60))
-            // document.cookie = `seller_token=${res.seller_token};expires=${expDate};path=/`;
+            localStorage.setItem('seller_token', res.seller_token)
             if (res.message) navigate('/user/dashboard')
         } catch (error) {
             console.error(error)

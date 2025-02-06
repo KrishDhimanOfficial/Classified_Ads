@@ -26,9 +26,9 @@ const SingleListing = () => {
         }
     }
     const showNumber = async () => {
-        const res = await DataService.post('/auth/seller', { token: sessionStorage.getItem('seller_token') }, {
+        const res = await DataService.post('/auth/seller', { token: localStorage.getItem('seller_token') }, {
             headers: {
-                'Authorization': `Bearer ${sessionStorage.getItem('seller_token')}`
+                'Authorization': `Bearer ${localStorage.getItem('seller_token')}`
             }
         })
         res.message ? setshownumber(true) : toast.warning('Please Login First!')

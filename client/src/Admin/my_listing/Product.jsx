@@ -5,12 +5,13 @@ import DataService from '../../hooks/DataService'
 import GetCookie from '../../hooks/GetCookie'
 import Notify from '../../hooks/Notify'
 import Dropdown from 'react-bootstrap/Dropdown'
-import { useSelector } from 'react-redux'
+import Badge from 'react-bootstrap/Badge'
+import { PromoteListing } from '../admin'
 
 const Product = ({ id, path, status, title, price, ad_status, clicks, publishStatus, createdAt, slug, updatelisting }) => {
     const navigate = useNavigate()
-    const sellerInfo = useSelector(state => state.seller)
     const [checkedStatus, setCheckedInput] = useState(status)
+    const [show, setShow] = useState(false)
 
     const deleteListing = async () => {
         try {
@@ -59,9 +60,7 @@ const Product = ({ id, path, status, title, price, ad_status, clicks, publishSta
                 style={{ width: '150px', height: '150px' }}
             />
             <div className="ms-md-4 ms-3">
-                <h5 className="mb-2 text-start">
-                    {title}
-                </h5>
+                <h5 className="mb-2 text-start">{title}</h5>
                 <h6 className="text-primary mb-3 text-start">
                     <i className="fa-solid fa-indian-rupee-sign"></i>
                     {price}
@@ -70,16 +69,14 @@ const Product = ({ id, path, status, title, price, ad_status, clicks, publishSta
                     <i className="fas fa-clock me-2"> </i>
                     <span className="text-muted"> {createdAt} </span>
                 </div>
-                <div className="d-flex align-items-center">
-                    <span className={`${publishStatus ? 'status' : 'unstatus'} me-3`}>
+                <div className="d-flex gap-2 align-items-center">
+                    <Badge bg="none" className={`${publishStatus ? 'status' : 'unstatus'}`}>
                         {publishStatus ? ' APPROVED' : 'PENDING'}
-                    </span>
+                    </Badge>
                     {
                         ad_status && (
                             <>
-                                <span className='status bg-primary text-white text-uppercase'>
-                                    Featured
-                                </span>
+                                <Badge bg="info">Featured</Badge>
                                 <i className="fas fa-eye ms-3 me-1"> </i>
                                 <span className="text-muted">{clicks}</span>
                             </>
@@ -89,7 +86,7 @@ const Product = ({ id, path, status, title, price, ad_status, clicks, publishSta
             </div>
             <div className="ms-auto published-toggle d-flex flex-lg-row flex-column">
                 <span> Published </span>
-                <div className="form-check form-switch px-4">
+                <div className="form-check form-switch ps-1 pe-4">
                     <Input
                         type={"checkbox"}
                         onChange={(e) => { setCheckedInput(prev => !prev), updateStatus(e.target.checked) }}
@@ -100,25 +97,23 @@ const Product = ({ id, path, status, title, price, ad_status, clicks, publishSta
                 </div>
                 <Dropdown>
                     <Dropdown.Toggle id="dropdown-basic" >
-                        options
+                        <i className="fa-solid fa-angle-down"></i>
                     </Dropdown.Toggle>
 
                     <Dropdown.Menu>
-                        <Dropdown.Item href={slug}>View</Dropdown.Item>
+                        <Dropdown.Item href={slug} target='_blank'>View</Dropdown.Item>
                         <Dropdown.Item href={updatelisting}>Edit</Dropdown.Item>
                         <Dropdown.Item href="#" onClick={(e) => { e.preventDefault(), deleteListing() }}>
                             Delete
                         </Dropdown.Item>
-                        {
-                            sellerInfo.seller?.wallet_amount > 100 && (
-                                <Dropdown.Item href='#' onClick={(e) => { e.preventDefault(), promoteListing() }}>
-                                    {ad_status ? 'Unpromote' : 'Promote'}
-                                </Dropdown.Item>
-                            )
-                        }
+                        <Dropdown.Item href='#' onClick={(e) => { e.preventDefault(), setShow(true) }}>
+                            {/* {ad_status ? 'Unpromote' : 'Promote'} */}
+                            Promote
+                        </Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>
             </div>
+            <PromoteListing show={show} setShow={() => setShow(false)} />
         </div>
     )
 }

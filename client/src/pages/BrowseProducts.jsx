@@ -16,7 +16,7 @@ const BrowseProducts = () => {
 
     const browseListing = async () => {
         try {
-            seterror(''), setlisting({}), setloading(true)
+            setlisting({}), setloading(true)
             const res = await DataService.get(`/browse-listing`)
             if (res.error) seterror(res.error), setloading(false)
             seterror(''), setlisting(res), setloading(false)

@@ -44,7 +44,8 @@ const AddProduct = () => {
     const [brands, setbrands] = useState([])
     const [states, setstates] = useState([])
     const [cities, setcities] = useState([])
-    const [location, setlocation] = useState({ state: { value: '', label: '' }, city: { value: '', label: '' } })
+    const [selectedState, setSelectedState] = useState(null)
+    const [selectedCity, setSelectedCity] = useState(null)
 
     const { handleSubmit, control, setValue, register, reset, watch, formState: {
         errors, isSubmitting, } } = useForm({ resolver: yupResolver(productSchema) })
@@ -63,10 +64,7 @@ const AddProduct = () => {
     }
 
     const createSlug = (str) => {
-        return str.toLowerCase()
-            .replace(/\s+/g, '-')
-            .replace(/&/g, 'and')
-            .replace(/[^\w-]+/, '-')
+        return str.toLowerCase().trim().replace(/\s+/g, '-').replace(/&/g, 'and').replace(/[^\w-]+/, '-')
     }
 
     const fetchCategorie = useCallback(async () => {
@@ -74,6 +72,7 @@ const AddProduct = () => {
         const category = res.map(item => ({ value: item._id, label: item.title }))
         setpcategory(category)
     }, [])
+    
 
     const fetchsubCategorie = useCallback(async (id) => {
         const res = await DataService.get(`/sub-category/${id}`)
@@ -87,12 +86,6 @@ const AddProduct = () => {
         setbrands(brands)
     }, [])
 
-    const setLocationData = () => {
-        const selectedState = JSON.parse(localStorage.getItem('state'))
-        const selectedCity = JSON.parse(localStorage.getItem('city'))
-        setlocation({ state: selectedState, city: selectedCity })
-    }
-
     const fetchState = useCallback(async () => {
         const res = await DataService.get(`/location/states`)
         const states = res.map(item => ({ value: item._id, label: item.name }))
@@ -104,6 +97,19 @@ const AddProduct = () => {
         const cities = res.map(item => ({ value: item._id, label: item.name }))
         setcities(cities)
     }, [])
+
+    const handleStateIdChange = (selectedoption) => {
+        setSelectedState(selectedoption), setSelectedCity(null)
+        fetchCities(selectedoption.value)
+        setValue('stateId', selectedoption.value)
+        localStorage.setItem('city', JSON.stringify(''))
+        localStorage.setItem('state', JSON.stringify(selectedoption))
+    }
+    const handleCityIdChange = (selectedoption) => {
+        setValue('cityId', selectedoption.value)
+        setSelectedCity(selectedoption)
+        localStorage.setItem('city', JSON.stringify(selectedoption))
+    }
 
     const createProduct = async (data) => {
         const formData = new FormData()
@@ -122,7 +128,13 @@ const AddProduct = () => {
         if (res) setfeaturedImg([]), setproductImg([]), setSlug('')
     }
 
-    useEffect(() => { fetchCategorie(), fetchState(), setLocationData(), setLocationData() }, [])
+    const setLocation = () => {
+        const state = JSON.parse(localStorage.getItem('state'))
+        const city = JSON.parse(localStorage.getItem('city'))
+        setSelectedState(state), setSelectedCity(city)
+    }
+
+    useEffect(() => { setLocation(), fetchCategorie(), fetchState() }, [])
     return (
         <div className="back-login-page">
             <div className="login-right-form pt-0 px-0">
@@ -301,14 +313,9 @@ const AddProduct = () => {
                                                 isClearable
                                                 isSearchable
                                                 isRtl={false}
-                                                value={{ value: location.state?.value, label: location.state?.label }}
+                                                value={selectedState}
                                                 options={states}
-                                                onChange={(selectedoption) => {
-                                                    setlocation(prev => ({ ...prev, state: selectedoption }))
-                                                    localStorage.setItem('state', JSON.stringify(selectedoption))
-                                                    field.onChange(selectedoption)
-                                                    fetchCities(selectedoption.value)
-                                                }}
+                                                onChange={(selectedoption) => { handleStateIdChange(selectedoption) }}
                                                 styles={{
                                                     control: (style) => ({
                                                         ...style,
@@ -331,17 +338,10 @@ const AddProduct = () => {
                                                 isClearable
                                                 isSearchable
                                                 isRtl={false}
-                                                value={{ value: location.city?.value, label: location.city?.label, }}
+                                                value={selectedCity}
                                                 options={cities}
-                                                onFocus={() => {
-                                                    const state = JSON.parse(localStorage.getItem('state'))
-                                                    fetchCities(state.value)
-                                                }}
-                                                onChange={(selectedoption) => {
-                                                    setlocation(prev => ({ ...prev, city: selectedoption }))
-                                                    localStorage.setItem('city', JSON.stringify(selectedoption))
-                                                    field.onChange(selectedoption)
-                                                }}
+                                                onFocus={() => { fetchCities(selectedState.value) }}
+                                                onChange={(selectedoption) => { handleCityIdChange(selectedoption) }}
                                                 styles={{
                                                     control: (style) => ({
                                                         ...style,

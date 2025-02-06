@@ -2,7 +2,6 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { Image } from '../../component'
-import config from '../../../../config/config'
 
 const Footer = () => {
     const settings = useSelector(state => state.setting)
@@ -16,7 +15,7 @@ const Footer = () => {
                                 <div className="footer-logo white">
                                     <Link to="/" className="logo-text">
                                         <Image
-                                            src={`${config.site_img_path}/${settings.setting.logo}`}
+                                            src={settings.setting.logo}
                                             alt="logo"
                                             style={{ height: '60px' }}
                                         />

@@ -21,8 +21,8 @@ const My_Wishlist = () => {
                     'Authorization': `Bearer ${GetCookie(navigate)}`
                 }
             })
-            Notify(res)
-            setloading(false), setwishlist(res), dispatch(setWishListVisible(false))
+            setloading(false), Notify(res)
+            setwishlist(res), dispatch(setWishListVisible(false))
         } catch (error) {
             setloading(false)
             console.error('fetchWishList : ', error)
@@ -59,7 +59,6 @@ const My_Wishlist = () => {
                                     category={listing.category.title}
                                     ad_status={listing.ad_status}
                                     sellerImg={listing.seller_Img}
-                                    isonWishList={true}
                                     isfavourite={true}
                                     sellerUsername={listing.seller.username}
                                 />
@@ -83,8 +82,7 @@ const My_Wishlist = () => {
                                 <li key={i}>
                                     <Link to="#"
                                         className={wishlist.page === i + 1 ? 'bg-primary text-white' : ''}
-                                        onClick={(e) => {
-                                            e.preventDefault(), fetchWishList(i + 1)
+                                        onClick={(e) => { e.preventDefault(), fetchWishList(i + 1)
                                         }}>{i + 1} </Link>
                                 </li>
                             ))

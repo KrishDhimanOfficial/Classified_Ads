@@ -43,7 +43,7 @@ const Transactions = () => {
                                         {transaction.status ? 'Completed' : 'Cancel'}
                                     </span>
                                 </td>
-                                <td>${transaction.amount}</td>
+                                <td> <i className="fa-solid fa-indian-rupee-sign"></i> {transaction.amount}</td>
                                 <td>{transaction.formattedDate} {transaction.formattedtime}</td>
                             </tr>
                         ))

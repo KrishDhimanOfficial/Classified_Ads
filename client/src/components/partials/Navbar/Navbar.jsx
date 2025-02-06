@@ -26,11 +26,11 @@ const Navbar = () => {
             console.error('handleLogin : ' + error)
         }
     }
-    const clearCookie = () => { sessionStorage.clear() }
+    const clearCookie = () => { localStorage.clear() }
 
     useEffect(() => {
         if (seller) setlogin(true)
-        const token = sessionStorage.getItem('seller_token')
+        const token = localStorage.getItem('seller_token')
         token ? setWishListVisible(true) : setWishListVisible(false)
     }, [])
     return (
@@ -44,7 +44,7 @@ const Navbar = () => {
                                     <div className="logo">
                                         <Link to='/' className="logo-text">
                                             <Image
-                                                src={`${config.site_img_path}/${settings.setting.logo}`}
+                                                src={settings.setting.logo}
                                                 alt="logo"
                                                 style={{ height: '60px' }}
                                             />
@@ -99,7 +99,7 @@ const Navbar = () => {
                                                     <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
                                                     <path d="M7 11V7a5 5 0 0 1 9.9-1"></path>
                                                 </svg>
-                                                {sessionStorage.getItem('seller_token') ? 'Log Out' : 'Log In'}
+                                                {localStorage.getItem('seller_token') ? 'Log Out' : 'Log In'}
                                             </Link>
                                         </div>
                                         <BTN

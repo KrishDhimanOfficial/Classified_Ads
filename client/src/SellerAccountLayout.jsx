@@ -10,8 +10,6 @@ import GetCookie from './hooks/GetCookie'
 import Notify from './hooks/Notify'
 import { setProfile } from '../controller/seller.store'
 import { setsetting } from '../controller/GNS.store'
-import config from '../config/config'
-
 
 const SellerAccountLayout = () => {
     const [logo, setlogo] = useState(null)
@@ -29,8 +27,7 @@ const SellerAccountLayout = () => {
 
     const fetchDetails = async () => {
         const res = await DataService.get('/settings')
-        setlogo(`${config.site_img_path}/${res.logo}`)
-        dispatch(setsetting(res))
+        setlogo(res.logo), dispatch(setsetting(res)), setfavicon()
     }
 
     const setfavicon = async () => {
@@ -39,7 +36,7 @@ const SellerAccountLayout = () => {
         document.head.appendChild(link)
     }
 
-    useEffect(() => { getProfile(), fetchDetails(), setfavicon() }, [])
+    useEffect(() => { getProfile(), fetchDetails() }, [])
     return (
         <>
             <Toaster />

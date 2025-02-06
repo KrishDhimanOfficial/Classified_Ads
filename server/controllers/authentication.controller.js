@@ -128,7 +128,7 @@ const authenticationcontroller = {
             const { token } = req.body;
             const seller = getUser(token)
             const response = await sellerModel.findOne({ _id: seller.id, status: true })
-            
+
             if (!response) return res.json({ error: 'Unauthorized!' })
             return res.json({ message: 'Authenticated!' })
         } catch (error) {
@@ -212,8 +212,16 @@ const authenticationcontroller = {
     },
     getGNSettings: async (req, res) => {
         try {
-            const response = await generalSettingModel.findOne({})
-            return res.status(200).json(response)
+            const response = await generalSettingModel.aggregate([
+                {
+                    $addFields: {
+                        logo: {
+                            $concat: [config.site_img_path, '/', '$logo']
+                        }
+                    }
+                }
+            ])
+            return res.status(200).json(response[0])
         } catch (error) {
             console.log('getGNSettings : ' + error.message)
         }
@@ -236,10 +244,7 @@ const authenticationcontroller = {
                         status: 1,
                         'seller.name': 1,
                         formatedDate: {
-                            $dateToString: {
-                                format: "%d-%m-%Y",
-                                date: "$date"
-                            }
+                            $dateToString: { format: "%d-%m-%Y", date: "$date" }
                         }
                     }
                 }
@@ -252,12 +257,7 @@ const authenticationcontroller = {
     RenderIndexPage: async (req, res) => {
         try {
             const response = await transaction_historyModel.aggregate([
-                {
-                    $group: {
-                        _id: null,
-                        totalAmount: { $sum: "$amount" }
-                    }
-                }
+                { $group: { _id: null, totalAmount: { $sum: "$amount" } } }
             ])
             const listings = await productModel.aggregate([
                 {
