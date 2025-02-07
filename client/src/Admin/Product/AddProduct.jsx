@@ -9,6 +9,7 @@ import Select from 'react-select'
 import GetCookie from '../../hooks/GetCookie'
 import { useNavigate } from 'react-router-dom'
 import Notify from '../../hooks/Notify'
+import config from '../../../config/config'
 
 const productSchema = yup.object().shape({
     title: yup.string().trim().required('Title is required!')
@@ -72,7 +73,7 @@ const AddProduct = () => {
         const category = res.map(item => ({ value: item._id, label: item.title }))
         setpcategory(category)
     }, [])
-    
+
 
     const fetchsubCategorie = useCallback(async (id) => {
         const res = await DataService.get(`/sub-category/${id}`)
@@ -147,7 +148,7 @@ const AddProduct = () => {
                                     type={'text'}
                                     {...register('title')}
                                     style={{ border: errors.title?.message ? '1px solid red' : '' }}
-                                    onChange={(e) => setSlug(createSlug(e.target.value))}
+                                    onChange={(e) => setSlug(`${config.siteURL}/${createSlug(e.target.value)}`)}
                                     placeholder={'Enter item name'}
                                 />
                                 <span className='mt-2 d-block text-primary'>{slug}</span>
@@ -383,7 +384,7 @@ const AddProduct = () => {
                             <label id='featured' className="upload-container mb-3">
                                 <Image src={featuredImg} className={'mb-2 featuredImg'} />
                                 <h5>
-                                    Click to browse &amp; Upload Freatured Image
+                                    Click to browse &amp; Upload Featured Image
                                 </h5>
                                 <p>
                                     image format: jpg,jpeg,png,webp
@@ -422,7 +423,7 @@ const AddProduct = () => {
                                     }
                                 </div>
                                 <h5>
-                                    Click to browse &amp; Upload Product Image
+                                    Click to browse &amp; Upload Product Others Image
                                 </h5>
                                 <p>
                                     image format: jpg,jpeg,png,webp

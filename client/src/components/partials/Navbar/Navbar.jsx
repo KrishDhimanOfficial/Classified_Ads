@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom'
 import { DataService, GetCookie } from '../../../hooks/hooks'
 import { useSelector } from 'react-redux'
 import { BTN, Image } from '../../component'
-import config from '../../../../config/config'
 import Dropdown from 'react-bootstrap/Dropdown'
 
 const Navbar = () => {

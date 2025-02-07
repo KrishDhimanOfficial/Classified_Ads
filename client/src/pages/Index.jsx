@@ -41,10 +41,7 @@ const Index = () => {
                     <Banner />
                     <div className="back_popular_topics pt-120 pb-120">
                         <div className="container">
-                            <Sec_Heading
-                                title={'Browse Categories'}
-                                subtitle={'Popular Category to Browse'}
-                            />
+                            <Sec_Heading title={'Browse Categories'} subtitle={'Popular Category to Browse'} />
                             <div className="row">
                                 {
                                     categories?.map((category, i) => (
@@ -67,10 +64,7 @@ const Index = () => {
                     </div>
                     <div className="back__course__area  pt-120 pb-90">
                         <div className="container">
-                            <Sec_Heading
-                                title={"Check Out What's New"}
-                                subtitle={'Featured ads'}
-                            />
+                            <Sec_Heading title={"Check Out What's New"} subtitle={'Featured ads'} />
                             <div className="row">
                                 {
                                     featuredListings?.map((listing, i) => (
@@ -84,6 +78,7 @@ const Index = () => {
                                                 category={listing.category.title}
                                                 ad_status={listing.ad_status}
                                                 sellerImg={listing.sellerImg}
+                                                location={listing.location}
                                                 sellerUsername={listing.seller.username}
                                             />
                                         </div>
@@ -94,10 +89,7 @@ const Index = () => {
                     </div>
                     <div className="back__course__area  pt-120 pb-90">
                         <div className="container">
-                            <Sec_Heading
-                                title={'Browse Products'}
-                                subtitle={'Browse More Products'}
-                            />
+                            <Sec_Heading title={'Browse Products'} subtitle={'Browse More Products'} />
                             <div className="row">
                                 {
                                     listings?.map((listing, i) => (
@@ -111,6 +103,7 @@ const Index = () => {
                                                 category={listing.category.title}
                                                 ad_status={listing.ad_status}
                                                 sellerImg={listing.sellerImg}
+                                                location={listing.location}
                                                 sellerUsername={listing.seller.username}
                                             />
                                         </div>

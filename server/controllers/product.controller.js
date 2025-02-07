@@ -738,13 +738,34 @@ const product_controller = {
                 },
                 { $unwind: '$seller' },
                 {
+                    $lookup: {
+                        from: 'states',
+                        localField: 'stateId',
+                        foreignField: '_id',
+                        as: 'state'
+                    }
+                },
+                { $unwind: '$state' },
+                {
+                    $lookup: {
+                        from: 'cities',
+                        localField: 'cityId',
+                        foreignField: '_id',
+                        as: 'city'
+                    }
+                },
+                { $unwind: '$city' },
+                {
                     $addFields: {
                         listing_img: {
                             $concat: [config.product_img_path, '/', '$featured_img']
                         },
                         sellerImg: {
                             $concat: [config.sellerImage, '/', '$seller.image']
-                        }
+                        },
+                        location: {
+                            $concat: ['$city.name', ', ', '$state.name'],
+                        },
                     }
                 },
                 {
@@ -753,6 +774,7 @@ const product_controller = {
                         title: 1, slug: 1,
                         price: 1,
                         ad_status: 1,
+                        location: 1,
                         'seller.username': 1,
                         'category.title': 1,
                     }
@@ -790,13 +812,34 @@ const product_controller = {
                 },
                 { $unwind: '$seller' },
                 {
+                    $lookup: {
+                        from: 'states',
+                        localField: 'stateId',
+                        foreignField: '_id',
+                        as: 'state'
+                    }
+                },
+                { $unwind: '$state' },
+                {
+                    $lookup: {
+                        from: 'cities',
+                        localField: 'cityId',
+                        foreignField: '_id',
+                        as: 'city'
+                    }
+                },
+                { $unwind: '$city' },
+                {
                     $addFields: {
                         listing_img: {
                             $concat: [config.product_img_path, '/', '$featured_img']
                         },
                         sellerImg: {
                             $concat: [config.sellerImage, '/', '$seller.image']
-                        }
+                        },
+                        location: {
+                            $concat: ['$city.name', ', ', '$state.name'],
+                        },
                     }
                 },
                 {
@@ -805,6 +848,7 @@ const product_controller = {
                         title: 1, slug: 1,
                         price: 1,
                         ad_status: 1,
+                        location: 1,
                         'seller.username': 1,
                         'category.title': 1,
                     }
@@ -835,7 +879,7 @@ const product_controller = {
             const { token } = req.body;
             const seller = getUser(token)
             const GNS = await generalSettingModel.findOne({}, { setFeaturedAdPrice: 1 })
-            
+
             const response = await productModel.findByIdAndUpdate(
                 { _id: req.params.id },
                 { $inc: { click_count: 1 } },

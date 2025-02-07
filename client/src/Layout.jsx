@@ -14,7 +14,7 @@ const Layout = () => {
 
     const fetchDetails = async () => {
         const res = await DataService.get('/settings')
-        setlogo(res.logo), dispatch(setsetting(res))
+        setlogo(res.logo), dispatch(setsetting(res)), setfavicon()
     }
 
     const getProfile = useCallback(async () => {
@@ -32,7 +32,7 @@ const Layout = () => {
         document.head.appendChild(link)
     }
 
-    useEffect(() => { fetchDetails(), getProfile(), setfavicon() }, [])
+    useEffect(() => { fetchDetails(), getProfile() }, [])
     return (
         <>
             <ToastContainer />

@@ -32,7 +32,7 @@ const My_Wishlist = () => {
     return (
         <div className='back-course-filter bg-white'>
             {
-                wishlist.collectionData?.length == 0 && (
+                wishlist.collectionData?.length == 0 && !isloading && (
                     <h1 className='text-center'>No Favourties Ads</h1>
                 )
             }
@@ -69,34 +69,39 @@ const My_Wishlist = () => {
             </div>
             <div className='w-100 d-flex justify-content-center'>
                 <ul className="back-pagination">
-                    {wishlist.prevpage && (
-                        <li className="back-next">
-                            <Link to="#" onClick={(e) => {
-                                e.preventDefault(), fetchWishList(wishlist.page - 1)
-                            }}> Previous </Link>
-                        </li>
-                    )}
+                    {
+                        wishlist.prevpage && (
+                            <li className="back-next">
+                                <Link to="#" onClick={(e) => {
+                                    e.preventDefault(), fetchWishList(wishlist.page - 1)
+                                }}> Previous </Link>
+                            </li>
+                        )
+                    }
                     {
                         wishlist?.totalDocs > wishlist?.limit && (
                             Array.from({ length: wishlist.totalPages })?.map((_, i) => (
                                 <li key={i}>
                                     <Link to="#"
                                         className={wishlist.page === i + 1 ? 'bg-primary text-white' : ''}
-                                        onClick={(e) => { e.preventDefault(), fetchWishList(i + 1)
+                                        onClick={(e) => {
+                                            e.preventDefault(), fetchWishList(i + 1)
                                         }}>{i + 1} </Link>
                                 </li>
                             ))
                         )
                     }
-                    {wishlist.nextpage && (
-                        <li className="back-next p-0">
-                            <Link to="#" onClick={(e) => {
-                                e.preventDefault(), fetchWishList(wishlist.page + 1)
-                            }}> Next </Link>
-                        </li>
-                    )}
+                    {
+                        wishlist.nextpage && (
+                            <li className="back-next p-0">
+                                <Link to="#" onClick={(e) => {
+                                    e.preventDefault(), fetchWishList(wishlist.page + 1)
+                                }}> Next </Link>
+                            </li>
+                        )
+                    }
                 </ul>
-            </div >
+            </div>
         </div>
     )
 }

@@ -10,11 +10,9 @@ import { DataService } from '../hooks/hooks'
 const defaultValues = { email: '', password: '' }
 
 const validateData = yup.object().shape({
-    email: yup.string().email().trim()
-        .required('Email is required')
+    email: yup.string().email().trim().required('Email is required')
         .matches(/^[a-z0-9]+@gmail.com$/, 'Incorrect Email'),
-    password: yup.string().trim()
-        .required('password is required')
+    password: yup.string().trim().required('password is required')
 })
 
 const LoginSeller = () => {
@@ -23,11 +21,12 @@ const LoginSeller = () => {
         defaultValues,
         resolver: yupResolver(validateData),
     })
+
+
     const handleLogin = async (fromData) => {
         try {
             const res = await DataService.post('/login/seller', fromData)
-            Notify(res)
-            localStorage.setItem('seller_token', res.seller_token)
+            Notify(res), localStorage.setItem('seller_token', res.seller_token)
             if (res.message) navigate('/user/dashboard')
         } catch (error) {
             console.error(error)
@@ -46,12 +45,12 @@ const LoginSeller = () => {
                             control={control}
                             rules={{ required: true }}
                             render={({ field }) => <Input
-                                type={'email'}
-                                placeholder={'Enter Email'}
+                                {...field}
+                                type='email'
+                                placeholder='Enter Email'
                                 style={{
                                     border: errors.email?.message ? '1px solid red' : ''
                                 }}
-                                {...field}
                             />}
                         />
                         <p className='fs-6 text-danger m-0'>{errors.email?.message}</p>
@@ -62,8 +61,8 @@ const LoginSeller = () => {
                             control={control}
                             rules={{ required: true }}
                             render={({ field }) => <Input
-                                type={"password"}
-                                placeholder={"Enter password"}
+                                type="password"
+                                placeholder="Enter password"
                                 style={{
                                     border: errors.password?.message ? '1px solid red' : ''
                                 }}

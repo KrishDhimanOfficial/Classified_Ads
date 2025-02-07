@@ -108,7 +108,7 @@ const Product = ({ id, path, status, title, price, ad_status, clicks, publishSta
                         </Dropdown.Item>
                         <Dropdown.Item href='#' onClick={(e) => { e.preventDefault(), setShow(true) }}>
                             {/* {ad_status ? 'Unpromote' : 'Promote'} */}
-                            Promote
+                            Ad Setting
                         </Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>

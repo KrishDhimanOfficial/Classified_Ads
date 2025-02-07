@@ -426,7 +426,7 @@ const UpdateProduct = () => {
                             <label id='featured' className="upload-container mb-3">
                                 <Image src={featuredImg} className={'mb-2 featuredImg'} />
                                 <h5>
-                                    Click to browse &amp; Upload Freatured Image
+                                    Click to browse &amp; Upload Featured Image
                                 </h5>
                                 <p>
                                     image format: jpg,jpeg,png,webp
@@ -438,10 +438,7 @@ const UpdateProduct = () => {
                                 <Input
                                     type={'file'} accept={'images/*'} htmlFor={'featured'}
                                     {...register('featured_img')}
-                                    onChange={(e) => {
-                                        displayFImgs(e)
-                                        register('featured_img').onChange(e)
-                                    }}
+                                    onChange={(e) => { displayFImgs(e), register('featured_img').onChange(e) }}
                                     hidden
                                 />
                             </label>
@@ -460,7 +457,7 @@ const UpdateProduct = () => {
                                                     className={"remove-btn float-end"}
                                                 />
                                                 <Image
-                                                    src={`${img}`}
+                                                    src={img}
                                                     className={'mb-0 featuredImg'}
                                                 />
                                             </div>
@@ -468,7 +465,7 @@ const UpdateProduct = () => {
                                     }
                                 </div>
                                 <h5>
-                                    Click to browse &amp; Upload Product Image
+                                    Click to browse &amp; Upload Product Others Image
                                 </h5>
                                 <p>
                                     image format: jpg,jpeg,png,webp
@@ -484,10 +481,7 @@ const UpdateProduct = () => {
                                     id={'input-images'}
                                     type={'file'} accept={'images/*'}
                                     {...register('images')}
-                                    onChange={(e) => {
-                                        displayImgs(e)
-                                        register('images').onChange(e)
-                                    }}
+                                    onChange={(e) => { displayImgs(e), register('images').onChange(e) }}
                                     hidden
                                     multiple
                                 />
