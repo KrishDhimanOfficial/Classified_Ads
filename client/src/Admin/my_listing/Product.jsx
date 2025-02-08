@@ -6,12 +6,10 @@ import GetCookie from '../../hooks/GetCookie'
 import Notify from '../../hooks/Notify'
 import Dropdown from 'react-bootstrap/Dropdown'
 import Badge from 'react-bootstrap/Badge'
-import { PromoteListing } from '../admin'
 
 const Product = ({ id, path, status, title, price, ad_status, clicks, publishStatus, createdAt, slug, updatelisting }) => {
     const navigate = useNavigate()
     const [checkedStatus, setCheckedInput] = useState(status)
-    const [show, setShow] = useState(false)
 
     const deleteListing = async () => {
         try {
@@ -96,7 +94,7 @@ const Product = ({ id, path, status, title, price, ad_status, clicks, publishSta
                     />
                 </div>
                 <Dropdown>
-                    <Dropdown.Toggle id="dropdown-basic" >
+                    <Dropdown.Toggle id="dropdown-basic">
                         <i className="fa-solid fa-angle-down"></i>
                     </Dropdown.Toggle>
 
@@ -106,14 +104,13 @@ const Product = ({ id, path, status, title, price, ad_status, clicks, publishSta
                         <Dropdown.Item href="#" onClick={(e) => { e.preventDefault(), deleteListing() }}>
                             Delete
                         </Dropdown.Item>
-                        <Dropdown.Item href='#' onClick={(e) => { e.preventDefault(), setShow(true) }}>
+                        <Dropdown.Item href='#' onClick={(e) => { e.preventDefault() }}>
                             {/* {ad_status ? 'Unpromote' : 'Promote'} */}
-                            Ad Setting
+                            Featured This Ad
                         </Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>
             </div>
-            <PromoteListing show={show} setShow={() => setShow(false)} />
         </div>
     )
 }
