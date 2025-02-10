@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 import handleAggregatePagination from "../services/handlepagination.js";
 import config from "../config/config.js";
 import generalSettingModel from "../models/general-setting.model.js";
+import adPlansModel from "../models/adPlans.model.js";
 const ObjectId = mongoose.Types.ObjectId;
 
 const product_controller = {
@@ -95,6 +96,12 @@ const product_controller = {
                             $dateToString: {
                                 format: "%d-%m-%Y",
                                 date: "$created_At"
+                            }
+                        },
+                        ad_end_date: {
+                            $dateToString: {
+                                format: "%d-%m-%Y",
+                                date: "$ad_end_date"
                             }
                         }
                     }
@@ -527,10 +534,11 @@ const product_controller = {
                         location: {
                             $concat: ['$city.name', ', ', '$state.name'],
                         },
+                        date: new Date(),
                         sellerusername: '$seller.username',
                     }
                 },
-                { $sort: { ad_status: -1 } },
+                { $sort: { ad_status: 1 } },
                 {
                     $project: {
                         'state.status': 0,
@@ -636,6 +644,7 @@ const product_controller = {
                         location: {
                             $concat: ['$city.name', ', ', '$state.name'],
                         },
+                        date: new Date(),
                         sellerusername: '$seller.username'
                     }
                 },
@@ -650,7 +659,6 @@ const product_controller = {
                 },
             ]
             const response = await handleAggregatePagination(productModel, projection, req.query)
-            // console.log(response.collectionData);
             if (response.collectionData.length === 0) return res.json({ error: 'No Results' })
             if (!response) return res.json({ error: 'No Results' })
             setTimeout(() => res.status(200).json(response), 1500)
@@ -861,16 +869,50 @@ const product_controller = {
     },
     promoteListing: async (req, res) => {
         try {
-            const { status } = req.body;
-            const response = await productModel.findByIdAndUpdate(
-                { _id: req.params.id },
-                { ad_status: status },
-                { new: true }
-            )
-            if (!response) return res.json({ error: 'unable to update!' })
-            return res.json({ message: 'update successfully!' })
+            const { status, planId, duration } = req.body;
+            const existingAdStatus = await productModel.findById({ _id: req.params.id })
+
+            if (existingAdStatus.ad_status) {
+                const response = await productModel.findByIdAndUpdate(
+                    { _id: req.params.id },
+                    {
+                        ad_status: status,
+                        planId: new ObjectId(planId),
+                        ad_start_date: new Date(),
+                        ad_end_date: new Date(existingAdStatus.ad_end_date).setDate(new Date(existingAdStatus.ad_end_date).getDate() + duration)
+                    },
+                    { new: true }
+                )
+                if (!response) return res.json({ error: 'Something Went Wrong, Please Try Again!' })
+                return res.json({ message: 'update successfully!' })
+            } else {
+                const response = await productModel.findByIdAndUpdate(
+                    { _id: req.params.id },
+                    {
+                        ad_status: status,
+                        planId: new ObjectId(planId),
+                        ad_start_date: new Date(),
+                        ad_end_date: new Date().setDate(new Date().getDate() + duration)
+                    },
+                    { new: true }
+                )
+                if (!response) return res.json({ error: 'Something Went Wrong, Please Try Again!' })
+                return res.json({ message: 'update successfully!' })
+            }
         } catch (error) {
             console.log('promoteListing : ' + error.message)
+        }
+    },
+    disabledAdStatus: async (req, res) => {
+        try {
+            const { ad_status } = req.body;
+            const response = await productModel.findByIdAndUpdate(
+                { _id: req.params.id }, { ad_status }, { new: true }
+            )
+            if (!response) return res.json({ error: 'Failed to update brand!' })
+            return res.json({ message: 'update successfully!' })
+        } catch (error) {
+            console.log('disabledAdStatus : ' + error.message)
         }
     },
     updateAdClick: async (req, res) => {

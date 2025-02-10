@@ -7,8 +7,10 @@ import {
   NotFound, SellerProfile
 } from './pages/pages'
 import {
-  Dashboard, UpdateProfile, AddProduct, Setting, User_wallet,
-  Listing_container, UpdateProduct, My_Wishlist, Audience
+  Dashboard, UpdateProfile, AddProduct, Setting,
+  Listing_container, UpdateProduct, My_Wishlist, Audience,
+  PromoteListing,
+  Transactions
 } from './Admin/admin'
 
 
@@ -76,8 +78,8 @@ const routes = [
         element: <UpdateProduct />
       },
       {
-        path: '/user/my-wallet',
-        element: <User_wallet />
+        path: '/user/payments',
+        element: <Transactions />
       },
       {
         path: '/user/audience',
@@ -88,6 +90,10 @@ const routes = [
         element: <Setting />
       }
     ]
+  },
+  {
+    path: '/feature/ad/:listing_slug/:id',
+    element: <PromoteListing />
   }
 ]
 

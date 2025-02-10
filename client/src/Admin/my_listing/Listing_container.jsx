@@ -39,10 +39,11 @@ const Listing_container = () => {
                                 status={listing.status}
                                 clicks={listing.click_count}
                                 ad_status={listing.ad_status}
-                                slug={`/listing/${listing.slug}`}
+                                slug={listing.slug}
                                 updatelisting={`/user/update/${listing.slug}`}
                                 publishStatus={listing.publishing_status}
                                 createdAt={listing.formattedDate}
+                                endDate={listing.ad_end_date}
                                 path={`${config.server_product_img_path}/${listing.featured_img}`}
                             />
                         ))

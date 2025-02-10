@@ -110,6 +110,8 @@ const BrowseProducts = () => {
                                                     location={listing.location}
                                                     isfavourite={sellerInfo.seller?.wishlist?.includes(listing._id)}
                                                     sellerUsername={listing.sellerusername}
+                                                    date={listing.date}
+                                                    ad_end_date={listing.ad_end_date}
                                                 />
                                             </div>
                                         ))

@@ -1,0 +1,52 @@
+<div class="modal fade" id="openadPlanModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Ads Plans</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="submitFormData" autocomplete="off">
+                    <div class="form-group">
+                        <label for="plantitle">Title</label>
+                        <select id="plantitle" class="form-control select2bs4" name="title">
+                            <option value='monthly'>Monthly</option>
+                            <option value='weekly'>Weekly</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="planDuration">Plan Duration</label>
+                        <select id="planDuration" class="form-control select2bs4" name="plan_duration">
+                            <option value='7'>7 Days</option>
+                            <option value='30'>30 Days</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="planprice">Price</label>
+                        <input id="planprice" type="number" value="0" min="0" class="form-control" name="price">
+                    </div>
+                    <div class="form-group">
+                        <label for="planpricediscount">Discount %</label>
+                        <input id="planpricediscount" type="number" value="0" min="0" max="100" class="form-control"
+                            name="discount">
+                    </div>
+                    <div class="form-group">
+                        <label for="discountedPrice">Discount Price</label>
+                        <input id="discountedPrice" type="text" readonly class="form-control">
+                    </div>
+                    <div class="d-flex gap-2 align-items-center">
+                        <button type="submit" id="submitbtn" class="btn btn-primary">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                            Submit
+                        </button>
+                        <div id="loader" class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

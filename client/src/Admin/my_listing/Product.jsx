@@ -7,10 +7,9 @@ import Notify from '../../hooks/Notify'
 import Dropdown from 'react-bootstrap/Dropdown'
 import Badge from 'react-bootstrap/Badge'
 
-const Product = ({ id, path, status, title, price, ad_status, clicks, publishStatus, createdAt, slug, updatelisting }) => {
+const Product = ({ id, path, status, title, price, ad_status, clicks, publishStatus, createdAt, endDate, slug, updatelisting }) => {
     const navigate = useNavigate()
     const [checkedStatus, setCheckedInput] = useState(status)
-
     const deleteListing = async () => {
         try {
             const res = await DataService.delete(`/product/${id}`, {
@@ -37,19 +36,6 @@ const Product = ({ id, path, status, title, price, ad_status, clicks, publishSta
         }
     }, [])
 
-    const promoteListing = async () => {
-        try {
-            const res = await DataService.patch(`/promote-listing/${id}`, { status: !ad_status }, {
-                headers: {
-                    'Authorization': `Bearer ${GetCookie(navigate)}`
-                }
-            })
-            Notify(res)
-        } catch (error) {
-            console.error('promoteListing : ', error)
-        }
-    }
-
     return (
         <div className="card d-flex flex-row align-items-start w-100 mt-0 mx-md-2 mx-0">
             <Image
@@ -75,9 +61,17 @@ const Product = ({ id, path, status, title, price, ad_status, clicks, publishSta
                         ad_status && (
                             <>
                                 <Badge bg="info">Featured</Badge>
-                                <i className="fas fa-eye ms-3 me-1"> </i>
+                                <i className="fas fa-eye ms-3"> </i>
                                 <span className="text-muted">{clicks}</span>
                             </>
+                        )
+                    }
+                    {
+                        ad_status && (
+                            <div className='ms-3'>
+                                <Badge bg="dark me-1">Ad Ends On : {endDate}</Badge>
+                            </div>
+
                         )
                     }
                 </div>
@@ -99,12 +93,12 @@ const Product = ({ id, path, status, title, price, ad_status, clicks, publishSta
                     </Dropdown.Toggle>
 
                     <Dropdown.Menu>
-                        <Dropdown.Item href={slug} target='_blank'>View</Dropdown.Item>
+                        <Dropdown.Item href={`/listing/${slug}`} target='_blank'>View</Dropdown.Item>
                         <Dropdown.Item href={updatelisting}>Edit</Dropdown.Item>
                         <Dropdown.Item href="#" onClick={(e) => { e.preventDefault(), deleteListing() }}>
                             Delete
                         </Dropdown.Item>
-                        <Dropdown.Item href='#' onClick={(e) => { e.preventDefault() }}>
+                        <Dropdown.Item href={`/feature/ad/${slug}/${id}`}>
                             {/* {ad_status ? 'Unpromote' : 'Promote'} */}
                             Featured This Ad
                         </Dropdown.Item>

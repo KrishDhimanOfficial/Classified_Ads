@@ -8,6 +8,7 @@ import seller_Controller from '../controllers/seller.controller.js'
 import product_controller from '../controllers/product.controller.js'
 import category_controller from '../controllers/category.controller.js'
 import brand_controller from '../controllers/brand.controller.js'
+import adPlanControllers from '../controllers/adPlan.controller.js'
 const router = express.Router()
 
 
@@ -53,8 +54,9 @@ router.post('/listings', AuthenticateUser, product_controller.getlistingDetails)
 router.get('/single-listing/:listing_slug', product_controller.getSingleListing)
 router.get('/popular-listings', product_controller.getPopularListings)
 router.get('/featured-listings', product_controller.getFeaturedListings)
-router.patch('/promote-listing/:id', product_controller.promoteListing)
+router.patch('/promote-listing/:id', AuthenticateUser, product_controller.promoteListing)
 router.patch('/update-ad-click/:id', product_controller.updateAdClick)
+router.patch('/unfeature/ad/:id', product_controller.disabledAdStatus)
 
 // Filters listings
 router.get('/browse-listing', product_controller.browseListings)
@@ -82,5 +84,8 @@ router.get('/user/following-followers', AuthenticateUser, seller_Controller.getU
 router.get('/check-seller', seller_Controller.getSellerIdToNotShowFollowBtn)
 router.patch('/follow/seller', AuthenticateUser, seller_Controller.startFollowing)
 router.patch('/unfollow/seller', AuthenticateUser, seller_Controller.startUnFollowing)
+
+// Ads Plans
+router.get('/all/plans', adPlanControllers.getAllPlans)
 
 export default router

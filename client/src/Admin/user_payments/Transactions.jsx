@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import {Notify} from '../../hooks/hooks'
+import { Notify } from '../../hooks/hooks'
 import { DataService, GetCookie } from '../../hooks/hooks'
 import { Link, useNavigate } from 'react-router-dom'
 
@@ -8,14 +8,13 @@ const Transactions = () => {
     const [transactions, settransactions] = useState([])
     const [pagination, setpagination] = useState({})
 
-
     const fetchTransctions = async (page) => {
         const res = await DataService.post(`/seller/payment-transactions?page=${page}`, {}, {
             headers: {
                 'Authorization': `Bearer ${GetCookie(navigate)}`,
             }
         })
-         Notify(res)
+        Notify(res)
         settransactions(res.collectionData)
         delete res.collectionData
         setpagination(res)
@@ -24,7 +23,7 @@ const Transactions = () => {
     return (
         <>
             <div className="d-flex justify-content-center">
-                <h4>Wallet History</h4>
+                <h4>Payments History</h4>
             </div>
             <table className="table">
                 <thead>

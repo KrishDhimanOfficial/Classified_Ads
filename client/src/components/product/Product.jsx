@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { BTN, Image } from '../component'
 import defaultUser from '../../assets/images/user.svg'
@@ -10,12 +10,16 @@ import { toast } from 'react-toastify'
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip'
 
-const Product = ({ id, title, category, image, slug, price, isfavourite,
+const Product = ({ id, title, category, image, slug, price, isfavourite, date, ad_end_date,
     ad_status, sellerImg, sellerUsername, location }) => {
-
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const [fillheart, setfillheart] = useState(isfavourite)
+
+    const current_date = new Date(date).getDate()
+    const end_date = new Date(ad_end_date).getDate()
+    const current_month = new Date(date).getMonth() + 1;
+    const end_month = new Date(ad_end_date).getMonth() + 1;
 
     const updateClickCount = async () => {
         try {
@@ -54,6 +58,13 @@ const Product = ({ id, title, category, image, slug, price, isfavourite,
             console.error('removeWishlist : ' + error)
         }
     }
+
+    const UpdateAdStatus = async (ad_status) => {
+        await DataService.patch(`/unfeature/ad/${id}`, { ad_status })
+    }
+    useEffect(() => {
+        if (current_date > end_date || (current_date > end_date && current_month > end_month)) UpdateAdStatus(false)
+    }, [])
     return (
         <div className="course__item mb-30">
             <div className="course__thumb d-flex justify-content-center">

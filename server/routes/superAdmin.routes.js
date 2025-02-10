@@ -8,6 +8,7 @@ import seller_controllers from '../controllers/seller.controller.js'
 import { checkAdminIsLogged, checkToken } from '../Middleware/CheckAdminAuthentication.js'
 import product_controller from '../controllers/product.controller.js'
 import locationControllers from '../controllers/location.controller.js'
+import adPlanControllers from '../controllers/adPlan.controller.js'
 const router = express.Router()
 
 // Routes for Super Admin
@@ -83,6 +84,14 @@ router.get('/all-sellers', checkAdminIsLogged, seller_controllers.renderAllSelle
 router.get('/deactivated-sellers', checkAdminIsLogged, seller_controllers.renderAllDeactivated_Sellers)
 router.route('/seller/:id?')
     .patch(seller_controllers.updateSellerStatus)
+
+// Routes for Ad Plans
+router.get('/ads-plans', checkAdminIsLogged, adPlanControllers.renderAllAdPlans)
+router.route('/adplan/:id?')
+    .post(upload.none(), adPlanControllers.createAdPlan)
+    .get(adPlanControllers.getAdPlans)
+    .put(upload.none(), adPlanControllers.updateAdsPlan)
+    .delete(adPlanControllers.deleteAdsPlan)
 
 // General-Settings
 router.get('/general-settings', checkAdminIsLogged, authenticationcontroller.renderGN)

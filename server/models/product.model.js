@@ -98,9 +98,20 @@ const productSchema = new mongoose.Schema({
         ref: 'city',
         required: [true, 'Please Select Your city!']
     },
+    planId: {
+        type: mongoose.Schema.Types.ObjectId,
+    },
     created_At: {
         type: mongoose.Schema.Types.Date,
         default: new Date()
+    },
+    ad_start_date: {
+        type: mongoose.Schema.Types.Date,
+        default: null
+    },
+    ad_end_date: {
+        type: mongoose.Schema.Types.Date,
+        default: null
     }
 })
 

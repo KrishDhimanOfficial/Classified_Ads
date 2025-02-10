@@ -16,9 +16,9 @@ const Sidebar = () => {
                 <i className="fa-solid fa-star me-3"></i>
                 My WishList
             </NavLink>
-            <NavLink className={`nav-link ${({ isActive }) => isActive ? 'active' : ''}`} to="/user/my-wallet">
+            <NavLink className={`nav-link ${({ isActive }) => isActive ? 'active' : ''}`} to="/user/payments">
                 <i className="fas fa-wallet me-3"></i>
-                Wallet
+                Payments History
             </NavLink>
             <NavLink className={`nav-link ${({ isActive }) => isActive ? 'active' : ''}`} to="/user/profile">
                 <i className="fas fa-user-circle me-3"></i>
