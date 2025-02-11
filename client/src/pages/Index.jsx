@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Banner, Category, Product, Sec_Heading } from '../components/component'
 import { Link } from 'react-router-dom'
 import DataService from '../hooks/DataService'
+import { motion } from "motion/react"
 
 const Index = () => {
     const [categories, setcategories] = useState([])
@@ -68,7 +69,12 @@ const Index = () => {
                             <div className="row">
                                 {
                                     featuredListings?.map((listing, i) => (
-                                        <div className="col-md-3" key={i}>
+                                        <motion.div
+                                            initial={{ opacity: 0, translateY: 100 }}
+                                            whileInView={{ opacity: 1, translateY: 0 }}
+                                            viewport={{ once: true }}
+                                            transition={{ delay: 0.3, duration: 0.5 }}
+                                            className="col-md-3" key={i}>
                                             <Product
                                                 id={listing._id}
                                                 title={listing.title}
@@ -81,7 +87,7 @@ const Index = () => {
                                                 location={listing.location}
                                                 sellerUsername={listing.seller.username}
                                             />
-                                        </div>
+                                        </motion.div>
                                     ))
                                 }
                             </div>
@@ -93,7 +99,12 @@ const Index = () => {
                             <div className="row">
                                 {
                                     listings?.map((listing, i) => (
-                                        <div className="col-md-3" key={i}>
+                                        <motion.div
+                                            initial={{ opacity: 0, translateY: 100 }}
+                                            whileInView={{ opacity: 1, translateY: 0 }}
+                                            viewport={{ once: true }}
+                                            transition={{ delay: 0.3, duration: 0.5 }}
+                                            className="col-md-3" key={i}>
                                             <Product
                                                 id={listing._id}
                                                 title={listing.title}
@@ -106,7 +117,7 @@ const Index = () => {
                                                 location={listing.location}
                                                 sellerUsername={listing.seller.username}
                                             />
-                                        </div>
+                                        </motion.div>
                                     ))
                                 }
                             </div>

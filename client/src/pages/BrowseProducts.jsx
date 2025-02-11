@@ -27,7 +27,7 @@ const BrowseProducts = () => {
 
     const getfilterData = useCallback(async () => {
         try {
-            seterror(''), setlisting({}), setloading(true)
+            setloading(true), setlisting({})
             const res = await DataService.get(`/filters/listings${applyfilters}`)
             if (res.error) return seterror(res.error), setloading(false)
             seterror(''), setlisting(res), setloading(false)
@@ -38,7 +38,7 @@ const BrowseProducts = () => {
 
     const filterLlistingwithPagination = useCallback(async (page) => {
         try {
-            seterror(''), setlisting({}), setloading(true)
+            setloading(true), setlisting({})
             const api = location.search
                 ? `/filters/listings${applyfilters}&page=${page}`
                 : `/browse-listing?page=${page}`;

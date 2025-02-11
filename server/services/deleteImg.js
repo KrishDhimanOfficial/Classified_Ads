@@ -14,5 +14,4 @@ const deleteImage = async (image) => {
     }
 }
 
-
 export default deleteImage;

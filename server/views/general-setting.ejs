@@ -142,37 +142,6 @@
                                             </div>
                                             <!-- /.card-body -->
                                         </div>
-                                        <!-- Set Featured Ad Price Per Click -->
-                                        <div class="card card-primary">
-                                            <div class="card-header">
-                                                <h3 class="card-title">Featured Ad Setting</h3>
-                                                <div class="card-tools">
-                                                    <button type="button" class="btn btn-tool"
-                                                        data-card-widget="collapse" title="Collapse">
-                                                        <i class="fas fa-minus"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div class="card-body">
-                                                <form action='/admin/setFeaturedAdPrice/<%= settings._id %>'
-                                                    method="post">
-                                                    <div class="form-group w-25">
-                                                        <label for="price">Price (Per Click ON Featured Ad)</label>
-                                                        <input type="number" class="form-control" id="price"
-                                                            value="<%= settings.setFeaturedAdPrice %>" name="setFeaturedAdPrice">
-                                                    </div>
-                                                    <button type="submit" class="btn btn-primary">
-                                                        <i class="fa-solid fa-cloud-arrow-up"></i>
-                                                        Submit
-                                                    </button>
-                                                    <% if (locals.error) { %>
-                                                        <div class="alert alert-danger" role="alert">
-                                                            <%= error %>
-                                                        </div>
-                                                        <% } %>
-                                                </form>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>

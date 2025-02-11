@@ -9,6 +9,7 @@ import { useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip'
+import { motion } from "motion/react"
 
 const Product = ({ id, title, category, image, slug, price, isfavourite, date, ad_end_date,
     ad_status, sellerImg, sellerUsername, location }) => {
@@ -66,7 +67,11 @@ const Product = ({ id, title, category, image, slug, price, isfavourite, date, a
         if (current_date > end_date || (current_date > end_date && current_month > end_month)) UpdateAdStatus(false)
     }, [])
     return (
-        <div className="course__item mb-30">
+        <motion.div className="course__item mb-30"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+        >
             <div className="course__thumb d-flex justify-content-center">
                 <Link to={slug} target='_blank' onClick={() => ad_status ? updateClickCount() : null} >
                     <Image
@@ -139,7 +144,7 @@ const Product = ({ id, title, category, image, slug, price, isfavourite, date, a
                     }
                 </div>
             </div>
-        </div>
+        </motion.div>
     )
 }
 

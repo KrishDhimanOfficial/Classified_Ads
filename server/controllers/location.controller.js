@@ -196,7 +196,7 @@ const locationControllers = {
     },
     getlocationCities: async (req, res) => {
         try {
-            const response = await cityModel.find({ stateId: req.params.id, status: true })
+            const response = await cityModel.find({ stateId: req.params.stateId, status: true })
             return res.status(200).json(response)
         } catch (error) {
             console.log(' : ' + error.message)

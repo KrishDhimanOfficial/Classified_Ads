@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { Link, useNavigate, } from 'react-router-dom'
-import { BTN, Image, Input } from '../component'
+import { Image, Input, Submit } from '../component'
 import Select from 'react-select'
 import DataService from '../../hooks/DataService'
 import { useForm, Controller } from 'react-hook-form'
-import bannerIMG from '../../assets/images/banner.webp'
+import bannerIMG from '../../assets/images/banner1.webp'
+import { TypeAnimation } from 'react-type-animation'
 
 const Banner = () => {
     const navigate = useNavigate()
@@ -53,16 +54,27 @@ const Banner = () => {
                 <Image className="desktop img-fluid w-100" src={bannerIMG} alt="Banner Image" />
             </div>
             <div className="container">
-                <div className="banner-content start-50 translate-middle">
+                <div className="banner-content start-50 translate-middle w-75">
                     <div className="back-sec-title">
-                        <h1 className="banner-title text-center">What are you looking for?</h1>
-                        {
-                            /* <p className="banner-desc text-white text-center">
-                            A simple way to connect buyers and sellers, promote services, or announce opportunities.
-                            </p> */
-                        }
+                        <TypeAnimation
+                            preRenderFirstString={true}
+                            sequence={[
+                                500,
+                                'Are You Looking For I-Phones ?',
+                                1000,
+                                'Are You Looking For Cars ?',
+                                1000,
+                                'Are You Looking For Tools ?',
+                                1000,
+                                'Are You Looking For Furniture ?',
+                                500,
+                            ]}
+                            speed={50}
+                            className='banner-title d-block text-center text-white'
+                            repeat={Infinity}
+                        />
                         <form onSubmit={handleSubmit(filterData)} autoComplete='off'>
-                            <div className="d-flex gap-2">
+                            <div className="d-flex gap-2 mb-3">
                                 <div className='flex-grow-1'>
                                     <Input
                                         {...register('search')}
@@ -80,6 +92,7 @@ const Banner = () => {
                                                 {...field}
                                                 isSearchable
                                                 isRtl={false}
+                                                placeholder='Select State'
                                                 options={states}
                                                 value={selectedState}
                                                 onChange={(selectedoption) => {
@@ -102,6 +115,7 @@ const Banner = () => {
                                                 {...field}
                                                 isSearchable
                                                 isRtl={false}
+                                                placeholder='Select City'
                                                 value={selectedCity}
                                                 options={selectedState ? cities : []}
                                                 onChange={(selectedoption) => {
@@ -113,18 +127,14 @@ const Banner = () => {
                                         )}
                                     />
                                 </div>
-                                <div className='flex-grow-1'>
-                                    <BTN
-                                        type='submit'
-                                        text='Search'
-                                        className="btn btn-dark w-100 h-100"
-                                    />
-                                </div>
+                            </div>
+                            <div className='d-flex justify-content-center'>
+                                <Submit
+                                    text='Search'
+                                    className="back-btn"
+                                />
                             </div>
                         </form>
-                    </div>
-                    <div className="banner-btn text-center pt-15">
-                        <Link to="/browse-products" className="back-btn">Discover More Ads</Link>
                     </div>
                 </div>
             </div>

@@ -24,8 +24,8 @@ const SellerProfile = () => {
                     Authorization: `Bearer ${GetCookie()}`
                 }
             })
-
             if (res.error) navigate('/not-found')
+            console.log(res)
             setShowFollowBtn(res.response.collectionData[0].seller._id !== res.sellerId)
             setLength(res.response.totalDocs)
             setsellerInfo(res.response.collectionData[0].seller)

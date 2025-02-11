@@ -33,7 +33,7 @@ const Audience = () => {
                     <Tabs defaultActiveKey="Followers" id="uncontrolled-tab-example" className="mb-3">
                         <Tab className='instructor__area ' eventKey="Followers" title="Followers">
                             <div className='row instructor__width bg-white'>
-                                {isloading && (<h2 className='text-center'>...Loading</h2>)}
+                                {isloading && (<h2 className='text-center'>Loading...</h2>)}
                                 {
                                     data.followers?.map((follower, i) => (
                                         <UserProfile

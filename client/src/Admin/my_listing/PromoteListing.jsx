@@ -84,6 +84,7 @@ const PromoteListing = () => {
     useEffect(() => { fetchPlans(), getProfile() }, [])
     return (
         <>
+            <title>Feature this Ad</title>
             <div className="container pt-120 pb-90">
                 <div className="row g-3">
                     <div className="col-md-12">

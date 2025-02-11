@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Notify } from '../../hooks/hooks'
 import { DataService, GetCookie } from '../../hooks/hooks'
 import { Link, useNavigate } from 'react-router-dom'
+import { motion } from "motion/react"
 
 const Transactions = () => {
     const navigate = useNavigate()
@@ -25,7 +26,11 @@ const Transactions = () => {
             <div className="d-flex justify-content-center">
                 <h4>Payments History</h4>
             </div>
-            <table className="table">
+            <motion.table
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5 }}
+                className="table">
                 <thead>
                     <tr>
                         <th>Payment Status</th>
@@ -36,7 +41,12 @@ const Transactions = () => {
                 <tbody>
                     {
                         transactions?.map((transaction, i) => (
-                            <tr key={i}>
+                            <motion.tr
+                                key={i}
+                                initial={{ opacity: 0, translateX: 100 }}
+                                animate={{ opacity: 1, translateX: 0 }}
+                                transition={{ duration: 0.5 }}
+                            >
                                 <td>
                                     <span className={transaction.status ? 'status-completed' : 'status-cancel'}>
                                         {transaction.status ? 'Completed' : 'Cancel'}
@@ -44,11 +54,11 @@ const Transactions = () => {
                                 </td>
                                 <td> <i className="fa-solid fa-indian-rupee-sign"></i> {transaction.amount}</td>
                                 <td>{transaction.formattedDate} {transaction.formattedtime}</td>
-                            </tr>
+                            </motion.tr>
                         ))
                     }
                 </tbody>
-            </table>
+            </motion.table>
             <div className='w-100 d-flex justify-content-center'>
                 <ul className="back-pagination">
                     {pagination.prevpage && (

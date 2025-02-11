@@ -17,10 +17,6 @@ const general_settingSchema = mongoose.Schema({
         required: [true, 'Email is required!'],
         unique: true,
         match: [/^[a-z0-9]+@gmail\.com$/, 'Incorrect email!']
-    },
-    setFeaturedAdPrice: {
-        type: mongoose.Schema.Types.Number,
-        default: 0
     }
 })
 

@@ -11,7 +11,6 @@ import brand_controller from '../controllers/brand.controller.js'
 import adPlanControllers from '../controllers/adPlan.controller.js'
 const router = express.Router()
 
-
 router.post('/auth/seller', AuthenticateUser, authenticationcontroller.handleSellerAuthentication)
 router.post('/register/seller', authenticationcontroller.handelSellerRegister)
 router.post('/login/seller', authenticationcontroller.handleSellerLogin)
@@ -21,7 +20,6 @@ router.route('/seller/profile/:id?')
     .all(AuthenticateUser)
     .post(upload.none(), seller_Controller.getProfile)
     .put(sellerprofileImg.single('image'), seller_Controller.updateProfile)
-router.put('/update/seller-wallet', seller_Controller.updateWallet)
 router.post('/seller/payment-transactions', AuthenticateUser, seller_Controller.getpaymentTransactions)
 router.get('/get/seller-profile/:seller_username', seller_Controller.getSeller)
 
@@ -77,7 +75,7 @@ router.get('/settings', authenticationcontroller.getGNSettings)
 
 // Location
 router.get('/location/states', location_controller.getlocationState)
-router.get('/location/cities/:id', location_controller.getlocationCities)
+router.get('/location/cities/:stateId', location_controller.getlocationCities)
 
 // Follow & Following
 router.get('/user/following-followers', AuthenticateUser, seller_Controller.getUserAudience)

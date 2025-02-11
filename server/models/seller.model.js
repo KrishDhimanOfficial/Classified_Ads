@@ -42,10 +42,6 @@ const sellerSchema = new mongoose.Schema({
         required: true,
         min: [6, 'Password is too short!'],
     },
-    wallet_amount: {
-        type: mongoose.Schema.Types.Number,
-        default: 0
-    },
     avg_rating: {
         type: mongoose.Schema.Types.Number,
         default: 0

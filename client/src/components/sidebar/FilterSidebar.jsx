@@ -13,7 +13,6 @@ const FilterSidebar = () => {
     const [brands, setbrands] = useState([])
     const [states, setstates] = useState([])
     const [cities, setcities] = useState([])
-    const [range, setRange] = useState(0)
     const [selectedState, setSelectedState] = useState(null)
     const [selectedCity, setSelectedCity] = useState(null)
 
@@ -55,6 +54,10 @@ const FilterSidebar = () => {
         const Filterstate = JSON.parse(localStorage.getItem('filterstate'))
         let filters = '?';
 
+        if (Filterstate && Filtercity) {
+            if (filters.endsWith('&')) filters = filters.slice(0, -1)
+            navigate(`/browse-products${filters}`)
+        }
         if (Filterstate) {
             filters += `stateId=${Filterstate.value}&`;
             setSelectedState(Filterstate), setValue('stateId', Filterstate.value)
@@ -64,10 +67,6 @@ const FilterSidebar = () => {
         if (Filtercity) {
             filters += `cityId=${Filtercity.value}&`;
             setSelectedCity(Filtercity), setValue('cityId', Filtercity.value)
-            if (filters.endsWith('&')) filters = filters.slice(0, -1)
-            navigate(`/browse-products${filters}`)
-        }
-        if (Filterstate && Filtercity) {
             if (filters.endsWith('&')) filters = filters.slice(0, -1)
             navigate(`/browse-products${filters}`)
         }

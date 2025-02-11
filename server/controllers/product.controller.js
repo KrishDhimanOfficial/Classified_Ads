@@ -920,8 +920,7 @@ const product_controller = {
         try {
             const { token } = req.body;
             const seller = getUser(token)
-            const GNS = await generalSettingModel.findOne({}, { setFeaturedAdPrice: 1 })
-
+            
             const response = await productModel.findByIdAndUpdate(
                 { _id: req.params.id },
                 { $inc: { click_count: 1 } },
@@ -933,11 +932,6 @@ const product_controller = {
                     { _id: req.params.id },
                     { $inc: { click_count: -1 } },
                     { signal: controller.signal }
-                )
-            } else {
-                await sellerModel.findByIdAndUpdate(
-                    { _id: response.sellerId },
-                    { $inc: { wallet_amount: -GNS.setFeaturedAdPrice } }
                 )
             }
 

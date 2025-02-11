@@ -8,4 +8,4 @@ A Classified Ads Application is an online platform where users can post, browse,
 
 ## Seller Account
 
-![alt text](<Screenshot 2025-01-21 at 10.14.04 PM.png>)
+![alt text](<Screenshot 2025-02-11 at 4.44.22 PM.png>)

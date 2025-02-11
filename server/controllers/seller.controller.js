@@ -9,6 +9,7 @@ import config from "../config/config.js"
 import reviewRatingModel from "../models/review&rating.model.js"
 const ObjectId = mongoose.Types.ObjectId;
 
+/** @type {Object.<string, import('express').RequestHandler>} */
 const seller_controllers = {
     renderAllSellers: async (req, res) => {
         try {
@@ -17,7 +18,6 @@ const seller_controllers = {
         } catch (error) {
             console.log('renderAllSellers : ' + error.message)
         }
-
     },
     renderAllDeactivated_Sellers: async (req, res) => {
         try {
@@ -30,10 +30,7 @@ const seller_controllers = {
     updateSellerStatus: async (req, res) => {
         try {
             const { status } = req.body;
-
-            const response = await sellerModel.findByIdAndUpdate(
-                { _id: req.params.id }, { status }
-            )
+            const response = await sellerModel.findByIdAndUpdate({ _id: req.params.id }, { status })
             if (!response) return res.json({ error: 'Failed to update brand!' })
             return res.json({ message: 'update successfully!' })
         } catch (error) {
@@ -74,26 +71,6 @@ const seller_controllers = {
             console.log('updateProfile : ' + error.message)
         }
     },
-    updateWallet: async (req, res) => {
-        try {
-            const seller = getUser(req.headers['authorization'].split(' ')[1])
-            const { amount, status } = req.body;
-
-            if (status) { // update the wallet when payment is successfull
-                const response = await sellerModel.findByIdAndUpdate(
-                    { _id: seller.id },
-                    { $inc: { wallet_amount: amount } },
-                    { new: true }
-                )
-                if (!response) return res.json({ error: 'Unable to update wallet!' })
-            }
-
-            await transaction_historyModel.create({ sellerId: seller.id, amount, status })
-            return res.json({ message: 'Amount Added to Wallet!' })
-        } catch (error) {
-            console.log('updateWallet : ' + error.message)
-        }
-    },
     getpaymentTransactions: async (req, res) => {
         try {
             const seller = getUser(req.headers['authorization'].split(' ')[1])
@@ -125,9 +102,9 @@ const seller_controllers = {
     },
     getSeller: async (req, res) => {
         try {
-            const seller = req.headers['authorization'].split(' ')[1]
-                ? getUser(req.headers['authorization'].split(' ')[1])
-                : null
+            const seller = req.headers['authorization'].split(' ')[1] === 'null'
+                ? null
+                : getUser(req.headers['authorization'].split(' ')[1])
 
             const projection = [
                 {
@@ -178,7 +155,7 @@ const seller_controllers = {
                         sellerusername: '$seller.username',
                         'seller.followersCount': { $size: '$seller.followers' },
                         'seller.followingsCount': { $size: '$seller.followings' },
-                        'seller.followerId': seller ? seller.id : null
+                        'seller.followerId': seller?.id
                     }
                 },
                 {
@@ -194,7 +171,7 @@ const seller_controllers = {
             ]
             const response = await handleAggregatePagination(sellerModel, projection, req.query)
             if (response.collectionData.length === 0) return res.json({ error: 'not found' })
-            if (!seller || seller) return res.status(200).json({ response, sellerId: seller ? seller.id : null })
+            if (!seller || seller) return res.status(200).json({ response, sellerId: seller?.id })
         } catch (error) {
             console.log('getSeller : ' + error.message)
         }
@@ -363,7 +340,9 @@ const seller_controllers = {
                     }
                 }
             ])
-            return res.status(200).json(response[0])
+            setTimeout(() => {
+                return res.status(200).json(response[0])
+            }, 1000)
         } catch (error) {
             console.log('getUserAudience : ' + error.message)
         }

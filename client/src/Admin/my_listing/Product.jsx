@@ -6,6 +6,7 @@ import GetCookie from '../../hooks/GetCookie'
 import Notify from '../../hooks/Notify'
 import Dropdown from 'react-bootstrap/Dropdown'
 import Badge from 'react-bootstrap/Badge'
+import { motion } from "motion/react"
 
 const Product = ({ id, path, status, title, price, ad_status, clicks, publishStatus, createdAt, endDate, slug, updatelisting }) => {
     const navigate = useNavigate()
@@ -30,6 +31,7 @@ const Product = ({ id, path, status, title, price, ad_status, clicks, publishSta
                     'Authorization': `Bearer ${GetCookie(navigate)}`
                 }
             })
+
             Notify(res)
         } catch (error) {
             console.error('updateStatus : ', error)
@@ -37,7 +39,11 @@ const Product = ({ id, path, status, title, price, ad_status, clicks, publishSta
     }, [])
 
     return (
-        <div className="card d-flex flex-row align-items-start w-100 mt-0 mx-md-2 mx-0">
+        <motion.div className="card d-flex flex-row align-items-start w-100 mt-0 mx-md-2 mx-0"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+        >
             <Image
                 src={path}
                 className='object-fit-cover'
@@ -105,7 +111,7 @@ const Product = ({ id, path, status, title, price, ad_status, clicks, publishSta
                     </Dropdown.Menu>
                 </Dropdown>
             </div>
-        </div>
+        </motion.div>
     )
 }
 
