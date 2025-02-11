@@ -104,6 +104,8 @@ router.post('/setFeaturedAdPrice/:id', authenticationcontroller.setFeaturedAdPri
 // Transactions
 router.get('/transactions', checkAdminIsLogged, authenticationcontroller.renderAllTransactions)
 
+// Settings
+router.get('/settings', authenticationcontroller.getGNSettings)
 router.get('/*', (req, res) => res.render('404'))
 
 export default router

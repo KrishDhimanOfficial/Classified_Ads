@@ -63,3 +63,10 @@ export const handleDeleteRequest = async (table_row, api) => {
     if (res.message) table_row.remove()
     Notify(res)
 }
+
+window.addEventListener('load', async () => {
+    const favicon = document.querySelector('#favicon')
+    const response = await fetch(`${serverAPI}/settings`)
+    const data = await response.json()
+    favicon.href = data.logo
+})

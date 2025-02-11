@@ -6,8 +6,6 @@ const published = document.querySelector('#published')
 const loader = document.querySelector('#loader')
 const planpricediscountInput = document.querySelector('#planpricediscount')
 const price = document.querySelector('#planprice')
-const plantitle = document.querySelector('#plantitle')
-const plan_duration = document.querySelector('#planDuration')
 
 
 datatable.onclick = (e) => {
@@ -107,19 +105,19 @@ if (planpricediscountInput) planpricediscountInput.onchange = (e) => {
 
 const fetchSingleAdPlan = async (api, id) => {
     try {
+        const plantitle = document.querySelector('#plantitle')
+        const plan_duration = document.querySelector('#planDuration')
         SubmitForm.id = 'updateFormData';
         loader.classList.remove('d-none')
         SubmitForm.setAttribute('data-id', id)
+
         const response = await fetch(api, { method: 'GET' })
         const data = await response.json()
+
         price.value = data.price;
         planpricediscountInput.value = data.discount;
-        Array.from(plan_duration.children).forEach(item => {
-            if (item.value === data.plan_duration) item.selected = true;
-        })
-        Array.from(plantitle.children).forEach(item => {
-            if (item.value === data.title) item.selected = true;
-        })
+        plan_duration.value = data.plan_duration;
+        plantitle.value = data.title;
         loader.classList.add('d-none')
     } catch (error) {
         console.error(error)

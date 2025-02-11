@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import GetCookie from '../../hooks/GetCookie'
 import { Notify } from '../../hooks/hooks'
 import config from '../../../config/config'
+import { motion } from 'motion/react'
 
 const Product = lazy(() => import('../my_listing/Product'))
 
@@ -20,6 +21,7 @@ const Listing_container = () => {
         })
         Notify(res), setlisting(res)
     }, [])
+
     useEffect(() => { fetchLlisting() }, [])
     return (
         <>

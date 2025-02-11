@@ -1,9 +1,15 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
+import { motion } from 'motion/react'
 
 const Sidebar = () => {
     return (
-        <div className="nav flex-column">
+        <motion.div
+            initial={{ opacity: 0, }}
+            animate={{ opacity: 1, }}
+            transition={{ duration: 0.5 }}
+            className="nav flex-column"
+        >
             <NavLink className={`nav-link ${({ isActive }) => isActive ? 'active' : ''}`} to="/user/dashboard">
                 <i className="fas fa-user me-3"></i>
                 Dashboard
@@ -28,7 +34,7 @@ const Sidebar = () => {
                 <i className="fas fa-cog me-3"></i>
                 Settings
             </NavLink>
-        </div>
+        </motion.div>
     )
 }
 

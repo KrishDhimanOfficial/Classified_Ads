@@ -74,7 +74,6 @@ const PromoteListing = () => {
             }
             const razorpayInstance = new window.Razorpay(options)
             razorpayInstance.open()
-            razorpayInstance.on('payment.error', () => featurethisAd(false))
             razorpayInstance.on('payment.failed', () => featurethisAd(false))
         } catch (error) {
             console.error(error)
