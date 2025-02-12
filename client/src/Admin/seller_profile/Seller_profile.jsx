@@ -33,7 +33,7 @@ const Seller_profile = ({ totalListing }) => {
                 </div>
                 <p className="mb-0 text-center text-sm-start my-2 my-sm-0">
                     <span className="text-warning me-3">
-                        {totalListing} listing
+                        {totalListing || 0} listing
                     </span>
                     Member since {date.getFullYear()}
                 </p>

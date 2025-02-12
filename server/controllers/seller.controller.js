@@ -1,5 +1,6 @@
 import sellerModel from "../models/seller.model.js"
 import transaction_historyModel from "../models/transaction_history.model.js"
+import productModel from "../models/product.model.js"
 import { getUser } from "../services/createToken.js"
 import deleteImg from '../services/deleteImg.js'
 import validations from "../services/validateData.js"
@@ -45,6 +46,23 @@ const seller_controllers = {
             return res.status(200).json(sellerprofile)
         } catch (error) {
             console.log('getProfile : ' + error.message)
+        }
+    },
+    deleteSeller: async (req, res) => {
+        try {
+            const seller = getUser(req.headers['authorization'].split(' ')[1])
+            const response = await sellerModel.findByIdAndDelete({ _id: seller.id }, { new: true })
+            if (!response) return res.json({ error: 'Failed to delete account!' })
+
+            if (response?.image) await deleteImg(`seller_profile_images/${response?.image}`)
+            await sellerModel.updateMany({}, { $pull: { followers: response._id, followings: response._id } })
+            await productModel.deleteMany({ sellerId: seller.id })
+            await transaction_historyModel.deleteMany({ sellerId: seller.id })
+            await reviewRatingModel.deleteMany({ sellerId: seller.id })
+
+            return res.json({ message: 'Account deleted successfully!' })
+        } catch (error) {
+            console.log('deleteSeller : ' + error.message)
         }
     },
     updateProfile: async (req, res) => {

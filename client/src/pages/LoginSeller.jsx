@@ -72,7 +72,7 @@ const LoginSeller = () => {
                         <p className='fs-6 text-danger m-0'>{errors.password?.message}</p>
                     </div>
                     <Submit
-                        text={isSubmitting ? '...Loging' : 'Login'}
+                        text={isSubmitting ? 'waiting...' : 'Login'}
                         className={'submit'}
                         disabled={isSubmitting}
                     />

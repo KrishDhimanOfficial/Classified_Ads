@@ -20,6 +20,7 @@ router.route('/seller/profile/:id?')
     .all(AuthenticateUser)
     .post(upload.none(), seller_Controller.getProfile)
     .put(sellerprofileImg.single('image'), seller_Controller.updateProfile)
+    .delete(seller_Controller.deleteSeller)
 router.post('/seller/payment-transactions', AuthenticateUser, seller_Controller.getpaymentTransactions)
 router.get('/get/seller-profile/:seller_username', seller_Controller.getSeller)
 

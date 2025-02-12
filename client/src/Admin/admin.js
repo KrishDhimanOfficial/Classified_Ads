@@ -14,6 +14,7 @@ import My_Wishlist from "./my_listing/My_Wishlist";
 import Audience from "./audience/Audience";
 import UserProfile from "./audience/UserProfile";
 import PromoteListing from "./my_listing/PromoteListing";
+import Account_setting from "./setiing/Account_setting";
 
 export {
     Sidebar,
@@ -31,5 +32,6 @@ export {
     UpdateProduct,
     Audience,
     UserProfile,
-    PromoteListing
+    PromoteListing,
+    Account_setting
 }

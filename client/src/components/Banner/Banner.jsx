@@ -11,6 +11,7 @@ const Banner = () => {
     const navigate = useNavigate()
     const [states, setstates] = useState([])
     const [cities, setcities] = useState([])
+    const [search, setsearch] = useState(false)
     const [selectedState, setSelectedState] = useState(null)
     const [selectedCity, setSelectedCity] = useState(null)
 
@@ -33,6 +34,7 @@ const Banner = () => {
     const handleStateChange = (selectedOption) => {
         setSelectedState(selectedOption)
         setSelectedCity(null) // Reset City to empty
+        localStorage.setItem('filtercity', JSON.stringify(''))
     }
 
     const filterData = (formdata) => {
@@ -44,6 +46,8 @@ const Banner = () => {
         if (!formdata.cityId) localStorage.setItem('filtercity', JSON.stringify(''))
         else filiters += `cityId=${formdata.cityId.value}`;
 
+        if (selectedState) localStorage.setItem('filterstate', JSON.stringify(selectedState))
+        if (selectedCity) localStorage.setItem('filtercity', JSON.stringify(selectedCity))
         navigate(`/browse-products${filiters}`)
     }
 
@@ -80,7 +84,7 @@ const Banner = () => {
                                         {...register('search')}
                                         type="text"
                                         placeholder="Search for a property"
-                                        className="form-control"
+                                        className="form-control h-100"
                                     />
                                 </div>
                                 <div className='flex-grow-1'>
@@ -97,8 +101,6 @@ const Banner = () => {
                                                 value={selectedState}
                                                 onChange={(selectedoption) => {
                                                     handleStateChange(selectedoption)
-                                                    localStorage.setItem('filtercity', JSON.stringify(''))
-                                                    localStorage.setItem('filterstate', JSON.stringify(selectedoption))
                                                     field.onChange(selectedoption)
                                                     fetchCities(selectedoption.value)
                                                 }}
@@ -121,7 +123,6 @@ const Banner = () => {
                                                 onChange={(selectedoption) => {
                                                     setSelectedCity(selectedoption)
                                                     field.onChange(selectedoption)
-                                                    localStorage.setItem('filtercity', JSON.stringify(selectedoption))
                                                 }}
                                             />
                                         )}

@@ -52,23 +52,12 @@ const FilterSidebar = () => {
     const getlocation = () => {
         const Filtercity = JSON.parse(localStorage.getItem('filtercity'))
         const Filterstate = JSON.parse(localStorage.getItem('filterstate'))
-        let filters = '?';
 
-        if (Filterstate && Filtercity) {
-            if (filters.endsWith('&')) filters = filters.slice(0, -1)
-            navigate(`/browse-products${filters}`)
-        }
         if (Filterstate) {
-            filters += `stateId=${Filterstate.value}&`;
             setSelectedState(Filterstate), setValue('stateId', Filterstate.value)
-            if (filters.endsWith('&')) filters = filters.slice(0, -1)
-            navigate(`/browse-products${filters}`)
         }
         if (Filtercity) {
-            filters += `cityId=${Filtercity.value}&`;
             setSelectedCity(Filtercity), setValue('cityId', Filtercity.value)
-            if (filters.endsWith('&')) filters = filters.slice(0, -1)
-            navigate(`/browse-products${filters}`)
         }
     }
 

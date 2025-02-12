@@ -6,7 +6,7 @@ class DataService {
     constructor() {
         this.clientAPI = axios.create({ baseURL: config.severAPI })
     }
-    
+
     async post(api, formdata, config = {}) { // POST Request
         const response = await this.clientAPI.post(api, formdata, config)
         return response.data
@@ -22,8 +22,8 @@ class DataService {
         return response.data
     }
 
-    async delete(api) { // DELETE Request
-        const response = await this.clientAPI.delete(api)
+    async delete(api, config = {}) { // DELETE Request
+        const response = await this.clientAPI.delete(api, config)
         return response.data
     }
 

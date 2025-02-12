@@ -16,9 +16,10 @@ const BrowseProducts = () => {
 
     const browseListing = async () => {
         try {
+            console.log('browseListing');
             setlisting({}), setloading(true)
             const res = await DataService.get(`/browse-listing`)
-            if (res.error) seterror(res.error), setloading(false)
+            if (res.error) return seterror(res.error), setloading(false)
             seterror(''), setlisting(res), setloading(false)
         } catch (error) {
             console.error(error)
@@ -43,8 +44,7 @@ const BrowseProducts = () => {
                 ? `/filters/listings${applyfilters}&page=${page}`
                 : `/browse-listing?page=${page}`;
             const res = await DataService.get(api)
-
-            if (res.error) return seterror(res.error), setloading(false)
+            if (res.error) seterror(res.error), setloading(false)
             seterror(''), setlisting(res), setloading(false)
         } catch (error) {
             console.error(error)
@@ -52,16 +52,19 @@ const BrowseProducts = () => {
     }, [location.key, applyfilters])
 
     useEffect(() => {
+        setFilters('')
         let filters = '?'
         const entries = urlQueryParams.entries()
-        for (const [key, value] of entries) filters += `${key}=${value}&`;
+        for (const [key, value] of entries) {
+            filters += `${key}=${value}&`;
+        }
         if (filters.endsWith('&')) filters = filters.slice(0, -1)
-        setFilters(filters)
-    }, [location.key])
+        if (location.search.length > 0) setFilters(filters)
+    }, [location.search])
 
-    useEffect(() => {
-        location.search ? getfilterData() : browseListing()
-    }, [applyfilters])
+    useEffect(() => { getfilterData() }, [applyfilters, applyfilters.length > 0])
+    useEffect(() => { if (!location.search) browseListing() }, [])
+
     return (
         <>
             <title>Browse products</title>

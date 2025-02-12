@@ -573,7 +573,6 @@ const product_controller = {
         try {
             const { brandId, condition, search, stateId, cityId, parentcategoryId, subcategoryId, featured, listed } = req.query;
             const query = []
-            // console.log(req.body)
             if (condition) query.push({ condition: condition })
             if (brandId) query.push({ brandId: new ObjectId(brandId) })
             if (parentcategoryId) query.push({ parentcategoryId: new ObjectId(parentcategoryId) })
@@ -591,7 +590,6 @@ const product_controller = {
                 if (featured) query.push({ ad_status: true })
                 if (listed) query.push({ ad_status: false })
             }
-
             const projection = [
                 {
                     $match: { $and: query },
@@ -661,7 +659,7 @@ const product_controller = {
             const response = await handleAggregatePagination(productModel, projection, req.query)
             if (response.collectionData.length === 0) return res.json({ error: 'No Results' })
             if (!response) return res.json({ error: 'No Results' })
-            setTimeout(() => res.status(200).json(response), 1500)
+            setTimeout(() => res.status(200).json(response), 1000)
         } catch (error) {
             console.log('handleFilteringListing : ' + error.message)
         }
@@ -920,7 +918,7 @@ const product_controller = {
         try {
             const { token } = req.body;
             const seller = getUser(token)
-            
+
             const response = await productModel.findByIdAndUpdate(
                 { _id: req.params.id },
                 { $inc: { click_count: 1 } },
