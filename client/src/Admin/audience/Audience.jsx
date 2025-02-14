@@ -4,13 +4,13 @@ import { UserProfile } from '../admin'
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import { useNavigate } from 'react-router-dom';
-import { useActionState } from 'react';
+import { motion } from 'motion/react';
 
 const Audience = () => {
     const navigate = useNavigate()
     const [data, setdata] = useState({})
     const [isloading, setloading] = useState(false)
-    
+
     const fetch = async () => {
         try {
             setloading(true)
@@ -44,6 +44,15 @@ const Audience = () => {
                                         />
                                     ))
                                 }
+                                {
+                                    data.followers?.length === 0 && (
+                                        <motion.div initial={{ opacity: 0, }} animate={{ opacity: 1, }} transition={{ duration: 0.5 }} className="col-md-12">
+                                            <div className="text-start">
+                                                <h2>0 Followers</h2>
+                                            </div>
+                                        </motion.div>
+                                    )
+                                }
                             </div>
                         </Tab>
                         <Tab className='instructor__area ' eventKey="Followings" title="Followings">
@@ -58,6 +67,15 @@ const Audience = () => {
                                             image={following.image}
                                         />
                                     ))
+                                }
+                                {
+                                    data.followings?.length === 0 && (
+                                        <motion.div initial={{ opacity: 0, }} animate={{ opacity: 1, }} transition={{ duration: 0.5 }} className="col-md-12">
+                                            <div className="text-start">
+                                                <h2>0 Followings</h2>
+                                            </div>
+                                        </motion.div>
+                                    )
                                 }
                             </div>
                         </Tab>

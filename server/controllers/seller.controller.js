@@ -53,9 +53,16 @@ const seller_controllers = {
             const seller = getUser(req.headers['authorization'].split(' ')[1])
             const response = await sellerModel.findByIdAndDelete({ _id: seller.id }, { new: true })
             if (!response) return res.json({ error: 'Failed to delete account!' })
-
             if (response?.image) await deleteImg(`seller_profile_images/${response?.image}`)
+
             await sellerModel.updateMany({}, { $pull: { followers: response._id, followings: response._id } })
+            const deletedProducts = await productModel.find({ sellerId: seller.id })
+            deletedProducts.map(async product => {
+                await deleteImg(`product_images/${product.featured_img}`)
+                if (product.images.length > 0) {
+                    product.images.map(async image => await deleteImg(`product_images/${image}`))
+                }
+            })
             await productModel.deleteMany({ sellerId: seller.id })
             await transaction_historyModel.deleteMany({ sellerId: seller.id })
             await reviewRatingModel.deleteMany({ sellerId: seller.id })
@@ -69,7 +76,6 @@ const seller_controllers = {
         try {
             const seller = getUser(req.headers['authorization'].split(' ')[1])
             const { username, name, phone, email } = req.body;
-
             const response = await sellerModel.findByIdAndUpdate(
                 { _id: seller.id },
                 {

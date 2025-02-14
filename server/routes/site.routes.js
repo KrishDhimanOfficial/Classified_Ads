@@ -19,7 +19,7 @@ router.put('/change/password', AuthenticateUser, authenticationcontroller.change
 router.route('/seller/profile/:id?')
     .all(AuthenticateUser)
     .post(upload.none(), seller_Controller.getProfile)
-    .put(sellerprofileImg.single('image'), seller_Controller.updateProfile)
+    .put(sellerprofileImg.single('image'), handlemulterError, seller_Controller.updateProfile)
     .delete(seller_Controller.deleteSeller)
 router.post('/seller/payment-transactions', AuthenticateUser, seller_Controller.getpaymentTransactions)
 router.get('/get/seller-profile/:seller_username', seller_Controller.getSeller)
@@ -56,6 +56,7 @@ router.get('/featured-listings', product_controller.getFeaturedListings)
 router.patch('/promote-listing/:id', AuthenticateUser, product_controller.promoteListing)
 router.patch('/update-ad-click/:id', product_controller.updateAdClick)
 router.patch('/unfeature/ad/:id', product_controller.disabledAdStatus)
+router.post('/transaction-history/', AuthenticateUser, product_controller.transactionHistory)
 
 // Filters listings
 router.get('/browse-listing', product_controller.browseListings)

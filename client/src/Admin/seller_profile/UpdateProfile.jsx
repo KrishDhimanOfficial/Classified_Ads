@@ -36,8 +36,8 @@ const UpdateProfile = () => {
 
     const handleupdateSellerProfile = async (data) => {
         const formData = new FormData()
+        formData.append('image', data.image[0])
         Object.entries(data).forEach(([key, value]) => formData.append(key, value))
-
         const res = await DataService.put(`/seller/profile/${profile.seller._id}`, formData, {
             headers: {
                 'Authorization': `Bearer ${GetCookie(navigate)}`

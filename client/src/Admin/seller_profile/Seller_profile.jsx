@@ -4,20 +4,21 @@ import { useSelector } from 'react-redux'
 import defaultuser from '../../assets/images/user.svg'
 import config from '../../../config/config'
 import { Image } from '../../components/component'
+import { motion } from 'motion/react'
 
 const Seller_profile = ({ totalListing }) => {
     const profile = useSelector(state => state.seller)
     const date = new Date(profile.seller.createdAt)
 
     return (
-        <div className="profile-header d-flex flex-sm-row flex-column align-items-center">
+        <motion.div initial={{ opacity: 0, }} animate={{ opacity: 1, }} transition={{ duration: 0.5 }} className="profile-header d-flex flex-sm-row flex-column align-items-center">
             <Image
                 src={profile.seller.image
                     ? `${config.seller_profile_img_path}/${profile.seller.image}`
                     : defaultuser
                 }
-                alt={"Profile picture of the user"}
-                height={"80"} width={"80"}
+                alt={'Profile picture of the user'}
+                height={'80'} width={'80'}
             />
             <div className="ms-3 my-2 my-sm-0">
                 <h5 className="mb-2 text-center text-sm-start">
@@ -55,7 +56,7 @@ const Seller_profile = ({ totalListing }) => {
                     Edit Profile
                 </Link>
             </div>
-        </div>
+        </motion.div>
     )
 }
 

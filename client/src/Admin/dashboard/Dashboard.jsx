@@ -50,17 +50,13 @@ const Dashboard = () => {
                             </p>
                         </div>
                         <div className="col-md-3 m-0 stat stat-red">
-                            <h4>
-                                {listing?.totalDeActive || 0}
-                            </h4>
+                            <h4>{listing?.totalDeActive || 0}</h4>
                             <p>
                                 Deactive Listing
                             </p>
                         </div>
                         <div className="col-md-3 m-0 stat stat-blue">
-                            <h4>
-                                0
-                            </h4>
+                            <h4> {listing?.ad_status || 0} </h4>
                             <p>
                                 Favorite Ads
                             </p>

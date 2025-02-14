@@ -118,6 +118,8 @@ const AddProduct = () => {
         Array.from(data.images).forEach((image) => formData.append('images', image))
         formData.append('slug', slug)
         formData.append('status', status)
+        formData.append('stateId', data.stateId.value)
+        formData.append('cityId', data.cityId.value)
         formData.append('data', JSON.stringify(data))
 
         const res = await DataService.post('/product', formData, {
@@ -148,10 +150,10 @@ const AddProduct = () => {
                                     type={'text'}
                                     {...register('title')}
                                     style={{ border: errors.title?.message ? '1px solid red' : '' }}
-                                    onChange={(e) => setSlug(`${config.siteURL}/${createSlug(e.target.value)}`)}
+                                    onChange={(e) => setSlug(createSlug(e.target.value))}
                                     placeholder={'Enter item name'}
                                 />
-                                <span className='mt-2 d-block text-primary'>{slug}</span>
+                                <span className='mt-2 d-block text-primary'>{`${config.siteURL}/${slug}`}</span>
                                 <span className='fs-6 text-danger m-0 mt-1'>{errors.title?.message}</span>
                             </div>
                             <div className='bg-light p-3 mb-3'>
@@ -459,7 +461,7 @@ const AddProduct = () => {
                             />
                         </div>
                     </div>
-                </form >
+                </form>
             </div>
         </div>
     )

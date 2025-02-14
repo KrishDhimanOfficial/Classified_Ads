@@ -3,6 +3,7 @@ import { FilterSidebar, Product, Placeholder } from '../components/component'
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { DataService } from '../hooks/hooks'
 import { useSelector } from 'react-redux'
+import { motion } from 'motion/react'
 
 const BrowseProducts = () => {
     const navigate = useNavigate()
@@ -16,11 +17,10 @@ const BrowseProducts = () => {
 
     const browseListing = async () => {
         try {
-            console.log('browseListing');
             setlisting({}), setloading(true)
             const res = await DataService.get(`/browse-listing`)
             if (res.error) return seterror(res.error), setloading(false)
-            seterror(''), setlisting(res), setloading(false)
+            seterror(''), setloading(false), setlisting(res)
         } catch (error) {
             console.error(error)
         }
@@ -31,7 +31,7 @@ const BrowseProducts = () => {
             setloading(true), setlisting({})
             const res = await DataService.get(`/filters/listings${applyfilters}`)
             if (res.error) return seterror(res.error), setloading(false)
-            seterror(''), setlisting(res), setloading(false)
+            seterror(''), setloading(false), setlisting(res)
         } catch (error) {
             console.error('filiters : ', error)
         }
@@ -45,7 +45,7 @@ const BrowseProducts = () => {
                 : `/browse-listing?page=${page}`;
             const res = await DataService.get(api)
             if (res.error) seterror(res.error), setloading(false)
-            seterror(''), setlisting(res), setloading(false)
+            seterror(''), setloading(false), setlisting(res)
         } catch (error) {
             console.error(error)
         }
@@ -91,11 +91,15 @@ const BrowseProducts = () => {
                                     }
                                     {
                                         error && (
-                                            <div className="col-md-12">
+                                            <motion.div
+                                                initial={{ opacity: 0, }}
+                                                animate={{ opacity: 1, }}
+                                                transition={{ duration: 0.5 }}
+                                                className="col-md-12">
                                                 <div className="text-center">
                                                     <h2>{error}</h2>
                                                 </div>
-                                            </div>
+                                            </motion.div>
                                         )
                                     }
                                     {

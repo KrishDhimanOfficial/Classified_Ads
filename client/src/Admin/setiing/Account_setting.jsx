@@ -4,7 +4,6 @@ import { BTN, Input } from '../../components/component'
 import DataService from '../../hooks/DataService'
 import GetCookie from '../../hooks/GetCookie'
 import { useNavigate } from 'react-router-dom'
-import { toast } from 'react-toastify'
 
 const Account_setting = () => {
     const navigate = useNavigate()
@@ -16,13 +15,14 @@ const Account_setting = () => {
     const handleDeleteAccount = async () => {
         try {
             setLoading(true)
-            if (confirm !== 'DELETE MY ACCOUNT') return toast.error('Please type "DELETE MY ACCOUNT" to confirm!')
-            const res = await DataService.delete(`/seller/profile`, {
-                headers: {
-                    'authorization': `Bearer ${GetCookie()}`
-                }
-            })
-            if (res.message) navigate('/'), localStorage.removeItem('seller_token')
+            if (confirm === 'DELETE MY ACCOUNT') {
+                const res = await DataService.delete(`/seller/profile`, {
+                    headers: {
+                        'authorization': `Bearer ${GetCookie()}`
+                    }
+                })
+                if (res.message) navigate('/'), localStorage.removeItem('seller_token')
+            }
         } catch (error) {
             console.error(error)
         } finally {
@@ -44,6 +44,7 @@ const Account_setting = () => {
                         ref={inputRef}
                         type={'text'}
                         className='form-control'
+                        style={{ border: confirm !== 'DELETE MY ACCOUNT' ? '1px solid red' : '1px solid #ced4da' }}
                         placeholder={'type here....'}
                     />
                 </Modal.Body>
@@ -56,7 +57,7 @@ const Account_setting = () => {
                     <BTN
                         text={'Understood'}
                         className={'btn btn-danger'}
-                        icon={loading && <div class="spinner-border text-light" role="status"><span class="visually-hidden">Loading...</span></div>}
+                        icon={loading && <div className="spinner-border text-light" role="status"><span className="visually-hidden">Loading...</span></div>}
                         disabled={loading}
                         onClick={() => { handleDeleteAccount(), setConfirm(inputRef.current.value) }}
                     />

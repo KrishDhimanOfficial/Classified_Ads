@@ -321,6 +321,7 @@ const UpdateProduct = () => {
                                         type={'checkbox'}
                                         checked={negotiable}
                                         style={{ width: '10%' }}
+                                        onClick={() => setnegotiable(!negotiable)}
                                         {...register('negotiable')}
                                     />
                                     <label>Negotiable</label>

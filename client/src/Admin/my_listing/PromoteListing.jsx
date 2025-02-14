@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { Input, BTN, Submit } from '../../components/component'
+import { Input, Submit } from '../../components/component'
 import { useNavigate, useParams } from 'react-router-dom'
 import { DataService, GetCookie, Notify } from '../../hooks/hooks'
-import { useForm } from 'react-hook-form'
 import config from '../../../config/config'
-
 
 const PromoteListing = () => {
     const navigate = useNavigate()
-    const { listing_slug, id } = useParams()
+    const { id } = useParams()
     const [seller, setProfile] = useState({})
     const [plans, setPlans] = useState([])
     const [amount, setamount] = useState(0)
@@ -44,15 +42,23 @@ const PromoteListing = () => {
                     'Authorization': `Bearer ${GetCookie(navigate)}`
                 }
             })
-            await DataService.put('/update/seller-wallet', { amount, status }, {
-                headers: {
-                    'Authorization': `Bearer ${GetCookie(navigate)}`
-                }
-            })
             res.error ? Notify(res.error) : navigate('/user/my-listing')
-            setamount(0), setplanId(''), setPlanDuration(0)
+            transactionHistory(status), setamount(0), setplanId(''), setPlanDuration(0)
         } catch (error) {
             console.error('promoteListing : ', error)
+        }
+    }
+
+    const transactionHistory = async (status) => {
+        try {
+            const res = await DataService.post('/transaction-history/', { amount, status }, {
+                headers: {
+                    Authorization: `Bearer ${GetCookie(navigate)}`
+                }
+            })
+            console.log(res)
+        } catch (error) {
+            console.error('transactionHistory : ', error)
         }
     }
 
@@ -65,11 +71,7 @@ const PromoteListing = () => {
                 name: 'Classified Ads',
                 description: 'Buy, Sell and Promote',
                 handler: (response) => featurethisAd(true),
-                prefill: {
-                    name: seller.name,
-                    email: seller.email,
-                    contact: seller.phone,
-                },
+                prefill: { name: seller.name, email: seller.email, contact: seller.phone },
                 theme: { color: "#000" }
             }
             const razorpayInstance = new window.Razorpay(options)

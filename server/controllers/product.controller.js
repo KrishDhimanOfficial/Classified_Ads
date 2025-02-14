@@ -3,12 +3,13 @@ import productModel from "../models/product.model.js";
 import deleteImage from "../services/deleteImg.js";
 import sellerModel from "../models/seller.model.js";
 import mongoose from "mongoose";
+import validations from "../services/validateData.js"
 import handleAggregatePagination from "../services/handlepagination.js";
 import config from "../config/config.js";
-import generalSettingModel from "../models/general-setting.model.js";
-import adPlansModel from "../models/adPlans.model.js";
+
 const ObjectId = mongoose.Types.ObjectId;
 
+/** @type {Object.<string, import('express').RequestHandler>} */
 const product_controller = {
     createProduct: async (req, res) => {
         try {
@@ -20,17 +21,19 @@ const product_controller = {
 
             const { slug, status } = req.body;
             const { title, description, parentcategoryId, subcategoryId, brandId,
-                price, negotiable, condition, attributes } = JSON.parse(req.body.data)
+                price, negotiable, condition, attributes, stateId, cityId } = JSON.parse(req.body.data)
 
             const response = await productModel.create({
                 title, description, slug, price, negotiable,
                 condition, features: attributes, status,
                 featured_img: req.files['featured_img'][0].filename,
                 images: req.files['images'].map(file => file.filename),
-                parentcategoryId: new Object(parentcategoryId.value),
-                sellerId: new Object(seller.id),
-                subcategoryId: new Object(subcategoryId.value),
-                brandId: new Object(brandId.value)
+                parentcategoryId: new ObjectId(parentcategoryId.value),
+                sellerId: new ObjectId(seller.id),
+                subcategoryId: new ObjectId(subcategoryId.value),
+                brandId: new ObjectId(brandId.value),
+                stateId: new ObjectId(stateId),
+                cityId: new ObjectId(cityId)
             })
 
             if (!response) return res.json({ error: 'failed!' })
@@ -47,14 +50,8 @@ const product_controller = {
         try {
             const seller = getUser(req.headers['authorization'].split(' ')[1])
             const response = await productModel.aggregate([
-                {
-                    $match: {
-                        sellerId: new mongoose.Types.ObjectId(seller.id)
-                    }
-                },
-                {
-                    $project: { _id: 1, status: 1 }
-                },
+                { $match: { sellerId: new ObjectId(seller.id) } },
+                { $project: { _id: 1, ad_status: 1, status: 1 } },
                 {
                     $group: {
                         _id: null, // Group all documents together
@@ -228,8 +225,6 @@ const product_controller = {
                     }
                 }
             ])
-            console.log(response);
-
             if (response.length === 0) return res.json({ error: 'Not Found!' })
             return res.json(response[0])
         } catch (error) {
@@ -663,6 +658,9 @@ const product_controller = {
         } catch (error) {
             console.log('handleFilteringListing : ' + error.message)
         }
+        res.on('finish', () => {
+            controller.abort() // Abort any pending operations
+        })
     },
     getSingleListing: async (req, res) => {
         try {
@@ -899,6 +897,20 @@ const product_controller = {
             }
         } catch (error) {
             console.log('promoteListing : ' + error.message)
+        }
+    },
+    transactionHistory: async (req, res) => {
+        try {
+            const seller = getUser(req.headers['authorization'].split(' ')[1])
+            const { amount, status } = req.body;
+            const response = await transactionHistoryModel.create({
+                sellerId: new ObjectId(seller.id),
+                amount, status
+            })
+            if (!response) return res.json({ error: 'Something Went Wrong, Please Try Again!' })
+            return res.json({ message: 'update successfully!' })
+        } catch (error) {
+            console.log('transactionHistory : ' + error.message)
         }
     },
     disabledAdStatus: async (req, res) => {
