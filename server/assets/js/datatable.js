@@ -53,6 +53,7 @@ const openviewModal = async (api) => {
 const setData = (data) => {
     published.setAttribute('data-id', data._id)
     published.checked = data.publishing_status;
+    document.querySelector('#address').innerHTML = `${data.city.name}, ${data.state.name}`;
     document.querySelector('#listingname').innerHTML = data.title;
     document.querySelector('#name').innerHTML = data.sellerInfo.name;
     document.querySelector('#username').innerHTML = data.sellerInfo.username;

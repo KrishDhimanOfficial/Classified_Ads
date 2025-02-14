@@ -31,8 +31,9 @@ const seller_controllers = {
     updateSellerStatus: async (req, res) => {
         try {
             const { status } = req.body;
-            const response = await sellerModel.findByIdAndUpdate({ _id: req.params.id }, { status })
+            const response = await sellerModel.findByIdAndUpdate({ _id: req.params.id }, { status }, { new: true })
             if (!response) return res.json({ error: 'Failed to update brand!' })
+            await productModel.findOneAndUpdate({ sellerId: response._id.toString() }, { publishing_status: status })
             return res.json({ message: 'update successfully!' })
         } catch (error) {
             console.log('updateSellerStatus : ' + error.message)

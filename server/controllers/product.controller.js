@@ -380,6 +380,24 @@ const product_controller = {
                 },
                 { $unwind: '$category' },
                 {
+                    $lookup: {
+                        from: 'states',
+                        localField: 'stateId',
+                        foreignField: '_id',
+                        as: 'state'
+                    }
+                },
+                { $unwind: '$state' },
+                {
+                    $lookup: {
+                        from: 'cities',
+                        localField: 'cityId',
+                        foreignField: '_id',
+                        as: 'city'
+                    }
+                },
+                { $unwind: '$city' },
+                {
                     $addFields: {
                         featuredImg: {
                             $concat: [config.product_img_path, '/', '$featured_img']
@@ -392,6 +410,8 @@ const product_controller = {
                         publishing_status: 1,
                         condition: 1,
                         featuredImg: 1,
+                        'state.name': 1,
+                        'city.name': 1,
                         'brand.title': 1,
                         'category.title': 1,
                         'sellerInfo.name': 1,
@@ -402,8 +422,6 @@ const product_controller = {
                 }
             ])
             if (response.length == 0) res.json({ error: "Not Found" })
-            console.log(response[0]);
-
             return res.status(200).json({ response: response[0] })
         } catch (error) {
             console.log('getSingleListingOnAdminPanel : ' + error.message)
@@ -497,9 +515,6 @@ const product_controller = {
                     }
                 },
                 { $unwind: '$seller' },
-                {
-                    $match: { 'seller.status': true }
-                },
                 {
                     $lookup: {
                         from: 'states',
@@ -658,9 +673,6 @@ const product_controller = {
         } catch (error) {
             console.log('handleFilteringListing : ' + error.message)
         }
-        res.on('finish', () => {
-            controller.abort() // Abort any pending operations
-        })
     },
     getSingleListing: async (req, res) => {
         try {

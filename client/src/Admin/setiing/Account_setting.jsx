@@ -57,7 +57,7 @@ const Account_setting = () => {
                     <BTN
                         text={'Understood'}
                         className={'btn btn-danger'}
-                        icon={loading && <div className="spinner-border text-light" role="status"><span className="visually-hidden">Loading...</span></div>}
+                        icon={loading && <div className="spinner-border text-light me-2" role="status"><span className="visually-hidden">Loading...</span></div>}
                         disabled={loading}
                         onClick={() => { handleDeleteAccount(), setConfirm(inputRef.current.value) }}
                     />

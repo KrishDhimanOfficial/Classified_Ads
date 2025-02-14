@@ -214,6 +214,7 @@ const category_controllers = {
                         as: 'products'
                     }
                 },
+                { $match: { 'products.publishing_status': true } },
                 {
                     $addFields: {
                         maximum: { $max: { $size: '$products' } },
