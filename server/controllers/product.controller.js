@@ -796,7 +796,7 @@ const product_controller = {
                     }
                 }
             ])
-            return res.status(200).json(response)
+            if (response.length > 0) return res.status(200).json(response)
         } catch (error) {
             console.log('getPopularListings : ' + error.message)
         }
@@ -870,7 +870,7 @@ const product_controller = {
                     }
                 }
             ])
-            return res.status(200).json(response)
+            if (response.length > 0) return res.status(200).json(response)
         } catch (error) {
             console.log('getFeaturedListings : ' + error.message)
         }
