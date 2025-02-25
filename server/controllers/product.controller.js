@@ -228,7 +228,7 @@ const product_controller = {
             if (response.length === 0) return res.json({ error: 'Not Found!' })
             return res.json(response[0])
         } catch (error) {
-            console.log('getSingleListing : ' + error.message)
+            console.log('getSingleListingtoUpdate : ' + error.message)
         }
     },
     updateProduct: async (req, res) => {
@@ -719,8 +719,9 @@ const product_controller = {
                         ad_status: 0, click_count: 0, publishing_status: 0,
                         sellerId: 0, brandId: 0, created_At: 0,
                     }
-                }
+                },
             ])
+            console.log(response)
             if (response.length === 0) return res.json({ error: 'Not Found' })
             return res.status(200).json(response)
         } catch (error) {
@@ -795,7 +796,9 @@ const product_controller = {
                         'category.title': 1,
                     }
                 }
-            ])
+            ]).explain('executionStats')
+            
+            console.log('Query execution stats:', response)
             if (response.length > 0) return res.status(200).json(response)
         } catch (error) {
             console.log('getPopularListings : ' + error.message)

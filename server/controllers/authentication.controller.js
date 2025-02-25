@@ -1,4 +1,3 @@
-import mongoose from "mongoose"
 import config from "../config/config.js"
 import adminModel from "../models/admin.model.js"
 import generalSettingModel from "../models/general-setting.model.js"

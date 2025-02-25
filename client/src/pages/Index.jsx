@@ -3,11 +3,14 @@ import { Banner, Category, Product, Sec_Heading } from '../components/component'
 import { Link } from 'react-router-dom'
 import DataService from '../hooks/DataService'
 import { motion } from "motion/react"
-
+import { useSelector } from 'react-redux'
 const Index = () => {
+    const profile = useSelector(state => state.seller)
     const [categories, setcategories] = useState([])
     const [listings, setlistings] = useState([])
     const [featuredListings, setfeaturedListings] = useState([])
+
+    const setfavourite =  (id) =>  profile.seller.error ? false : profile.seller.wishlist?.includes(id)
 
     const fetchcategories = async () => {
         try {
@@ -85,6 +88,7 @@ const Index = () => {
                                                 ad_status={listing.ad_status}
                                                 sellerImg={listing.sellerImg}
                                                 location={listing.location}
+                                                isfavourite={setfavourite(listing._id)}
                                                 sellerUsername={listing.seller.username}
                                             />
                                         </motion.div>
@@ -115,6 +119,7 @@ const Index = () => {
                                                 ad_status={listing.ad_status}
                                                 sellerImg={listing.sellerImg}
                                                 location={listing.location}
+                                                isfavourite={setfavourite(listing._id)}
                                                 sellerUsername={listing.seller.username}
                                             />
                                         </motion.div>

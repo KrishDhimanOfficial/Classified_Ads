@@ -114,6 +114,6 @@ const productSchema = new mongoose.Schema({
         default: null
     }
 })
-
+productSchema.index({ slug: 1 })
 productSchema.plugin(aggregatePaginate)
 export default mongoose.model('product', productSchema)
