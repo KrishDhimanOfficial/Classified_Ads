@@ -721,7 +721,7 @@ const product_controller = {
                     }
                 },
             ])
-            console.log(response)
+            // console.log(response)
             if (response.length === 0) return res.json({ error: 'Not Found' })
             return res.status(200).json(response)
         } catch (error) {
