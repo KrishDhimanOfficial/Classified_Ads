@@ -796,9 +796,7 @@ const product_controller = {
                         'category.title': 1,
                     }
                 }
-            ]).explain('executionStats')
-            
-            console.log('Query execution stats:', response)
+            ])
             if (response.length > 0) return res.status(200).json(response)
         } catch (error) {
             console.log('getPopularListings : ' + error.message)

@@ -27,15 +27,12 @@ const SellerAccountLayout = () => {
 
     const fetchDetails = async () => {
         const res = await DataService.get('/settings')
-        setlogo(res.logo), dispatch(setsetting(res)), setfavicon()
-    }
-
-    const setfavicon = async () => {
         const link = document.createElement('link')
-        link.rel = 'icon', link.type = 'image/x-icon', link.href = logo
+        link.rel = 'icon', link.type = 'image/x-icon', link.href = res.logo;
         document.head.appendChild(link)
+        dispatch(setsetting(res))
     }
-
+    
     useEffect(() => { getProfile(), fetchDetails() }, [])
     return (
         <>
