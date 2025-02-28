@@ -572,7 +572,7 @@ const product_controller = {
                 },
             ]
             const response = await handleAggregatePagination(productModel, projection, req.query)
-            if (response.collectionData.length === 0) return res.json({ error: 'No Results' })
+            if (response.collectionData.length === 0) setTimeout(()=> res.json({ error: 'No Results' }) ,1000)
             setTimeout(() => res.status(200).json(response), 1500)
 
         } catch (error) {
@@ -667,8 +667,8 @@ const product_controller = {
                 },
             ]
             const response = await handleAggregatePagination(productModel, projection, req.query)
-            if (response.collectionData.length === 0) return res.json({ error: 'No Results' })
-            if (!response) return res.json({ error: 'No Results' })
+            if (response.collectionData.length === 0) setTimeout(()=> res.json({ error: 'No Results' }) ,1000)
+            if (!response) setTimeout(()=> res.json({ error: 'No Results' }) ,1000)
             setTimeout(() => res.status(200).json(response), 1000)
         } catch (error) {
             console.log('handleFilteringListing : ' + error.message)
