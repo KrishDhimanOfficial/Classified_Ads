@@ -6,6 +6,6 @@ A Classified Ads Application is an online platform where users can post, browse,
 
 ![alt text](<Screenshot 2025-01-06 at 1.50.59 PM.png>)
 
-## Seller Account
+## Frontend
 
-![alt text](<Screenshot 2025-02-24 at 6.20.09 PM.png>)
+[text](<../../Desktop/Screen Recording 2025-02-27 at 10.05.31 PM.mov>)
