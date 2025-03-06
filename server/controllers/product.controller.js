@@ -8,7 +8,6 @@ import handleAggregatePagination from "../services/handlepagination.js";
 import config from "../config/config.js";
 
 const ObjectId = mongoose.Types.ObjectId;
-
 /** @type {Object.<string, import('express').RequestHandler>} */
 const product_controller = {
     createProduct: async (req, res) => {

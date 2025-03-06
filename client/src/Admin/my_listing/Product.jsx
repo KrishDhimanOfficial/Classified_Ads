@@ -44,6 +44,7 @@ const Product = ({ id, path, status, title, price, ad_status, clicks, publishSta
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
         >
+        
             <Image
                 src={path}
                 className='object-fit-cover'
